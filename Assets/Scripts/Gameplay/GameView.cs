@@ -74,16 +74,16 @@ namespace Gameplay
 
         private async UniTaskVoid HandleMovementAsync(Vector2Int from, Vector2Int to)
         {
-            IEnumerator<StackingGame<int>.GameEvent> move = _game.MoveBlock(from, to);
+            IEnumerator<GameEvent> move = _game.MoveBlock(from, to);
 
             while (move.MoveNext())
             {
                 switch (move.Current.Type)
                 {
-                    case StackingGame<int>.GameEventType.BlockMovedByUser:
+                    case GameEventType.BlockMovedByUser:
                         await MoveBlock(move.Current.Actions[0].From, move.Current.Actions[0].To);
                         break;
-                    case StackingGame<int>.GameEventType.BlocksFell:
+                    case GameEventType.BlocksFell:
                         await UniTask.WhenAll(move.Current.Actions.Select(m => MoveBlock(m.From, m.To)));
                         break;
                     default:

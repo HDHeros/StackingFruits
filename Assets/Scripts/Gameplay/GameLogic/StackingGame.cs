@@ -31,32 +31,6 @@ namespace Gameplay.GameLogic
                 _blocksCount[block]++;
             }
         }
-
-        public struct GameEvent
-        {
-            public readonly GameEventType Type;
-            public readonly IReadOnlyList<PerformedMovement> Actions;
-                
-            public GameEvent(GameEventType type, IReadOnlyList<PerformedMovement> actions)
-            {
-                Type = type;
-                Actions = actions;
-            }
-        }
-
-        public struct PerformedMovement
-        {
-            public readonly Vector2Int From;
-            public readonly Vector2Int To;
-
-            public PerformedMovement(Vector2Int from, Vector2Int to)
-            {
-                From = from;
-                To = to;
-            }
-        }
-        
-        public enum GameEventType{None, BlockMovedByUser, BlocksFell}
         
         public IEnumerator<GameEvent> MoveBlock(Vector2Int from, Vector2Int to)
         {
