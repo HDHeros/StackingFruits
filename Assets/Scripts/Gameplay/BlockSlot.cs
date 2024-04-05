@@ -1,4 +1,5 @@
 ﻿using System;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Gameplay
@@ -19,13 +20,13 @@ namespace Gameplay
             transform.position = new Vector3(_position.x, _position.y);
         }
 
-        public void SetBlock(BlockView block, bool animated)
+        public UniTask SetBlock(BlockView block, bool animated)
         {
             if (_isContainBlock)
                 throw new Exception();
             _currentBlock = block;
             block.SetSlot(this);
-            _currentBlock.MoveTo(_position, animated);
+            return FitCurrentBlockInside(animated);
         }
 
         public BlockView RemoveCurrentBlock()
@@ -39,11 +40,8 @@ namespace Gameplay
         private void Awake() => 
             _transform = transform;
 
-        public void FitCurrentBlockInside()
-        {
-            _currentBlock.Transform.position = _transform.position;
-            _currentBlock.Transform.rotation = _transform.rotation;
-        }
+        public UniTask FitCurrentBlockInside(bool animated) => 
+            _currentBlock.MoveTo(_position, animated);
 
         public Vector2Int GetHitSide(Vector3 hitPoint)
         {

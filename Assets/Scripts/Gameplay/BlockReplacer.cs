@@ -1,6 +1,6 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using Cysharp.Threading.Tasks;
-using Gameplay.GameLogic;
 using HDH.UnityExt.Extensions;
 using Infrastructure.SimpleInput;
 using UnityEngine;
@@ -13,7 +13,7 @@ namespace Gameplay
         private readonly Camera _camera;
         private readonly InputService _inputService;
         private readonly float _replacementDepth;
-        private readonly StackingGame<int> _game;
+        private readonly Action<Vector2Int, Vector2Int> _performMovement;
         private BlockView _currentBlock;
         private Vector3 _targetPosition;
         private Quaternion _targetRotation;
@@ -24,13 +24,12 @@ namespace Gameplay
         private bool _isCurrentBlockInSlot;
         private BlockSlot _currentSlot;
 
-        public BlockReplacer(Camera camera, InputService inputService, float replacementDepth, 
-            StackingGame<int> game)
+        public BlockReplacer(Camera camera, InputService inputService, float replacementDepth, Action<Vector2Int, Vector2Int> performMovement)
         {
             _camera = camera;
             _inputService = inputService;
             _replacementDepth = replacementDepth;
-            _game = game;
+            _performMovement = performMovement;
         }
         
         public bool TryBeginReplacement(PointerEventData eventData, BlockView block)
@@ -77,10 +76,10 @@ namespace Gameplay
             {
                 Vector2Int oldBlockPos = _currentBlock.Slot.Position;
                 // _currentSlot.SetBlock(_currentBlock, false);
-                _game.MoveBlock(oldBlockPos, _currentSlot.Position);   
+                _performMovement.Invoke(oldBlockPos, _currentSlot.Position);   
             }
             else
-                _currentBlock.Slot.FitCurrentBlockInside();
+                _currentBlock.Slot.FitCurrentBlockInside(true);
 
             _currentBlock = null;
             _inputService.SimpleDrag -= OnReplace;

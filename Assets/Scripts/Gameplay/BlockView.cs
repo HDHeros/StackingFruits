@@ -1,4 +1,6 @@
-﻿using HDH.UnityExt.Extensions;
+﻿using Cysharp.Threading.Tasks;
+using DG.Tweening;
+using HDH.UnityExt.Extensions;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -28,17 +30,17 @@ namespace Gameplay
             _replacer = replacer;
         }
 
-        public void MoveTo(Vector2Int to, bool animated)
+        public UniTask MoveTo(Vector2Int to, bool animated)
         {
             Vector3 position = new Vector3(to.x, to.y);
-            // if (animated == false)
+            if (animated == false)
             {
                 transform.position = position;
-                return;
+                return UniTask.CompletedTask;
             }
             
-            // Tween tween = transform.DOMove(position, 0.2f);
-            // return UniTask.WaitWhile(() => tween.IsActive() && tween.IsPlaying());
+            Tween tween = transform.DOMove(position, 20f).SetSpeedBased(true).SetEase(Ease.InSine);
+            return UniTask.WaitWhile(() => tween.IsActive() && tween.IsPlaying());
         }
 
         public void OnPointerDown(PointerEventData eventData)

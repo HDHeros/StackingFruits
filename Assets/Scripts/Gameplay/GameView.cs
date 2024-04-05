@@ -1,4 +1,7 @@
-﻿using Gameplay.GameLogic;
+﻿using System;
+using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
+using Gameplay.GameLogic;
 using Infrastructure.SimpleInput;
 using TriInspector;
 using UnityEngine;
@@ -14,7 +17,8 @@ namespace Gameplay
         private StackingGame<int> _game;
         // private BlockView[,] _blocks;
         private BlockSlot[,] _slots;
-
+        private BlockReplacer _replacer;
+        private bool _isMovementLocked;
         private LevelData<int> _levelData = new()
         {
             EmptyBlockValue = 0,
@@ -30,21 +34,13 @@ namespace Gameplay
             }
         };
 
-        private BlockReplacer _replacer;
 
         public void Setup(InputService input)
         {
             _game = new StackingGame<int>();
-            _game.BlockReplaced += OnBlockReplaced;
             _game.Reinitialize(_levelData);
-            _replacer = new BlockReplacer(_camera, input, _replacementDepth, _game);
+            _replacer = new BlockReplacer(_camera, input, _replacementDepth, Move);
             InitField();
-        }
-
-        private void OnBlockReplaced(Vector2Int from, Vector2Int to)
-        {
-            BlockView view = _slots[from.x, from.y].RemoveCurrentBlock();
-            _slots[to.x, to.y].SetBlock(view, true);
         }
 
         private void InitField()
@@ -69,7 +65,39 @@ namespace Gameplay
         }
 
         [Button]
-        private void Move(Vector2Int from, Vector2Int to) => 
-            _game.MoveBlock(from, to);
+        private void Move(Vector2Int from, Vector2Int to)
+        {
+            if (_isMovementLocked) return;
+            _isMovementLocked = true;
+            HandleMovementAsync(from, to).Forget();
+        }
+
+        private async UniTaskVoid HandleMovementAsync(Vector2Int from, Vector2Int to)
+        {
+            IEnumerator<StackingGame<int>.GameEvent> move = _game.MoveBlock(from, to);
+
+            while (move.MoveNext())
+            {
+                switch (move.Current.Type)
+                {
+                    case StackingGame<int>.GameEventType.BlockMovedByUser:
+                        await MoveBlock(move.Current.Actions[0].From, move.Current.Actions[0].To);
+                        break;
+                    case StackingGame<int>.GameEventType.BlocksFell:
+                        await UniTask.WhenAll(move.Current.Actions.Select(m => MoveBlock(m.From, m.To)));
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+            
+            _isMovementLocked = false;
+        }
+        
+        private UniTask MoveBlock(Vector2Int from, Vector2Int to)
+        {
+            BlockView view = _slots[from.x, from.y].RemoveCurrentBlock();
+            return _slots[to.x, to.y].SetBlock(view, true);
+        }
     }
 }
