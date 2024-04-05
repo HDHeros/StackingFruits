@@ -1,8 +1,8 @@
 ﻿using HDH.Fsm;
 using HDH.GoPool;
 using Infrastructure.GameStateMachine.States;
-using Infrastructure.InputLogic;
 using Infrastructure.SceneManagement;
+using Infrastructure.SimpleInput;
 using UnityEngine;
 using Zenject;
 

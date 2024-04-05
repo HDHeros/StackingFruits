@@ -1,6 +1,8 @@
 ﻿using System.Threading;
 using Cysharp.Threading.Tasks;
+using Gameplay.GameLogic;
 using HDH.UnityExt.Extensions;
+using Infrastructure.SimpleInput;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -9,11 +11,12 @@ namespace Gameplay
     public class BlockReplacer
     {
         private readonly Camera _camera;
+        private readonly InputService _inputService;
         private readonly float _replacementDepth;
+        private readonly StackingGame<int> _game;
         private BlockView _currentBlock;
         private Vector3 _targetPosition;
         private Quaternion _targetRotation;
-        private Vector3 _targetScale;
         private Vector3 _currentPosVelocity;
         private Quaternion _currentRotationVelocity;
         private Vector3 _currentScaleVelocity;
@@ -21,10 +24,13 @@ namespace Gameplay
         private bool _isCurrentBlockInSlot;
         private BlockSlot _currentSlot;
 
-        public BlockReplacer(Camera camera, float replacementDepth)
+        public BlockReplacer(Camera camera, InputService inputService, float replacementDepth, 
+            StackingGame<int> game)
         {
             _camera = camera;
+            _inputService = inputService;
             _replacementDepth = replacementDepth;
+            _game = game;
         }
         
         public bool TryBeginReplacement(PointerEventData eventData, BlockView block)
@@ -39,59 +45,64 @@ namespace Gameplay
             _currentBlock = block;
             _currentBlock.gameObject.SetActive(true);
             
-            CalculateTargetTransform(eventData);
+            CalculateTargetTransform(eventData.position);
             _currentBlock.Transform.position = _targetPosition;
-            _currentBlock.Transform.rotation = _targetRotation;
-            _currentBlock.Transform.localScale = _targetScale;
+            // _currentBlock.Transform.rotation = _targetRotation;
             _syncCtSource = new CancellationTokenSource();
+            _inputService.SimpleDrag += OnReplace;
+            _inputService.SimpleDragFinished += FinishReplacement;
             SyncPosWithTargetPos().Forget();
         }
 
-        private void OnReplace(PointerEventData eventData)
+        private void OnReplace(Vector2 delta, Vector2 screenPosition)
         {
             _isCurrentBlockInSlot = false;
-            CalculateTargetTransform(eventData);
+            CalculateTargetTransform(screenPosition);
             
-            if (RayCastSlot(out BlockSlot slot) == false)
+            if (RayCastSlot(out BlockSlot slot, out _) == false)
                 return;
 
-            _targetPosition = slot.Transform.position;
-            _targetRotation = slot.Transform.rotation;
-            _targetScale = slot.Transform.localScale;
+            _targetPosition = slot.WorldPosition;
+
+            // _targetRotation = slot.Rotation;
+            // _targetScale = slot.Transform.localScale;
             _currentSlot = slot;
             _isCurrentBlockInSlot = true;
         }
 
-        private void FinishReplacement(PointerEventData eventData)
+        private void FinishReplacement(Vector2 screenPosition)
         {
             _syncCtSource?.Cancel();
-            if (_isCurrentBlockInSlot)
+            if (_isCurrentBlockInSlot && _currentSlot != _currentBlock.Slot)
             {
-                _currentSlot.SetBlock(_currentBlock);
+                Vector2Int oldBlockPos = _currentBlock.Slot.Position;
+                // _currentSlot.SetBlock(_currentBlock, false);
+                _game.MoveBlock(oldBlockPos, _currentSlot.Position);   
             }
             else
                 _currentBlock.Slot.FitCurrentBlockInside();
 
             _currentBlock = null;
+            _inputService.SimpleDrag -= OnReplace;
+            _inputService.SimpleDragFinished -= FinishReplacement;
         }
 
-        private bool RayCastSlot(out BlockSlot slot)
+        private bool RayCastSlot(out BlockSlot slot, out RaycastHit hit)
         {
             slot = null;
             var camPosition = _camera.transform.position;
             return Physics.Raycast(new Ray(camPosition, _targetPosition - camPosition),
-                out var hit, 100) && hit.transform.TryGetComponent(out slot) && slot.IsAvailableForReceive;
+                out hit, 100, LayerMask.GetMask("SlotsLayer")) && hit.transform.TryGetComponent(out slot) && slot.IsAvailableForReceive;
         }
 
-        private void CalculateTargetTransform(PointerEventData eventData)
+        private void CalculateTargetTransform(Vector2 screenPosition)
         {
-            _targetPosition = GetWorldPos(eventData);
-            _targetRotation = Quaternion.LookRotation(-_camera.transform.forward, Vector3.up);
-            _targetScale = Vector3.one;
+            _targetPosition = GetWorldPos(screenPosition);
+            // _targetRotation = Quaternion.LookRotation(-_camera.transform.forward, Vector3.up);
         }
 
-        private Vector3 GetWorldPos(PointerEventData eventData) =>
-            _camera.ScreenToWorldPoint(eventData.position.To3(missingValue: _replacementDepth));
+        private Vector3 GetWorldPos(Vector2 screenPosition) =>
+            _camera.ScreenToWorldPoint(screenPosition.To3(missingValue: _replacementDepth));
 
         private async UniTaskVoid SyncPosWithTargetPos()
         {
@@ -99,10 +110,8 @@ namespace Gameplay
             {
                 _currentBlock.Transform.position = Vector3.SmoothDamp(_currentBlock.Transform.position, 
                     _targetPosition, ref _currentPosVelocity, 0.1f);
-                _currentBlock.Transform.rotation = QuaternionExtensions.SmoothDamp(_currentBlock.Transform.rotation,
-                    _targetRotation, ref _currentRotationVelocity, 0.1f);
-                _currentBlock.Transform.localScale = Vector3.SmoothDamp(_currentBlock.Transform.localScale, _targetScale,
-                    ref _currentScaleVelocity, 0.1f);
+                // _currentBlock.Transform.rotation = QuaternionExtensions.SmoothDamp(_currentBlock.Transform.rotation,
+                //     _targetRotation, ref _currentRotationVelocity, 0.1f);
                 
                 await UniTask.Yield(PlayerLoopTiming.Update);
             }

@@ -1,4 +1,5 @@
 ﻿using Gameplay.GameLogic;
+using Infrastructure.SimpleInput;
 using TriInspector;
 using UnityEngine;
 
@@ -31,19 +32,19 @@ namespace Gameplay
 
         private BlockReplacer _replacer;
 
-        private void Start()
+        public void Setup(InputService input)
         {
             _game = new StackingGame<int>();
             _game.BlockReplaced += OnBlockReplaced;
             _game.Reinitialize(_levelData);
-            _replacer = new BlockReplacer(_camera, _replacementDepth);
+            _replacer = new BlockReplacer(_camera, input, _replacementDepth, _game);
             InitField();
         }
 
         private void OnBlockReplaced(Vector2Int from, Vector2Int to)
         {
             BlockView view = _slots[from.x, from.y].RemoveCurrentBlock();
-            _slots[to.x, to.y].SetBlock(view);
+            _slots[to.x, to.y].SetBlock(view, true);
         }
 
         private void InitField()
@@ -54,7 +55,7 @@ namespace Gameplay
                 for (int x = 0; x < _game.LevelData.FieldSize.x; x++)
                 {
                     Vector2Int inGamePosition = new Vector2Int(x, y);
-                    
+
                     BlockSlot slot = Instantiate(_slotPrefab, transform);
                     slot.Setup(inGamePosition);
                     _slots[x, y] = slot;
@@ -62,7 +63,7 @@ namespace Gameplay
                     if (block == 0) continue;
                     BlockView blockView = Instantiate(_blockPrefab, transform);
                     blockView.Setup(block, inGamePosition, _replacer);
-                    slot.SetBlock(blockView);
+                    slot.SetBlock(blockView, false);
                 }
             }
         }

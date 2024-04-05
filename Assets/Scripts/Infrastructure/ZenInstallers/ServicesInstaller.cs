@@ -1,5 +1,4 @@
 ﻿using HDH.GoPool;
-using Infrastructure.InputLogic;
 using Infrastructure.SceneManagement;
 using Zenject;
 
@@ -9,8 +8,8 @@ namespace Infrastructure.ZenInstallers
     {
         public override void InstallBindings()
         {
-            InstallSceneService();
             InstallInputService();
+            InstallSceneService();
             InstallGoPool();
         }
 
@@ -22,7 +21,7 @@ namespace Infrastructure.ZenInstallers
 
         private void InstallInputService() =>
             Container
-                .Bind<InputService>()
+                .Bind<SimpleInput.InputService>()
                 .FromNew()
                 .AsSingle();
 

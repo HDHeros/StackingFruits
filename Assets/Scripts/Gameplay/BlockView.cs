@@ -1,17 +1,15 @@
-﻿using DG.Tweening;
-using HDH.UnityExt.Extensions;
+﻿using HDH.UnityExt.Extensions;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace Gameplay
 {
-    public class BlockView : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
+    public class BlockView : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler
     {
         [SerializeField] private MeshRenderer _renderer;
         public Transform Transform => _transform;
         public BlockSlot Slot { get; private set; }
 
-        private Vector2Int _position;
         private BlockReplacer _replacer;
         private Transform _transform;
 
@@ -25,16 +23,22 @@ namespace Gameplay
                 case 3: color = Color.red; break;
             }
 
-            _position = position;
-            transform.position = new Vector3(_position.x, _position.y);
+            transform.position = new Vector3(position.x, position.y);
             _renderer.material.color = color;
             _replacer = replacer;
         }
 
-        public void MoveTo(Vector2Int to)
+        public void MoveTo(Vector2Int to, bool animated)
         {
-            transform.DOMove(new Vector3(to.x, to.y), 0.2f);
-            _position = to;
+            Vector3 position = new Vector3(to.x, to.y);
+            // if (animated == false)
+            {
+                transform.position = position;
+                return;
+            }
+            
+            // Tween tween = transform.DOMove(position, 0.2f);
+            // return UniTask.WaitWhile(() => tween.IsActive() && tween.IsPlaying());
         }
 
         public void OnPointerDown(PointerEventData eventData)
@@ -44,6 +48,11 @@ namespace Gameplay
         public void OnBeginDrag(PointerEventData eventData)
         {
             if(_replacer.TryBeginReplacement(eventData, this) == false) return;
+        }
+
+
+        public void OnDrag(PointerEventData eventData)
+        {
         }
 
         public void SetSlot(BlockSlot slot)
