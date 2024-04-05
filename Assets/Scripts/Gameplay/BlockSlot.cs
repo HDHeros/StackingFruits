@@ -16,6 +16,7 @@ namespace Gameplay
 
         public void Setup(Vector2Int position)
         {
+            gameObject.SetActive(true);
             _position = position;
             transform.position = new Vector3(_position.x, _position.y);
         }
@@ -40,20 +41,34 @@ namespace Gameplay
         public UniTask FitCurrentBlockInside(bool animated) => 
             _currentBlock.MoveTo(_position, animated);
 
-        public UniTask RemoveBlock()
+        public async UniTask<BlockView> StackContainingBlock()
         {
             var block = _currentBlock;
             _currentBlock = null;
             _isContainBlock = false;
-            return block.DestroyAnimated();
+            await block.AnimateStacking();
+            return block;
         }
 
         public UniTask DropContent()
         {
             return _currentBlock.Drop();
         }
+        
+        public BlockView ResetSlot()
+        {
+            BlockView block = _currentBlock;
+            _currentBlock = null;
+            _isContainBlock = false;
+            return block;
+        }
 
         private void Awake() => 
             _transform = transform;
+
+        private void OnDisable()
+        {
+            ResetSlot();
+        }
     }
 }

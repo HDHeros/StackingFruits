@@ -20,7 +20,7 @@ namespace Infrastructure.GameStateMachine.States
             _root.OnExit();
             base.Exit(onExit);
         }
-
+        
         private async UniTaskVoid Setup()
         {
             _root = await Fields.SceneService.LoadSceneSingle<GameSceneRoot>(SceneId.GameScene);

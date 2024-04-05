@@ -17,6 +17,7 @@ namespace Gameplay
 
         public void Setup(int block, Vector2Int position, BlockReplacer replacer)
         {
+            gameObject.SetActive(true);
             Color color = Color.white;
             switch (block)
             {
@@ -69,10 +70,10 @@ namespace Gameplay
             Slot = slot;
         }
 
-        public UniTask DestroyAnimated()
+        public UniTask AnimateStacking()
         {
             _transform.DOKill();
-            Tween tween = _transform.DOScale(0, 0.5f).SetEase(Ease.InBack).OnComplete(() => Destroy(gameObject));
+            Tween tween = _transform.DOScale(0, 0.5f).SetEase(Ease.InBack);
             return UniTask.WaitWhile(() => tween.IsActive() && tween.IsPlaying());
         }
 
@@ -81,9 +82,21 @@ namespace Gameplay
             return AnimateDrop(_transform.position.AddY(-20));
         }
 
+        public void ResetBlock()
+        {
+            _transform.DOKill();
+            _transform.localScale = Vector3.one;
+            Slot = null;
+        }
+
         private void Awake()
         {
             _transform = transform;
+        }
+
+        private void OnDisable()
+        {
+            ResetBlock();
         }
     }
 }

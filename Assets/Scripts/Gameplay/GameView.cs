@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Gameplay.GameLogic;
+using HDH.GoPool;
+using HDH.UnityExt.Extensions;
 using Infrastructure.SimpleInput;
 using TriInspector;
 using UnityEngine;
@@ -15,35 +17,28 @@ namespace Gameplay
         [SerializeField] private Camera _camera;
         [SerializeField] private float _replacementDepth;
         private StackingGame<int> _game;
-        // private BlockView[,] _blocks;
         private BlockSlot[,] _slots;
         private BlockReplacer _replacer;
+        private IGoPool _pool;
         private bool _isMovementLocked;
-        private LevelData<int> _levelData = new()
+        private bool _gameFinished;
+
+        public void Initialize(InputService input, IGoPool pool)
         {
-            EmptyBlockValue = 0,
-            FieldSize = new Vector2Int(4, 6),
-            Blocks = new []
-            {
-                1,1,2,3,
-                1,3,2,3,
-                0,2,0,0,
-                0,0,0,0,
-                0,0,0,0,
-                0,0,0,0,
-            }
-        };
-
-
-        public void Setup(InputService input)
+            _pool = pool;
+            _replacer = new BlockReplacer(_camera, input, _replacementDepth, Move);
+        }
+        
+        public UniTask StartGame(LevelData<int> levelData)
         {
             _game = new StackingGame<int>();
-            _game.Reinitialize(_levelData);
-            _replacer = new BlockReplacer(_camera, input, _replacementDepth, Move);
-            InitField();
+            _game.Reinitialize(levelData);
+            SetupField();
+            _gameFinished = false;
+            return UniTask.WaitUntil(() => _gameFinished);
         }
 
-        private void InitField()
+        private void SetupField()
         {
             _slots = new BlockSlot[_game.LevelData.FieldSize.x, _game.LevelData.FieldSize.y];
             for (int y = 0; y < _game.LevelData.FieldSize.y; y++)
@@ -52,12 +47,12 @@ namespace Gameplay
                 {
                     Vector2Int inGamePosition = new Vector2Int(x, y);
 
-                    BlockSlot slot = Instantiate(_slotPrefab, transform);
+                    BlockSlot slot = _pool.Get(_slotPrefab, transform);
                     slot.Setup(inGamePosition);
                     _slots[x, y] = slot;
                     int block = _game.GetCellValue(x, y);
                     if (block == 0) continue;
-                    BlockView blockView = Instantiate(_blockPrefab, transform);
+                    BlockView blockView = _pool.Get(_blockPrefab, transform);
                     blockView.Setup(block, inGamePosition, _replacer);
                     slot.SetBlock(blockView, false);
                 }
@@ -92,6 +87,10 @@ namespace Gameplay
                         break;
                     case GameEventType.GameLost:
                         await UniTask.WhenAll(move.Current.Actions.Select(m => DropSlotContent(m.From)));
+                        HandleLoose();
+                        break;
+                    case GameEventType.GameWon:
+                        HandleWin();
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -112,9 +111,32 @@ namespace Gameplay
             return _slots[to.x, to.y].SetBlock(view, true);
         }
 
-        private UniTask ClearSlot(Vector2Int position)
+        private async UniTask ClearSlot(Vector2Int position)
         {
-            return _slots[position.x, position.y].RemoveBlock();
+            BlockView block = await _slots[position.x, position.y].StackContainingBlock();
+            _pool.Return(block, _blockPrefab);
+        }
+        
+        private void HandleLoose() => 
+            HandleFinishGame();
+
+        private void HandleWin() => 
+            HandleFinishGame();
+
+        private void HandleFinishGame()
+        {
+            for (int y = 0; y < _game.LevelData.FieldSize.y; y++)
+            for (int x = 0; x < _game.LevelData.FieldSize.x; x++)
+            {
+                BlockView block = _slots[x, y].ResetSlot();
+                if (block.IsNotNull())
+                {
+                    block.ResetBlock();
+                    _pool.Return(block, _blockPrefab);
+                }
+                _pool.Return(_slots[x, y], _slotPrefab);
+            }
+            _gameFinished = true;
         }
     }
 }

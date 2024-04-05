@@ -76,8 +76,9 @@ namespace Gameplay.GameLogic
                 if (NormalizeField())
                 {
                     yield return new GameEvent(GameEventType.BlocksFell, _performedMovements);
-                    isStackPerformed = HandleStacks();
                 }
+                
+                isStackPerformed = HandleStacks();
             }
             
             if (_stacksPerformed == 0)
