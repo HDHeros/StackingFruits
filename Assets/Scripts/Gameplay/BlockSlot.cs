@@ -37,16 +37,23 @@ namespace Gameplay
             return block;
         }
 
-        private void Awake() => 
-            _transform = transform;
-
         public UniTask FitCurrentBlockInside(bool animated) => 
             _currentBlock.MoveTo(_position, animated);
 
-        public Vector2Int GetHitSide(Vector3 hitPoint)
+        public UniTask RemoveBlock()
         {
-            Vector3 relativeHitPoint =  hitPoint - _transform.position;
-            return new Vector2Int((int)Mathf.Sign(relativeHitPoint.x), (int)Mathf.Sign(relativeHitPoint.y));
+            var block = _currentBlock;
+            _currentBlock = null;
+            _isContainBlock = false;
+            return block.DestroyAnimated();
         }
+
+        public UniTask DropContent()
+        {
+            return _currentBlock.Drop();
+        }
+
+        private void Awake() => 
+            _transform = transform;
     }
 }

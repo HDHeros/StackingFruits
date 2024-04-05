@@ -55,7 +55,7 @@ namespace Gameplay
                     BlockSlot slot = Instantiate(_slotPrefab, transform);
                     slot.Setup(inGamePosition);
                     _slots[x, y] = slot;
-                    int block = _game.GetBlock(x, y);
+                    int block = _game.GetCellValue(x, y);
                     if (block == 0) continue;
                     BlockView blockView = Instantiate(_blockPrefab, transform);
                     blockView.Setup(block, inGamePosition, _replacer);
@@ -78,6 +78,7 @@ namespace Gameplay
 
             while (move.MoveNext())
             {
+                Debug.Log($"{move.Current.Type} - {move.Current.Actions.Count}");
                 switch (move.Current.Type)
                 {
                     case GameEventType.BlockMovedByUser:
@@ -86,6 +87,12 @@ namespace Gameplay
                     case GameEventType.BlocksFell:
                         await UniTask.WhenAll(move.Current.Actions.Select(m => MoveBlock(m.From, m.To)));
                         break;
+                    case GameEventType.StackPerformed:
+                        await UniTask.WhenAll(move.Current.Actions.Select(m => ClearSlot(m.From)));
+                        break;
+                    case GameEventType.GameLost:
+                        await UniTask.WhenAll(move.Current.Actions.Select(m => DropSlotContent(m.From)));
+                        break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -93,11 +100,21 @@ namespace Gameplay
             
             _isMovementLocked = false;
         }
-        
+
+        private UniTask DropSlotContent(Vector2Int position)
+        {
+            return _slots[position.x, position.y].DropContent();
+        }
+
         private UniTask MoveBlock(Vector2Int from, Vector2Int to)
         {
             BlockView view = _slots[from.x, from.y].RemoveCurrentBlock();
             return _slots[to.x, to.y].SetBlock(view, true);
+        }
+
+        private UniTask ClearSlot(Vector2Int position)
+        {
+            return _slots[position.x, position.y].RemoveBlock();
         }
     }
 }

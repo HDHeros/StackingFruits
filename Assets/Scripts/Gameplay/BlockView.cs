@@ -39,6 +39,11 @@ namespace Gameplay
                 return UniTask.CompletedTask;
             }
             
+            return AnimateDrop(position);
+        }
+
+        private UniTask AnimateDrop(Vector3 position)
+        {
             Tween tween = transform.DOMove(position, 20f).SetSpeedBased(true).SetEase(Ease.InSine);
             return UniTask.WaitWhile(() => tween.IsActive() && tween.IsPlaying());
         }
@@ -62,6 +67,18 @@ namespace Gameplay
             if (Slot.IsNotNull())
                 Slot.RemoveCurrentBlock();
             Slot = slot;
+        }
+
+        public UniTask DestroyAnimated()
+        {
+            _transform.DOKill();
+            Tween tween = _transform.DOScale(0, 0.5f).SetEase(Ease.InBack).OnComplete(() => Destroy(gameObject));
+            return UniTask.WaitWhile(() => tween.IsActive() && tween.IsPlaying());
+        }
+
+        public UniTask Drop()
+        {
+            return AnimateDrop(_transform.position.AddY(-20));
         }
 
         private void Awake()
