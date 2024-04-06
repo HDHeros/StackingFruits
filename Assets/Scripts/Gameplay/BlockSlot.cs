@@ -42,15 +42,6 @@ namespace Gameplay
         public UniTask FitCurrentBlockInside(bool animated) => 
             _currentBlock.MoveTo(_position, animated);
 
-        public async UniTask<BlockView> StackContainingBlock()
-        {
-            var block = _currentBlock;
-            _currentBlock = null;
-            _isContainBlock = false;
-            await block.AnimateStacking();
-            return block;
-        }
-
         public UniTask DropContent()
         {
             return _currentBlock.Drop();

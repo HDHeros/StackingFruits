@@ -1,5 +1,8 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System.Threading;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using HDH.GoPool;
+using HDH.GoPool.Components;
 using HDH.UnityExt.Extensions;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -9,12 +12,14 @@ namespace Gameplay.Blocks
     public class BlockView : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler
     {
         [SerializeField] private BlockType _type;
+        [SerializeField] private PooledParticle[] _onStackParticles;
+        [SerializeField] private ParticleSystem.MinMaxGradient _stackParticleColor;
         public Transform Transform => _transform;
         public BlockSlot Slot { get; private set; }
         public BlockType Type => _type;
-
         private BlockReplacer _replacer;
         private Transform _transform;
+
 
         public void Setup(Vector2Int position, BlockReplacer replacer)
         {
@@ -35,12 +40,6 @@ namespace Gameplay.Blocks
             return AnimateDrop(position);
         }
 
-        private UniTask AnimateDrop(Vector3 position)
-        {
-            Tween tween = transform.DOMove(position, 20f).SetSpeedBased(true).SetEase(Ease.InSine);
-            return UniTask.WaitWhile(() => tween.IsActive() && tween.IsPlaying());
-        }
-
         public void OnPointerDown(PointerEventData eventData)
         {
         }
@@ -49,7 +48,6 @@ namespace Gameplay.Blocks
         {
             if(_replacer.TryBeginReplacement(eventData, this) == false) return;
         }
-
 
         public void OnDrag(PointerEventData eventData)
         {
@@ -81,6 +79,12 @@ namespace Gameplay.Blocks
             Slot = null;
         }
 
+        private UniTask AnimateDrop(Vector3 position)
+        {
+            Tween tween = transform.DOMove(position, 20f).SetSpeedBased(true).SetEase(Ease.InSine);
+            return UniTask.WaitWhile(() => tween.IsActive() && tween.IsPlaying());
+        }
+
         private void Awake()
         {
             _transform = transform;
@@ -89,6 +93,34 @@ namespace Gameplay.Blocks
         private void OnDisable()
         {
             ResetBlock();
+            _transform.localScale = Vector3.one;
+        }
+
+        public UniTask StartStackingSequence(Vector3 position)
+        {
+            _transform.DOKill();
+            Tween tween = _transform.DOMove(position, 0.25f).SetEase(Ease.InSine);
+            return UniTask.WaitWhile(() => tween.IsActive() && tween.IsPlaying());
+        }
+
+        public async UniTask PlayOnStackAnimation(IGoPool pool)
+        {
+            _transform.DOKill();
+            Sequence sequence = DOTween.Sequence()
+                .Append(_transform.DOScale(Vector3.one * 0.8f, 0.5f).SetEase(Ease.Linear))
+                .Join(_transform.DOShakePosition(0.5f, strength: 0.05f, vibrato: 15, fadeOut: false));
+            await UniTask.WaitWhile(() => sequence.IsActive() && sequence.IsPlaying());
+            SpawnStackingParticle(pool);
+        }
+
+        private void SpawnStackingParticle(IGoPool pool)
+        {
+            PooledParticle particlePrefab = _onStackParticles.GetRandom();
+            PooledParticle pooledParticle = pool.Get(particlePrefab);
+            var particleSystemMain = pooledParticle.ParticleSystem.main;
+            particleSystemMain.startColor = _stackParticleColor;
+            pooledParticle
+                .PlayAndReturn(_transform.position, particlePrefab, pool, CancellationToken.None);
         }
     }
 }

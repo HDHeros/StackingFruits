@@ -146,6 +146,26 @@ PrefabInstance:
       propertyPath: _type
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 4957925591509554552, guid: 949d89c28cd5a984587e765abc06d70a,
+        type: 3}
+      propertyPath: _stackParticleColor.m_ColorMax.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4957925591509554552, guid: 949d89c28cd5a984587e765abc06d70a,
+        type: 3}
+      propertyPath: _stackParticleColor.m_ColorMax.b
+      value: 0.27727836
+      objectReference: {fileID: 0}
+    - target: {fileID: 4957925591509554552, guid: 949d89c28cd5a984587e765abc06d70a,
+        type: 3}
+      propertyPath: _stackParticleColor.m_ColorMax.g
+      value: 0.8773585
+      objectReference: {fileID: 0}
+    - target: {fileID: 4957925591509554552, guid: 949d89c28cd5a984587e765abc06d70a,
+        type: 3}
+      propertyPath: _stackParticleColor.m_ColorMax.r
+      value: 0.6045948
+      objectReference: {fileID: 0}
     - target: {fileID: 5655279764786305650, guid: 949d89c28cd5a984587e765abc06d70a,
         type: 3}
       propertyPath: m_Name
