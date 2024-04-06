@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
-using Gameplay.GameLogic;
+using Gameplay.Blocks;
+using Gameplay.GameCore;
 using HDH.GoPool;
 using HDH.UnityExt.Extensions;
 using Infrastructure.SimpleInput;
@@ -13,19 +14,20 @@ namespace Gameplay
     public class GameView : MonoBehaviour
     {
         [SerializeField] private BlockSlot _slotPrefab;
-        [SerializeField] private BlockView _blockPrefab;
         [SerializeField] private Camera _camera;
         [SerializeField] private float _replacementDepth;
         private StackingGame<int> _game;
         private BlockSlot[,] _slots;
         private BlockReplacer _replacer;
         private IGoPool _pool;
+        private BlocksContainer _blocksContainer;
         private bool _isMovementLocked;
         private bool _gameFinished;
 
-        public void Initialize(InputService input, IGoPool pool)
+        public void Initialize(InputService input, IGoPool pool, BlocksContainer blocksContainer)
         {
             _pool = pool;
+            _blocksContainer = blocksContainer;
             _replacer = new BlockReplacer(_camera, input, _replacementDepth, Move);
         }
         
@@ -52,8 +54,8 @@ namespace Gameplay
                     _slots[x, y] = slot;
                     int block = _game.GetCellValue(x, y);
                     if (block == 0) continue;
-                    BlockView blockView = _pool.Get(_blockPrefab, transform);
-                    blockView.Setup(block, inGamePosition, _replacer);
+                    BlockView blockView = _pool.Get(_blocksContainer.BlocksDict[(BlockType)block], transform);
+                    blockView.Setup(inGamePosition, _replacer);
                     slot.SetBlock(blockView, false);
                 }
             }
@@ -114,7 +116,7 @@ namespace Gameplay
         private async UniTask ClearSlot(Vector2Int position)
         {
             BlockView block = await _slots[position.x, position.y].StackContainingBlock();
-            _pool.Return(block, _blockPrefab);
+            _pool.Return(block, _blocksContainer.BlocksDict[block.Type]);
         }
         
         private void HandleLoose() => 
@@ -132,7 +134,7 @@ namespace Gameplay
                 if (block.IsNotNull())
                 {
                     block.ResetBlock();
-                    _pool.Return(block, _blockPrefab);
+                    _pool.Return(block, _blocksContainer.BlocksDict[block.Type]);
                 }
                 _pool.Return(_slots[x, y], _slotPrefab);
             }

@@ -1,7 +1,8 @@
 ﻿using System.Threading;
 using Cysharp.Threading.Tasks;
 using Gameplay;
-using Gameplay.GameLogic;
+using Gameplay.Blocks;
+using Gameplay.GameCore;
 using HDH.GoPool;
 using Infrastructure.SimpleInput;
 using UnityEngine;
@@ -28,11 +29,11 @@ namespace Infrastructure.SceneManagement.Roots
             }
         };
 
-        public void OnEnter(InputService inputService, IGoPool pool)
+        public void OnEnter(InputService inputService, IGoPool pool, GameConfig gameConfig)
         {
             _ctSource = new CancellationTokenSource();
             _input = inputService;
-            _gameView.Initialize(_input, pool);
+            _gameView.Initialize(_input, pool, gameConfig.BlocksContainer);
             StartLoop(_ctSource.Token).Forget();
         }
 

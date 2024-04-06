@@ -1,4 +1,4 @@
-﻿namespace Gameplay.GameLogic
+﻿namespace Gameplay.GameCore
 {
     public enum GameEventType
     {

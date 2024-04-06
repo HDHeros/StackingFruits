@@ -1,4 +1,5 @@
-﻿using HDH.Fsm;
+﻿using Gameplay;
+using HDH.Fsm;
 using HDH.GoPool;
 using Infrastructure.GameStateMachine.States;
 using Infrastructure.SceneManagement;
@@ -13,13 +14,14 @@ namespace Infrastructure.GameStateMachine
         private Fsm<BaseGameState, SharedFields> _fsm;
         
         [Inject]
-        public void Inject(SceneService sceneService, InputService inputService, IGoPool pool)
+        public void Inject(SceneService sceneService, InputService inputService, IGoPool pool, GameConfig gameConfig)
         {
             var fields = new SharedFields
             {
                 SceneService = sceneService,
                 InputService = inputService,
                 GoPool = pool,
+                GameConfig = gameConfig,
             };
             
             _fsm = Fsm<BaseGameState, SharedFields>
@@ -43,6 +45,7 @@ namespace Infrastructure.GameStateMachine
             public SceneService SceneService;
             public InputService InputService;
             public IGoPool GoPool;
+            public GameConfig GameConfig;
         }
     }
 }

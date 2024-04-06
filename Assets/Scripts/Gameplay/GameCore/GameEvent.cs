@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Gameplay.GameLogic
+namespace Gameplay.GameCore
 {
     public struct GameEvent
     {

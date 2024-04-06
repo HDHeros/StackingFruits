@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Gameplay.GameLogic
+namespace Gameplay.GameCore
 {
     public class StackingGame<TBlock> where TBlock : IEquatable<TBlock>
     {

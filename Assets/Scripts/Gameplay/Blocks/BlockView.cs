@@ -4,30 +4,22 @@ using HDH.UnityExt.Extensions;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Gameplay
+namespace Gameplay.Blocks
 {
     public class BlockView : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler
     {
-        [SerializeField] private MeshRenderer _renderer;
+        [SerializeField] private BlockType _type;
         public Transform Transform => _transform;
         public BlockSlot Slot { get; private set; }
+        public BlockType Type => _type;
 
         private BlockReplacer _replacer;
         private Transform _transform;
 
-        public void Setup(int block, Vector2Int position, BlockReplacer replacer)
+        public void Setup(Vector2Int position, BlockReplacer replacer)
         {
             gameObject.SetActive(true);
-            Color color = Color.white;
-            switch (block)
-            {
-                case 1: color = Color.green; break;
-                case 2: color = Color.yellow; break;
-                case 3: color = Color.red; break;
-            }
-
             transform.position = new Vector3(position.x, position.y);
-            _renderer.material.color = color;
             _replacer = replacer;
         }
 

@@ -1,16 +1,30 @@
-﻿using HDH.GoPool;
+﻿using Gameplay;
+using HDH.GoPool;
 using Infrastructure.SceneManagement;
+using UnityEngine;
 using Zenject;
 
 namespace Infrastructure.ZenInstallers
 {
     public class ServicesInstaller : MonoInstaller
     {
+        [SerializeField] private GameConfig _gameConfig;
+
         public override void InstallBindings()
         {
+            InstallGameConfig();
             InstallInputService();
             InstallSceneService();
             InstallGoPool();
+        }
+
+        private void InstallGameConfig()
+        {
+            _gameConfig.Initialize();
+            Container
+                .Bind<GameConfig>()
+                .FromInstance(_gameConfig)
+                .AsSingle();
         }
 
         private void InstallSceneService() =>

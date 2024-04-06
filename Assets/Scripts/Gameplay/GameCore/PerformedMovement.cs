@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Gameplay.GameLogic
+namespace Gameplay.GameCore
 {
     public struct PerformedMovement
     {

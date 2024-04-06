@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Gameplay.GameLogic
+namespace Gameplay.GameCore
 {
     [Serializable]
     public struct LevelData<TBlock> where TBlock : IEquatable<TBlock>
