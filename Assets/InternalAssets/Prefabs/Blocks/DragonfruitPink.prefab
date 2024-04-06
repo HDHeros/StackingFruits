@@ -148,6 +148,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4957925591509554552, guid: 949d89c28cd5a984587e765abc06d70a,
         type: 3}
+      propertyPath: _decalColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4957925591509554552, guid: 949d89c28cd5a984587e765abc06d70a,
+        type: 3}
+      propertyPath: _decalColor.b
+      value: 0.54901963
+      objectReference: {fileID: 0}
+    - target: {fileID: 4957925591509554552, guid: 949d89c28cd5a984587e765abc06d70a,
+        type: 3}
+      propertyPath: _decalColor.g
+      value: 0.34509805
+      objectReference: {fileID: 0}
+    - target: {fileID: 4957925591509554552, guid: 949d89c28cd5a984587e765abc06d70a,
+        type: 3}
+      propertyPath: _decalColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4957925591509554552, guid: 949d89c28cd5a984587e765abc06d70a,
+        type: 3}
       propertyPath: _stackParticleColor.m_ColorMax.a
       value: 1
       objectReference: {fileID: 0}

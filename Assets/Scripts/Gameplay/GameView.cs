@@ -16,8 +16,8 @@ namespace Gameplay
     {
         [SerializeField] private BlockSlot _slotPrefab;
         [SerializeField] private Camera _camera;
+        [SerializeField] private WallDecals _wallDecals;
         [SerializeField] private float _replacementDepth;
-        [SerializeField] private float _stackingAnimationDepth;
         private StackingGame<int> _game;
         private BlockSlot[,] _slots;
         private BlockReplacer _replacer;
@@ -31,6 +31,7 @@ namespace Gameplay
             _pool = pool;
             _blocksContainer = blocksContainer;
             _replacer = new BlockReplacer(_camera, input, _replacementDepth, Move);
+            _wallDecals.Initialize(_camera, pool);
         }
         
         public UniTask StartGame(LevelData<int> levelData)
@@ -110,8 +111,8 @@ namespace Gameplay
             await MoveAllToStackPos();
             BlockView animatedFruit = SelectOneFruit();
             await animatedFruit.PlayOnStackAnimation(_pool);
+            _wallDecals.SpawnDecal(animatedFruit.Transform.position, animatedFruit.DecalColor);
             RemoveBlock(animatedFruit);
-            
             
             UniTask MoveAllToStackPos()
             {
@@ -122,7 +123,7 @@ namespace Gameplay
                 Vector3 stackPos = _camera.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 3f));
                 stackPos = Vector3.Lerp(avgPos, stackPos, 0.5f);
 
-                return UniTask.WhenAll(stackedFruits.Select(f => f.StartStackingSequence(stackPos)));
+                return UniTask.WhenAll(stackedFruits.Select(f => f.MoveToStackingAnimationPos(stackPos)));
             }
 
             BlockView SelectOneFruit()
@@ -172,6 +173,7 @@ namespace Gameplay
                 }
                 _pool.Return(_slots[x, y], _slotPrefab);
             }
+            _wallDecals.Clear();
             _gameFinished = true;
         }
     }

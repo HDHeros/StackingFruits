@@ -588,7 +588,9 @@ MonoBehaviour:
   _slotPrefab: {fileID: 8376657328796967314, guid: a899b552fedcf7f438ca0977a1afcda9,
     type: 3}
   _camera: {fileID: 541004751}
+  _wallDecals: {fileID: 1719252201}
   _replacementDepth: 5
+  _stackingAnimationDepth: 0
 --- !u!1 &1719252197
 GameObject:
   m_ObjectHideFlags: 0
@@ -600,6 +602,7 @@ GameObject:
   - component: {fileID: 1719252200}
   - component: {fileID: 1719252199}
   - component: {fileID: 1719252198}
+  - component: {fileID: 1719252201}
   m_Layer: 0
   m_Name: Wall
   m_TagString: Untagged
@@ -672,6 +675,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 693965536}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1719252201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1719252197}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e7e63ffb1894d64a352ee8ea0e6ba50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _projectorPrefab: {fileID: 1995724225289147467, guid: f2db8ec35be01cf4b8405b6df8b29600,
+    type: 3}
+  _materialPool:
+  - {fileID: 2100000, guid: 40d613ee96c126249bbe0b23eee566b3, type: 2}
+  - {fileID: 2100000, guid: 6771337dd5be7e143844219ca468bc7f, type: 2}
+  - {fileID: 2100000, guid: 3dffb23c8d523a143a02aa86ce653bdd, type: 2}
+  - {fileID: 2100000, guid: 06f663722a8b5ad4092ef4d24a9df6fe, type: 2}
+  - {fileID: 2100000, guid: c89278dbadd3407459ae77e2c1cd7dca, type: 2}
+  - {fileID: 2100000, guid: 96c587a440c2f8140835fa390e627c88, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

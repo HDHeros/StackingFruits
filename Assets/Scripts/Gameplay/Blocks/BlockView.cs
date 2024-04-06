@@ -14,9 +14,12 @@ namespace Gameplay.Blocks
         [SerializeField] private BlockType _type;
         [SerializeField] private PooledParticle[] _onStackParticles;
         [SerializeField] private ParticleSystem.MinMaxGradient _stackParticleColor;
+        [SerializeField] private Color _decalColor;
         public Transform Transform => _transform;
         public BlockSlot Slot { get; private set; }
         public BlockType Type => _type;
+        public Color DecalColor => _decalColor;
+
         private BlockReplacer _replacer;
         private Transform _transform;
 
@@ -94,13 +97,17 @@ namespace Gameplay.Blocks
         {
             ResetBlock();
             _transform.localScale = Vector3.one;
+            _transform.rotation = Quaternion.identity;
         }
 
-        public UniTask StartStackingSequence(Vector3 position)
+        public UniTask MoveToStackingAnimationPos(Vector3 position)
         {
             _transform.DOKill();
-            Tween tween = _transform.DOMove(position, 0.25f).SetEase(Ease.InSine);
-            return UniTask.WaitWhile(() => tween.IsActive() && tween.IsPlaying());
+            Sequence sequence = DOTween.Sequence()
+                .Append(_transform.DOMove(position, 0.25f).SetEase(Ease.InSine))
+                .Join(_transform.DORotate(Vector3.zero.WithY(Random.Range(90, 180)), 0.25f));
+            
+            return UniTask.WaitWhile(() => sequence.IsActive() && sequence.IsPlaying());
         }
 
         public async UniTask PlayOnStackAnimation(IGoPool pool)
@@ -108,7 +115,8 @@ namespace Gameplay.Blocks
             _transform.DOKill();
             Sequence sequence = DOTween.Sequence()
                 .Append(_transform.DOScale(Vector3.one * 0.8f, 0.5f).SetEase(Ease.Linear))
-                .Join(_transform.DOShakePosition(0.5f, strength: 0.05f, vibrato: 15, fadeOut: false));
+                .Join(_transform.DOShakePosition(0.5f, strength: 0.05f, vibrato: 15, fadeOut: false))
+                .Join(_transform.DOShakeRotation(0.5f, strength: 15f, vibrato: 15, fadeOut: false));
             await UniTask.WaitWhile(() => sequence.IsActive() && sequence.IsPlaying());
             SpawnStackingParticle(pool);
         }
@@ -120,7 +128,7 @@ namespace Gameplay.Blocks
             var particleSystemMain = pooledParticle.ParticleSystem.main;
             particleSystemMain.startColor = _stackParticleColor;
             pooledParticle
-                .PlayAndReturn(_transform.position, particlePrefab, pool, CancellationToken.None);
+                .PlayAndReturn(_transform.position, particlePrefab, pool, CancellationToken.None, Random.rotation);
         }
     }
 }
