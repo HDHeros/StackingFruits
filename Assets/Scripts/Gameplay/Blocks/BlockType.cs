@@ -3,8 +3,8 @@
     public enum BlockType
     {
         None = 0,
-        AppleRed = 1,
-        AppleGreen = 2,
-        AppleYellow = 3,
+        DragonfruitPink = 1,
+        CoconutGreen = 2,
+        Apricot = 3,
     }
 }

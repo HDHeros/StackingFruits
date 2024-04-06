@@ -46,7 +46,7 @@ namespace Gameplay
             _currentBlock.gameObject.SetActive(true);
             
             CalculateTargetTransform(eventData.position);
-            _currentBlock.Transform.position = _targetPosition;
+            // _currentBlock.Transform.position = _targetPosition;
             // _currentBlock.Transform.rotation = _targetRotation;
             _syncCtSource = new CancellationTokenSource();
             _inputService.SimpleDrag += OnReplace;
@@ -62,7 +62,7 @@ namespace Gameplay
             if (RayCastSlot(out BlockSlot slot, out _) == false)
                 return;
 
-            _targetPosition = slot.WorldPosition;
+            // _targetPosition = slot.WorldPosition;
 
             // _targetRotation = slot.Rotation;
             // _targetScale = slot.Transform.localScale;
