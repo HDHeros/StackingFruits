@@ -1,4 +1,5 @@
 ﻿using Gameplay;
+using GameStructConfigs;
 using HDH.GoPool;
 using Infrastructure.SceneManagement;
 using UnityEngine;

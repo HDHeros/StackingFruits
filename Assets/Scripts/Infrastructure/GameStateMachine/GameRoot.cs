@@ -1,4 +1,4 @@
-﻿using Gameplay;
+﻿using GameStructConfigs;
 using HDH.Fsm;
 using HDH.GoPool;
 using Infrastructure.GameStateMachine.States;

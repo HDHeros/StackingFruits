@@ -17,6 +17,9 @@ namespace Infrastructure.SimpleInput
         /// </summary>
         public event Action<Vector2, Vector2> SimpleDrag;
         public event Action<Vector2> SimpleDragFinished;
+        public event Action<LeanFinger> OnTap;
+        public event Action<Vector2Int> OnSwipe;
+        public event Action OnBackButtonPressed;
         public bool IsTouchDetected { get; private set; }
         private Vector2 _lastDragDelta;
         private float _lastPinchRatio;
@@ -24,12 +27,30 @@ namespace Infrastructure.SimpleInput
         public InputService()
         {
             LeanTouch.OnFingerDown += OnFingerDown;
+            LeanTouch.OnFingerSwipe += OnFingerSwipe;
+            LeanTouch.OnFingerTap += OnFingerTap;
             _ctSource = new CancellationTokenSource();
             ObserveEvents(_ctSource.Token).Forget();
         }
 
+        private void OnFingerTap(LeanFinger finger)
+        {
+            if (finger.StartedOverGui) return;
+            OnTap?.Invoke(finger);
+        }
+
+        private void OnFingerSwipe(LeanFinger finger)
+        {
+            Vector2Int direction = new Vector2Int(Mathf.RoundToInt(finger.SwipeScaledDelta.x),
+                Mathf.RoundToInt(finger.SwipeScaledDelta.y));
+            OnSwipe?.Invoke(direction);
+        }
+
         public void Dispose() => 
             _ctSource?.Dispose();
+
+        public void RaiseOnBackButtonClicked() => 
+            OnBackButtonPressed?.Invoke();
 
         private async UniTaskVoid ObserveEvents(CancellationToken token)
         {
@@ -42,8 +63,15 @@ namespace Infrastructure.SimpleInput
                 IsTouchDetected = fingers.Count > 0;
                 HandlePinch(fingers);
                 HandleDrag(fingers);
+                HandleBackButton();
                 await UniTask.Yield(PlayerLoopTiming.Update, token);
             }
+        }
+
+        private void HandleBackButton()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+                RaiseOnBackButtonClicked();
         }
 
         private void HandleDrag(List<LeanFinger> fingers)

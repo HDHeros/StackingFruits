@@ -7,6 +7,7 @@
     "com.hdhero.gopool": "https://github.com/HDHeros/UniPacks.git?path=Packages/com.hdhero.gopool",
     "com.hdhero.pupups": "https://github.com/HDHeros/UniPacks.git?path=Packages/com.hdhero.pupups",
     "com.hdhero.unity-engine-ext": "https://github.com/HDHeros/UniPacks.git?path=Packages/com.hdhero.unity-engine-ext",
+    "com.unity.cinemachine": "2.9.7",
     "com.unity.collab-proxy": "2.2.0",
     "com.unity.ide.rider": "3.0.28",
     "com.unity.ide.visualstudio": "2.0.22",

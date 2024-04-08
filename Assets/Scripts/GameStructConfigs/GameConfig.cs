@@ -1,7 +1,7 @@
 ﻿using Gameplay.Blocks;
 using UnityEngine;
 
-namespace Gameplay
+namespace GameStructConfigs
 {
     [CreateAssetMenu(menuName = "Configs/GameConfig", fileName = "GameConfig", order = 0)]
     public class GameConfig : ScriptableObject
