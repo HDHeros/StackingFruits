@@ -80,7 +80,7 @@ MonoBehaviour:
   _boundsSize: {x: 4.87, y: 5.6, z: 4.07}
   _model: {fileID: 8450431749847579537}
   _onSelectOffset: {x: 0, y: 0.5, z: -2}
-  _onPickedOffset: 0
+  _onPickedOffset: {x: 0, y: 0, z: 0}
 --- !u!1001 &6557033657558483219
 PrefabInstance:
   m_ObjectHideFlags: 0
