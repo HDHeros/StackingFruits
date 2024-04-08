@@ -13,3 +13,9 @@ MonoBehaviour:
   m_Name: GameConfig
   m_EditorClassIdentifier: 
   BlocksContainer: {fileID: 11400000, guid: 751f8adb155c68a4a9379d9812922aa8, type: 2}
+  Sections:
+  - {fileID: 11400000, guid: f8252c47a09aa7942bd9a38741a5b3f5, type: 2}
+  - {fileID: 11400000, guid: a4d577fe7335ac34eb57a48233d838d9, type: 2}
+  - {fileID: 11400000, guid: 14c5e871483782e49a96f6842f75025a, type: 2}
+  - {fileID: 11400000, guid: b947d024c3b6132419e338a094e50059, type: 2}
+  - {fileID: 11400000, guid: 25094e14de55a194e93848cd7fd889d2, type: 2}

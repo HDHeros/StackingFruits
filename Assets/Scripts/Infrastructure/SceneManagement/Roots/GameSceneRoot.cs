@@ -8,6 +8,7 @@ using GameStructConfigs;
 using HDH.Fsm;
 using HDH.GoPool;
 using Infrastructure.SimpleInput;
+using Menu;
 using UI;
 using UnityEngine;
 
@@ -61,6 +62,7 @@ namespace Infrastructure.SceneManagement.Roots
             public CameraController CameraController;
             public GameView GameView;
             public Hud Hud;
+            public SectionPicker SectionPicker;
             [NonSerialized] public GameConfig GameConfig;
             [NonSerialized] public InputService Input;
             [NonSerialized] public IGoPool Pool;

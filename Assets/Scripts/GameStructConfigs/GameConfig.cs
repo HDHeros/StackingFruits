@@ -7,6 +7,7 @@ namespace GameStructConfigs
     public class GameConfig : ScriptableObject
     {
         public BlocksContainer BlocksContainer;
+        public SectionConfig[] Sections;
 
         public void Initialize()
         {

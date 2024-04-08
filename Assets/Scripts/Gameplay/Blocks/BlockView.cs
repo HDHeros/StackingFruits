@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using HDH.GoPool;
@@ -6,10 +7,11 @@ using HDH.GoPool.Components;
 using HDH.UnityExt.Extensions;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Random = UnityEngine.Random;
 
 namespace Gameplay.Blocks
 {
-    public class BlockView : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler
+    public class BlockView : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler, IEquatable<BlockView>
     {
         [SerializeField] private BlockType _type;
         [SerializeField] private PooledParticle[] _onStackParticles;
@@ -129,6 +131,11 @@ namespace Gameplay.Blocks
             particleSystemMain.startColor = _stackParticleColor;
             pooledParticle
                 .PlayAndReturn(_transform.position, particlePrefab, pool, CancellationToken.None, Random.rotation);
+        }
+
+        public bool Equals(BlockView other)
+        {
+            return other != null && other.Type == _type;
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Gameplay
         [SerializeField] private Camera _camera;
         [SerializeField] private WallDecals _wallDecals;
         [SerializeField] private float _replacementDepth;
-        private StackingGame<int> _game;
+        private StackingGame<BlockView> _game;
         private BlockSlot[,] _slots;
         private BlockReplacer _replacer;
         private IGoPool _pool;
@@ -34,9 +34,9 @@ namespace Gameplay
             _wallDecals.Initialize(_camera, pool);
         }
         
-        public UniTask StartGame(LevelData<int> levelData)
+        public UniTask StartGame(LevelData<BlockView> levelData)
         {
-            _game = new StackingGame<int>();
+            _game = new StackingGame<BlockView>();
             _game.Reinitialize(levelData);
             SetupField();
             _gameFinished = false;
@@ -55,9 +55,9 @@ namespace Gameplay
                     BlockSlot slot = _pool.Get(_slotPrefab, transform);
                     slot.Setup(inGamePosition);
                     _slots[x, y] = slot;
-                    int block = _game.GetCellValue(x, y);
-                    if (block == 0) continue;
-                    BlockView blockView = _pool.Get(_blocksContainer.BlocksDict[(BlockType)block], transform);
+                    BlockView block = _game.GetCellValue(x, y);
+                    if (block.Type == BlockType.None) continue;
+                    BlockView blockView = _pool.Get(_blocksContainer.BlocksDict[block.Type], transform);
                     blockView.Setup(inGamePosition, _replacer);
                     slot.SetBlock(blockView, false);
                 }

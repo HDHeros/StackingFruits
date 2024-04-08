@@ -41,8 +41,12 @@ namespace Infrastructure.SimpleInput
 
         private void OnFingerSwipe(LeanFinger finger)
         {
-            Vector2Int direction = new Vector2Int(Mathf.RoundToInt(finger.SwipeScaledDelta.x),
-                Mathf.RoundToInt(finger.SwipeScaledDelta.y));
+            Vector2 swipeDelta = finger.SwipeScaledDelta;
+            Vector2Int direction = Vector2Int.zero;
+            direction = Mathf.Abs(swipeDelta.x) > Mathf.Abs(swipeDelta.y) 
+                ? new Vector2Int((int)Mathf.Sign(swipeDelta.x), 0) 
+                : new Vector2Int(0, (int)Mathf.Sign(swipeDelta.y));
+            
             OnSwipe?.Invoke(direction);
         }
 
