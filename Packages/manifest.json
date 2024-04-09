@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "com.codewriter.triinspector": "https://github.com/codewriter-packages/Tri-Inspector.git",
     "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
     "com.hdhero.audio": "https://github.com/HDHeros/UniPacks.git?path=Packages/com.hdhero.audio",
     "com.hdhero.fsm": "https://github.com/HDHeros/UniPacks.git?path=Packages/com.hdhero.fsm",

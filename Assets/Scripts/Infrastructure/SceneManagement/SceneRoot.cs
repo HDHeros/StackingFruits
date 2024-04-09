@@ -1,4 +1,4 @@
-﻿using TriInspector;
+﻿using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Infrastructure.SceneManagement
@@ -9,9 +9,7 @@ namespace Infrastructure.SceneManagement
         [ValidateInput(nameof(ValidateSceneName))]
         [SerializeField] private SceneId _sceneId;
 
-        private TriValidationResult ValidateSceneName() => 
-            gameObject.scene.name != _sceneId.ToString() 
-                ? TriValidationResult.Error("Scene name and SceneId are not matching") 
-                : TriValidationResult.Valid;
+        private bool ValidateSceneName() =>
+            gameObject.scene.name == _sceneId.ToString();
     }
 }

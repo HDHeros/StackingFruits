@@ -7,7 +7,7 @@ using Gameplay.GameCore;
 using HDH.GoPool;
 using HDH.UnityExt.Extensions;
 using Infrastructure.SimpleInput;
-using TriInspector;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Gameplay
