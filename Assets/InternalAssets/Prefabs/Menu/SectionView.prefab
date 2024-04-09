@@ -78,30 +78,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _localBounds:
-    m_Center: {x: 0, y: 0, z: -0.81}
-    m_Extent: {x: 2.4, y: 3.49, z: 0.81}
+    m_Center: {x: 0, y: 0, z: -0.21}
+    m_Extent: {x: 0.6, y: 0.9, z: 0.22}
   _model: {fileID: 8450431749847579537}
-  _onSelectOffset: {x: 0, y: 0.5, z: -2}
-  _onPickedOffset: {x: 0, y: 0, z: 0}
+  _onSelectOffset: {x: 0, y: 0.2, z: -0.8}
+  _onPickedOffset: {x: 0, y: 0, z: 0.5}
   _availablePreviewBounds:
-  - m_Center: {x: -1.34, y: 2.2, z: -0.79}
-    m_Extent: {x: 0.5, y: 0.6, z: 0.8}
-  - m_Center: {x: 0.02, y: 1.97, z: -0.79}
-    m_Extent: {x: 0.6, y: 0.5, z: 0.8}
-  - m_Center: {x: 1.46, y: 2.25, z: -0.79}
-    m_Extent: {x: 0.6, y: 0.6, z: 0.8}
-  - m_Center: {x: -1.56, y: 0.11, z: -0.79}
-    m_Extent: {x: 0.5, y: 0.6, z: 0.8}
-  - m_Center: {x: 0.09, y: -0.27, z: -0.79}
-    m_Extent: {x: 0.6, y: 0.6, z: 0.8}
-  - m_Center: {x: 1.44, y: 0.01, z: -0.79}
-    m_Extent: {x: 0.5, y: 0.5, z: 0.8}
-  - m_Center: {x: -1.41, y: -2.31, z: -0.79}
-    m_Extent: {x: 0.7, y: 0.7, z: 0.8}
-  - m_Center: {x: -0.04, y: -2.51, z: -0.79}
-    m_Extent: {x: 0.5, y: 0.7, z: 0.8}
-  - m_Center: {x: 1.33, y: -1.97, z: -0.79}
-    m_Extent: {x: 0.7, y: 0.7, z: 0.8}
+  - m_Center: {x: -0.334, y: 0.55, z: -0.1975}
+    m_Extent: {x: 0.125, y: 0.15, z: 0.2}
+  - m_Center: {x: 0.005, y: 0.4925, z: -0.1975}
+    m_Extent: {x: 0.15, y: 0.125, z: 0.2}
+  - m_Center: {x: 0.365, y: 0.5625, z: -0.1975}
+    m_Extent: {x: 0.15, y: 0.15, z: 0.2}
+  - m_Center: {x: -0.39, y: 0.0275, z: -0.1975}
+    m_Extent: {x: 0.125, y: 0.15, z: 0.2}
+  - m_Center: {x: 0.0225, y: -0.0675, z: -0.1975}
+    m_Extent: {x: 0.15, y: 0.15, z: 0.2}
+  - m_Center: {x: 0.36, y: 0.0025, z: -0.1975}
+    m_Extent: {x: 0.125, y: 0.125, z: 0.2}
+  - m_Center: {x: -0.3525, y: -0.5775, z: -0.1975}
+    m_Extent: {x: 0.175, y: 0.175, z: 0.2}
+  - m_Center: {x: -0.01, y: -0.6275, z: -0.1975}
+    m_Extent: {x: 0.125, y: 0.175, z: 0.2}
+  - m_Center: {x: 0.3325, y: -0.4925, z: -0.1975}
+    m_Extent: {x: 0.175, y: 0.175, z: 0.2}
 --- !u!1001 &6557033657558483219
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -118,17 +118,17 @@ PrefabInstance:
     - target: {fileID: 8484083326786777424, guid: 5fad8a7d18044284a918e4756c98e639,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8484083326786777424, guid: 5fad8a7d18044284a918e4756c98e639,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8484083326786777424, guid: 5fad8a7d18044284a918e4756c98e639,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8484083326786777424, guid: 5fad8a7d18044284a918e4756c98e639,
         type: 3}

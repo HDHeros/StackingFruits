@@ -11,6 +11,7 @@ namespace Gameplay.GameSceneLogic
         public override void Enter()
         {
             _ctSource = new CancellationTokenSource();
+            Fields.CameraController.ActivateInGameCamera();
             StartGameLoop(_ctSource.Token).Forget();
         }
 

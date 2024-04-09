@@ -10,6 +10,7 @@ namespace Gameplay.CameraLogic
         [SerializeField] private CinemachineVirtualCamera _homeScreenCamera;
         [SerializeField] private CinemachineVirtualCamera _selectSectionVCam;
         [SerializeField] private CinemachineVirtualCamera _selectLevelVCam;
+        [SerializeField] private CinemachineVirtualCamera _inGameVCam;
         private CinemachineVirtualCamera _activeVCam;
         public Camera Camera => _camera;
 
@@ -21,6 +22,9 @@ namespace Gameplay.CameraLogic
 
         public void ActivateSelectLevelCamera() => 
             ActivateCamera(_selectLevelVCam);
+
+        public void ActivateInGameCamera() =>
+            ActivateCamera(_inGameVCam);
 
         private void ActivateCamera(CinemachineVirtualCamera vCam)
         {

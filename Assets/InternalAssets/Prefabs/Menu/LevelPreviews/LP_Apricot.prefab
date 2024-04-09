@@ -15,13 +15,28 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4114579181248816693, guid: 659fad11630e9474197f42b308e7fce1,
         type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4114579181248816693, guid: 659fad11630e9474197f42b308e7fce1,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4114579181248816693, guid: 659fad11630e9474197f42b308e7fce1,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4114579181248816693, guid: 659fad11630e9474197f42b308e7fce1,
+        type: 3}
       propertyPath: m_LocalPosition.x
       value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4114579181248816693, guid: 659fad11630e9474197f42b308e7fce1,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.249
+      value: -0.102
       objectReference: {fileID: 0}
     - target: {fileID: 4114579181248816693, guid: 659fad11630e9474197f42b308e7fce1,
         type: 3}
@@ -67,7 +82,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: b84cefb0d6e13a54190aa33bb55d64a5, type: 2}
+      objectReference: {fileID: 2100000, guid: c27b12cfe2fac9240955365529793a55, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -120,17 +135,17 @@ PrefabInstance:
     - target: {fileID: 5183899783146244303, guid: 4341530679db66643bfdba4dceb50dda,
         type: 3}
       propertyPath: m_Size.x
-      value: 0.52
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 5183899783146244303, guid: 4341530679db66643bfdba4dceb50dda,
         type: 3}
       propertyPath: m_Size.y
-      value: 0.55
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 5183899783146244303, guid: 4341530679db66643bfdba4dceb50dda,
         type: 3}
       propertyPath: m_Size.z
-      value: 0.55
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 7318648407229216689, guid: 4341530679db66643bfdba4dceb50dda,
         type: 3}

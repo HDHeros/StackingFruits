@@ -18,6 +18,7 @@ namespace Gameplay
         [SerializeField] private Camera _camera;
         [SerializeField] private WallDecals _wallDecals;
         [SerializeField] private float _replacementDepth;
+        [SerializeField] private Bounds _gameFieldBounds;
         private StackingGame<BlockView> _game;
         private BlockSlot[,] _slots;
         private BlockReplacer _replacer;
@@ -30,13 +31,13 @@ namespace Gameplay
         {
             _pool = pool;
             _blocksContainer = blocksContainer;
+            _game = new StackingGame<BlockView>();
             _replacer = new BlockReplacer(_camera, input, _replacementDepth, Move);
             _wallDecals.Initialize(_camera, pool);
         }
         
         public UniTask StartGame(LevelData<BlockView> levelData)
         {
-            _game = new StackingGame<BlockView>();
             _game.Reinitialize(levelData);
             SetupField();
             _gameFinished = false;
@@ -175,6 +176,12 @@ namespace Gameplay
             }
             _wallDecals.Clear();
             _gameFinished = true;
+        }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawWireCube(transform.position + _gameFieldBounds.center, _gameFieldBounds.size);
         }
     }
 }
