@@ -1,4 +1,5 @@
 ﻿using System;
+using Menu;
 
 namespace Gameplay.GameSceneLogic
 {
@@ -8,12 +9,14 @@ namespace Gameplay.GameSceneLogic
         {
             Fields.CameraController.ActivateSelectLevelCamera();
             Fields.Input.OnBackButtonPressed += OnBackButtonPressed;
+            Fields.PickedSection.OnLevelPreviewClick += OnLevelClicked;
             base.Enter();
         }
 
         public override void Exit(Action onExit)
         {
             Fields.Input.OnBackButtonPressed -= OnBackButtonPressed;
+            Fields.PickedSection.OnLevelPreviewClick -= OnLevelClicked;
             base.Exit(onExit);
         }
 
@@ -21,6 +24,12 @@ namespace Gameplay.GameSceneLogic
         {
             if (Fields.SectionPicker.UnpickSelected() == false) return;
             StateSwitcher.SwitchState<GsSelectSectionState>();        
+        }
+
+        private void OnLevelClicked(LevelPreview preview)
+        {
+            Fields.PickedLevel = preview;
+            StateSwitcher.SwitchState<GsGameInProgressState>();
         }
     }
 }

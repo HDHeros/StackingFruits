@@ -46,7 +46,7 @@ namespace Gameplay.GameSceneLogic
 
         private void OnTap(LeanFinger finger)
         {
-            if (Fields.SectionPicker.PickSelected() == false) return;
+            if (Fields.SectionPicker.PickSelected(out Fields.PickedSection) == false) return;
             StateSwitcher.SwitchState<GsSelectLevelState>();
         }
     }

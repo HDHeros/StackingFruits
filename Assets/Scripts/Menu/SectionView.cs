@@ -1,16 +1,21 @@
-﻿using DG.Tweening;
+﻿using System;
+using DG.Tweening;
 using GameStructConfigs;
+using HDH.GoPool;
 using UnityEngine;
 
 namespace Menu
 {
     public class SectionView : MonoBehaviour
     {
-        [SerializeField] private Vector3 _boundsSize = Vector3.one;
+        public event Action<LevelPreview> OnLevelPreviewClick;
+        [SerializeField] private Bounds _localBounds;
         [SerializeField] private Transform _model;
         [SerializeField] private Vector3 _onSelectOffset;
         [SerializeField] private Vector3 _onPickedOffset;
-        public Vector3 Bounds => _boundsSize;
+        [SerializeField] private Bounds[] _availablePreviewBounds;
+        private LevelPreview[] _previews;
+        public Vector3 Bounds => _localBounds.size;
         public Transform Transform => transform;
         public Vector3 DefaultLocalPosition => _defaultLocalPos;
 
@@ -18,11 +23,21 @@ namespace Menu
         private Vector3 _defaultLocalPos;
 
 
-        public void Initialize(SectionConfig config, Vector3 localPos)
+        public void Initialize(SectionConfig config, Vector3 localPos, IGoPool pool)
         {
             _config = config;
             _defaultLocalPos = localPos;
             Transform.localPosition = localPos;
+            if (config.Levels.Length > _availablePreviewBounds.Length) 
+                throw new Exception();
+            _previews = new LevelPreview[config.Levels.Length];
+            for (var i = 0; i < config.Levels.Length; i++)
+            {
+                _previews[i] = pool.Get(config.Levels[i].LevelPreview, _model);
+                _previews[i].gameObject.SetActive(true);
+                _previews[i].Initialize(config.Levels[i], _availablePreviewBounds[i]);
+                _previews[i].OnClick += OnPreviewClick;
+            }
         }
 
         public void Select(float duration)
@@ -54,10 +69,18 @@ namespace Menu
             });
         }
 
+        private void OnPreviewClick(LevelPreview preview) => 
+            OnLevelPreviewClick?.Invoke(preview);
+
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.yellow;
-            Gizmos.DrawWireCube(transform.position, _boundsSize);
+            Gizmos.DrawWireCube(transform.position + _localBounds.center, _localBounds.size);
+            foreach (Bounds bound in _availablePreviewBounds)
+            {
+                Gizmos.color = Color.cyan;
+                Gizmos.DrawWireCube(transform.position + bound.center, bound.size);
+            }
         }
     }
 }

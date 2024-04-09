@@ -66,6 +66,8 @@ namespace Infrastructure.SceneManagement.Roots
             [NonSerialized] public GameConfig GameConfig;
             [NonSerialized] public InputService Input;
             [NonSerialized] public IGoPool Pool;
+            public SectionView PickedSection;
+            public LevelPreview PickedLevel;
         }
     }
 }

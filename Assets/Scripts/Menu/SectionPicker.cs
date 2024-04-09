@@ -31,7 +31,7 @@ namespace Menu
                 _views[i] = pool.Get(configs[i].ViewPrefab, _rightViewsParent);
                 SectionView view = _views[i];
                 view.gameObject.SetActive(true);
-                view.Initialize(configs[i], Vector3.zero.WithX(width + view.Bounds.x * 0.5f));
+                view.Initialize(configs[i], Vector3.zero.WithX(width + view.Bounds.x * 0.5f), pool);
                 view.Transform.rotation *= Quaternion.Euler(0, 0, Random.Range(_itemsRotationRange.x, _itemsRotationRange.y));
                 width += view.Bounds.x + Random.Range(_itemsSpacingRange.x, _itemsSpacingRange.y);
             }
@@ -74,8 +74,9 @@ namespace Menu
             }
         }
 
-        public bool PickSelected()
+        public bool PickSelected(out SectionView pickedSection)
         {
+            pickedSection = null;
             if (CheckInteraction() == false) return false;
             _selectedLocalPosCached = _selected.DefaultLocalPosition;
             _selected.Transform.SetParent(_transform);
@@ -84,6 +85,7 @@ namespace Menu
             _rightViewsParent.DOKill();
             _leftViewsParent.DOMove(-_hiddenPosition - _selectedLocalPosCached, 0.5f);
             _rightViewsParent.DOMove(_hiddenPosition, 0.5f).OnComplete(UnlockInteraction);
+            pickedSection = _selected;
             return true;
         }
 

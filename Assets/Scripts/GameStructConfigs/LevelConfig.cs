@@ -15,7 +15,7 @@ namespace GameStructConfigs
         public Vector2Int FieldSize;
         public BlockView[] Blocks;
         public LevelPreview LevelPreview;
-        [TableMatrix(RowHeight = 60, SquareCells = true, DrawElementMethod = "DrawCell"), ShowInInspector]
+        [TableMatrix(RowHeight = 60, DrawElementMethod = "DrawCell"), ShowInInspector]
         private BlockView[,] Blocks2D;
 
         public LevelData<BlockView> GetLevelData()
@@ -36,7 +36,10 @@ namespace GameStructConfigs
             {
                 for (int x = 0; x < FieldSize.x; x++)
                 {
-                    Blocks[y * FieldSize.x + x] = Blocks2D[x, y];
+                    int modY = FieldSize.y - y - 1;
+                    Blocks[y * FieldSize.x + x] = Blocks2D[x, modY];
+                    if (Blocks2D[x, modY] == null)
+                        Blocks2D[x, modY] = EmptyBlock;
                 }
             }
             
@@ -51,10 +54,9 @@ namespace GameStructConfigs
             {
                 BlockView block = Blocks[i];
                 int x = i % FieldSize.x;
-                int y = Mathf.FloorToInt((float) i / FieldSize.x);
+                int y = FieldSize.y - 1 - Mathf.FloorToInt((float) i / FieldSize.x);
                 Blocks2D[x, y] = block;
             }
-
         }
         
         [Button]
@@ -63,6 +65,7 @@ namespace GameStructConfigs
             Blocks2D = new BlockView[FieldSize.x, FieldSize.y];
         }
 
+        // ReSharper disable once UnusedMember.Local
         private static BlockView DrawCell(Rect rect, BlockView view)
         {
             if (DragAndDropUtilities.IsDragging &&
@@ -74,8 +77,8 @@ namespace GameStructConfigs
             }
             else
             {
-                if (view != null)
-                    EditorGUI.DrawPreviewTexture(rect, AssetPreview.GetAssetPreview(view.gameObject));
+                if (view != null )
+                    EditorGUI.DrawPreviewTexture(rect, AssetPreview.GetAssetPreview(view.gameObject) ?? Texture2D.grayTexture, null, ScaleMode.ScaleToFit);
             }
             
             return view;
