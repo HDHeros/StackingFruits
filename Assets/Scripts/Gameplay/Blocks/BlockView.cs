@@ -24,8 +24,8 @@ namespace Gameplay.Blocks
 
         private BlockReplacer _replacer;
         private Transform _transform;
-
-
+        private Vector3 _initialScale;
+        
         public void Setup(Vector2Int position, BlockReplacer replacer)
         {
             gameObject.SetActive(true);
@@ -33,16 +33,15 @@ namespace Gameplay.Blocks
             _replacer = replacer;
         }
 
-        public UniTask MoveTo(Vector2Int to, bool animated)
+        public UniTask MoveTo(Vector3 to, bool animated)
         {
-            Vector3 position = new Vector3(to.x, to.y);
             if (animated == false)
             {
-                transform.position = position;
+                transform.position = to;
                 return UniTask.CompletedTask;
             }
             
-            return AnimateDrop(position);
+            return AnimateDrop(to);
         }
 
         public void OnPointerDown(PointerEventData eventData)
@@ -80,7 +79,7 @@ namespace Gameplay.Blocks
         public void ResetBlock()
         {
             _transform.DOKill();
-            _transform.localScale = Vector3.one;
+            _transform.localScale = _initialScale;
             Slot = null;
         }
 
@@ -93,12 +92,13 @@ namespace Gameplay.Blocks
         private void Awake()
         {
             _transform = transform;
+            _initialScale = _transform.localScale;
         }
 
         private void OnDisable()
         {
             ResetBlock();
-            _transform.localScale = Vector3.one;
+            _transform.localScale = _initialScale;
             _transform.rotation = Quaternion.identity;
         }
 
@@ -116,7 +116,7 @@ namespace Gameplay.Blocks
         {
             _transform.DOKill();
             Sequence sequence = DOTween.Sequence()
-                .Append(_transform.DOScale(Vector3.one * 0.8f, 0.5f).SetEase(Ease.Linear))
+                .Append(_transform.DOScale(_initialScale * 0.8f, 0.5f).SetEase(Ease.Linear))
                 .Join(_transform.DOShakePosition(0.5f, strength: 0.05f, vibrato: 15, fadeOut: false))
                 .Join(_transform.DOShakeRotation(0.5f, strength: 15f, vibrato: 15, fadeOut: false));
             await UniTask.WaitWhile(() => sequence.IsActive() && sequence.IsPlaying());

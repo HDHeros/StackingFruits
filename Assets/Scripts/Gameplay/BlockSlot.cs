@@ -1,25 +1,28 @@
 ﻿using System;
 using Cysharp.Threading.Tasks;
 using Gameplay.Blocks;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Gameplay
 {
     public class BlockSlot : MonoBehaviour
     {
+        [SerializeField] private Bounds _bounds;
         public bool IsAvailableForReceive => _isContainBlock == false;
-        public Vector3 WorldPosition => _transform.position;
+        public Bounds Bounds => _bounds;
         public Vector2Int Position => _position;
+
         private Vector2Int _position;
         private BlockView _currentBlock;
         private Transform _transform;
         private bool _isContainBlock;
 
-        public void Setup(Vector2Int position)
+        public void Setup(Vector2Int position, Vector3 worldPosition)
         {
             gameObject.SetActive(true);
             _position = position;
-            transform.position = new Vector3(_position.x, _position.y);
+            transform.position = worldPosition;
         }
 
         public UniTask SetBlock(BlockView block, bool animated)
@@ -39,8 +42,10 @@ namespace Gameplay
             return block;
         }
 
-        public UniTask FitCurrentBlockInside(bool animated) => 
-            _currentBlock.MoveTo(_position, animated);
+        public UniTask FitCurrentBlockInside(bool animated)
+        {
+            return _currentBlock.MoveTo(_transform.position, animated);
+        }
 
         public UniTask DropContent()
         {
@@ -61,6 +66,12 @@ namespace Gameplay
         private void OnDisable()
         {
             ResetSlot();
+        }
+
+        [Button]
+        private void GetBoundsFromCollider()
+        {
+            _bounds = GetComponent<BoxCollider>().bounds;
         }
     }
 }

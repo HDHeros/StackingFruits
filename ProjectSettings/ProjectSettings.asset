@@ -819,7 +819,7 @@ PlayerSettings:
     PS5: DOTWEEN
     QNX: DOTWEEN
     Stadia: DOTWEEN
-    Standalone: DOTWEEN
+    Standalone: DOTWEEN;ODIN_INSPECTOR;ODIN_INSPECTOR_3
     VisionOS: DOTWEEN
     WebGL: DOTWEEN;ODIN_INSPECTOR;ODIN_INSPECTOR_3
     Windows Store Apps: DOTWEEN

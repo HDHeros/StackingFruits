@@ -76,7 +76,6 @@ namespace Gameplay
             if (_isCurrentBlockInSlot && _currentSlot != _currentBlock.Slot)
             {
                 Vector2Int oldBlockPos = _currentBlock.Slot.Position;
-                // _currentSlot.SetBlock(_currentBlock, false);
                 _performMovement.Invoke(oldBlockPos, _currentSlot.Position);   
             }
             else

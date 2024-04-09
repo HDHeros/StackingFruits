@@ -38,6 +38,7 @@ namespace Gameplay
         
         public UniTask StartGame(LevelData<BlockView> levelData)
         {
+            _wallDecals.Clear();
             _game.Reinitialize(levelData);
             SetupField();
             _gameFinished = false;
@@ -47,14 +48,17 @@ namespace Gameplay
         private void SetupField()
         {
             _slots = new BlockSlot[_game.LevelData.FieldSize.x, _game.LevelData.FieldSize.y];
+            Vector3 parentPosition = transform.position;
+            Vector2 itemSize = _slotPrefab.Bounds.size;
+            
             for (int y = 0; y < _game.LevelData.FieldSize.y; y++)
             {
                 for (int x = 0; x < _game.LevelData.FieldSize.x; x++)
                 {
                     Vector2Int inGamePosition = new Vector2Int(x, y);
-
                     BlockSlot slot = _pool.Get(_slotPrefab, transform);
-                    slot.Setup(inGamePosition);
+                    Vector3 worldPosition = parentPosition + new Vector3(GetLocalXPos(x), GetLocalYPos(y));
+                    slot.Setup(inGamePosition, worldPosition);
                     _slots[x, y] = slot;
                     BlockView block = _game.GetCellValue(x, y);
                     if (block.Type == BlockType.None) continue;
@@ -62,6 +66,21 @@ namespace Gameplay
                     blockView.Setup(inGamePosition, _replacer);
                     slot.SetBlock(blockView, false);
                 }
+            }
+
+            float GetLocalXPos(int index)
+            {
+                float allElementsWidth = itemSize.x * _game.LevelData.FieldSize.x;
+                float paddingLeft = (_gameFieldBounds.size.x - allElementsWidth) * 0.5f;
+                float left = _gameFieldBounds.center.x - _gameFieldBounds.size.x * 0.5f;
+                float itemHalfSize = itemSize.x * 0.5f;
+                return left + itemSize.x * index + paddingLeft + itemHalfSize;
+            }
+
+            float GetLocalYPos(int index)
+            {
+                float bottom = _gameFieldBounds.center.y - _gameFieldBounds.size.y * 0.5f;
+                return bottom + itemSize.y * index + itemSize.y * 0.5f;
             }
         }
 
@@ -90,8 +109,10 @@ namespace Gameplay
                         break;
                     case GameEventType.StackPerformed:
                         await AnimateStackPerform(move.Current.Actions);
+                        await UniTask.Delay(TimeSpan.FromSeconds(0.5f));
                         break;
                     case GameEventType.GameLost:
+                        await UniTask.Delay(TimeSpan.FromSeconds(0.5f));
                         await UniTask.WhenAll(move.Current.Actions.Select(m => DropSlotContent(m.From)));
                         HandleLoose();
                         break;
@@ -142,19 +163,13 @@ namespace Gameplay
         {
             return _slots[position.x, position.y].DropContent();
         }
-        
+
         private UniTask MoveBlock(Vector2Int from, Vector2Int to)
         {
             BlockView view = _slots[from.x, from.y].RemoveCurrentBlock();
             return _slots[to.x, to.y].SetBlock(view, true);
         }
 
-        // private async UniTask ClearSlot(Vector2Int position)
-        // {
-        //     BlockView block = await _slots[position.x, position.y].ResetSlot();
-        //     _pool.Return(block, _blocksContainer.BlocksDict[block.Type]);
-        // }
-        
         private void HandleLoose() => 
             HandleFinishGame();
 
@@ -174,7 +189,6 @@ namespace Gameplay
                 }
                 _pool.Return(_slots[x, y], _slotPrefab);
             }
-            _wallDecals.Clear();
             _gameFinished = true;
         }
 
