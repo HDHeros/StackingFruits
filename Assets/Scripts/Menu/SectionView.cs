@@ -1,6 +1,7 @@
 ﻿using System;
 using DG.Tweening;
 using Gameplay.LevelsLogic;
+using GameStructConfigs;
 using HDH.GoPool;
 using UnityEngine;
 
@@ -18,12 +19,14 @@ namespace Menu
         public Vector3 Bounds => _localBounds.size;
         public Transform Transform => transform;
         public Vector3 DefaultLocalPosition => _defaultLocalPos;
+        public SectionId Id { get; private set; }
 
         private Vector3 _defaultLocalPos;
 
 
         public void Initialize(LevelsService.SectionModel sectionModel, Vector3 localPos, IGoPool pool)
         {
+            Id = sectionModel.Id;
             _defaultLocalPos = localPos;
             Transform.localPosition = localPos;
             if (sectionModel.Levels.Length > _availablePreviewBounds.Length) 

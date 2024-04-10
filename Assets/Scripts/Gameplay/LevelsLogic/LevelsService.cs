@@ -48,17 +48,21 @@ namespace Gameplay.LevelsLogic
             }
         }
 
-        public void MarkLevelAsCompleted(SectionId sectionId, string levelId)
+        public void SetLevelProgress(SectionId sectionId, string levelId, float progressValue)
         {
             int sectionIndex = GetSectionIndex(sectionId);
-            _sections[sectionIndex].Levels[GetLevelIndexInSection(sectionIndex, levelId)].IsCompleted = true;
+            _sections[sectionIndex].Levels[GetLevelIndexInSection(sectionIndex, levelId)].Progress = progressValue;
             ForceSaveModel();
         }
 
-        public bool IsLevelCompleted(SectionId sectionId, string levelId)
+        public bool IsLevelCompleted(SectionId sectionId, string levelId) => 
+            GetLevelProgress(sectionId, levelId) >= 1;
+
+        public float GetLevelProgress(SectionId sectionId, string levelId)
         {
             int sectionIndex = GetSectionIndex(sectionId);
-            return _sections[sectionIndex].Levels[GetLevelIndexInSection(sectionIndex, levelId)].IsCompleted;
+            return _sections[sectionIndex].Levels[GetLevelIndexInSection(sectionIndex, levelId)].Progress;
+            
         }
 
         public SectionModel GetSectionByIndex(int index) => 
@@ -90,7 +94,7 @@ namespace Gameplay.LevelsLogic
             
             throw new ArgumentOutOfRangeException(nameof(levelId));
         }
-        
+
         [Serializable]
         public struct SectionModel
         {
@@ -111,13 +115,13 @@ namespace Gameplay.LevelsLogic
                 return false;
             }
         }
-        
+
         [Serializable]
         public struct LevelModel
         {
             [NonSerialized] public LevelConfig Config;
             public string Id;
-            public bool IsCompleted;
+            public float Progress;
         }
     }
 }

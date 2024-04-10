@@ -16,6 +16,6 @@ MonoBehaviour:
   ViewPrefab: {fileID: 7761172298782686354, guid: c9aedd9a2033fc04f91ac3420b56ab2f,
     type: 3}
   Levels:
-  - {fileID: 11400000, guid: 210c3d2e3fe16f24eae6ea5022705aac, type: 2}
-  - {fileID: 11400000, guid: 210c3d2e3fe16f24eae6ea5022705aac, type: 2}
-  - {fileID: 11400000, guid: 210c3d2e3fe16f24eae6ea5022705aac, type: 2}
+  - {fileID: 11400000, guid: abb8e8a5963bfd74fa0306179ff226b0, type: 2}
+  - {fileID: 11400000, guid: d92457aa79529fc4fa2d0f2904ec42be, type: 2}
+  - {fileID: 11400000, guid: c3684b95c9cbb8b43970d1af6a9dbe4d, type: 2}

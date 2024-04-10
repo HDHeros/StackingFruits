@@ -13,6 +13,7 @@ namespace Gameplay.GameCore
         }
         
         public LevelData<TBlock> LevelData => _levelData;
+        private float GameProgress => (float)_stacksPerformed / _numberOfBlockTypesOnLevel;
         private LevelData<TBlock> _levelData;
         private CellInfo[,] _field;
         private Dictionary<TBlock, int> _blocksCount;
@@ -21,6 +22,7 @@ namespace Gameplay.GameCore
         private int _numberOfBlockTypesOnLevel;
         private bool _isFieldNormalized;
         private int _stacksPerformed;
+
 
         public StackingGame() => 
             _performedMovements = null;
@@ -43,7 +45,7 @@ namespace Gameplay.GameCore
                 _blocksCount[block]++;
             }
 
-            _numberOfBlockTypesOnLevel = _blocksCount.Count;
+            _numberOfBlockTypesOnLevel = _blocksCount.Count - 1;
         }
 
         public TBlock GetCellValue(int x, int y) => 
@@ -86,7 +88,7 @@ namespace Gameplay.GameCore
             
             if (_stacksPerformed == _numberOfBlockTypesOnLevel)
             {
-                yield return new GameEvent(GameEventType.GameWon, _performedMovements);
+                yield return new GameEvent(GameEventType.GameWon, _performedMovements, GameProgress);
                 yield break;
             }
             
@@ -96,7 +98,7 @@ namespace Gameplay.GameCore
                 if(_field[x, y].Value.Equals(_levelData.EmptyBlockValue) == false)
                     _performedMovements.Add(new PerformedMovement(new Vector2Int(x, y), default));
                     
-            yield return new GameEvent(GameEventType.GameLost, _performedMovements);
+            yield return new GameEvent(GameEventType.GameLost, _performedMovements, GameProgress);
         }
 
         private bool HandleStacks()

@@ -186,7 +186,7 @@ Material:
     - _UseRimLightMask: 1
     - _UseShadowTexture: 0
     - _UseSpecular: 0
-    - _Val: 1
+    - _Val: 0.7
     - _YFinish: 0.22
     - _YPos: 0.03
     - _YStart: 0

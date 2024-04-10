@@ -25,7 +25,12 @@ namespace Gameplay.GameSceneLogic
         {
             while (ct.IsCancellationRequested == false)
             {
-                await Fields.GameView.StartGame(Fields.PickedLevel.LevelData);
+                GameView.GameResult result = await Fields.GameView.StartGame(Fields.PickedLevel.LevelData);
+                if (result.Progress > Fields.LevelsService.GetLevelProgress(Fields.PickedSection.Id, Fields.PickedLevel.Id))
+                {
+                    Fields.LevelsService.SetLevelProgress(Fields.PickedSection.Id, Fields.PickedLevel.Id, result.Progress);
+                    Fields.PickedLevel.SetLevelProgress(result.Progress);
+                }
                 StateSwitcher.SwitchState<GsSelectLevelState>();
             }
         }

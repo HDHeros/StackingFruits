@@ -15,18 +15,19 @@ namespace Menu
         [SerializeField] private MeshRenderer _modelRenderer;
         private LevelConfig _levelConfig;
         public LevelData<BlockView> LevelData => _levelConfig.GetLevelData();
+        public string Id => _levelConfig.Id;
 
         public void Initialize(LevelsService.LevelModel levelModel, Bounds bounds)
         {
             _levelConfig = levelModel.Config;
             transform.localPosition = bounds.center;
             transform.localScale *= FitInto(bounds);
-            SetCompletedView(levelModel.IsCompleted);
+            SetLevelProgress(levelModel.Progress);
         }
 
-        public void SetCompletedView(bool isCompleted)
+        public void SetLevelProgress(float progress)
         {
-            _modelRenderer.material.color = isCompleted ? Color.white : Color.black;
+            _modelRenderer.material.color = progress < 1 ? Color.black : Color.white;
         }
         
         private float FitInto(Bounds bounds)

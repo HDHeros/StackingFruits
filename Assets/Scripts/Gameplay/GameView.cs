@@ -25,7 +25,7 @@ namespace Gameplay
         private IGoPool _pool;
         private BlocksContainer _blocksContainer;
         private bool _isMovementLocked;
-        private bool _gameFinished;
+        private GameResult? _gameResult;
 
         public void Initialize(InputService input, IGoPool pool, BlocksContainer blocksContainer)
         {
@@ -36,13 +36,14 @@ namespace Gameplay
             _wallDecals.Initialize(_camera, pool);
         }
         
-        public UniTask StartGame(LevelData<BlockView> levelData)
+        public async UniTask<GameResult> StartGame(LevelData<BlockView> levelData)
         {
             _wallDecals.Clear();
             _game.Reinitialize(levelData);
             SetupField();
-            _gameFinished = false;
-            return UniTask.WaitUntil(() => _gameFinished);
+            _gameResult = null;
+            await UniTask.WaitUntil(() => _gameResult.HasValue);
+            return _gameResult ?? new GameResult();
         }
 
         private void SetupField()
@@ -114,10 +115,11 @@ namespace Gameplay
                     case GameEventType.GameLost:
                         await UniTask.Delay(TimeSpan.FromSeconds(0.5f));
                         await UniTask.WhenAll(move.Current.Actions.Select(m => DropSlotContent(m.From)));
-                        HandleLoose();
+                        HandleLoose(move.Current.GameProgress);
                         break;
                     case GameEventType.GameWon:
-                        HandleWin();
+                        await UniTask.Delay(TimeSpan.FromSeconds(0.5f));
+                        HandleWin(move.Current.GameProgress);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -170,13 +172,13 @@ namespace Gameplay
             return _slots[to.x, to.y].SetBlock(view, true);
         }
 
-        private void HandleLoose() => 
-            HandleFinishGame();
+        private void HandleLoose(float progress) => 
+            HandleFinishGame(progress);
 
-        private void HandleWin() => 
-            HandleFinishGame();
+        private void HandleWin(float progress) => 
+            HandleFinishGame(progress);
 
-        private void HandleFinishGame()
+        private void HandleFinishGame(float progress)
         {
             for (int y = 0; y < _game.LevelData.FieldSize.y; y++)
             for (int x = 0; x < _game.LevelData.FieldSize.x; x++)
@@ -189,13 +191,18 @@ namespace Gameplay
                 }
                 _pool.Return(_slots[x, y], _slotPrefab);
             }
-            _gameFinished = true;
+            _gameResult = new GameResult{Progress = progress};
         }
 
         private void OnDrawGizmos()
         {
             Gizmos.color = Color.cyan;
             Gizmos.DrawWireCube(transform.position + _gameFieldBounds.center, _gameFieldBounds.size);
+        }
+
+        public struct GameResult
+        {
+            public float Progress;
         }
     }
 }

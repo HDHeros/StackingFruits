@@ -66,6 +66,13 @@ namespace GameStructConfigs
             Blocks2D = new BlockView[FieldSize.x, FieldSize.y];
         }
 
+        [Button]
+        private void SetIdByName()
+        {
+            Id = name;
+            EditorUtility.SetDirty(this);
+        }
+
         // ReSharper disable once UnusedMember.Local
         private static BlockView DrawCell(Rect rect, BlockView view)
         {
