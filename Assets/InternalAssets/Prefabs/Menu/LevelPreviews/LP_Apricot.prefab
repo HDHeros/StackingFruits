@@ -94,6 +94,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 5596470970808941942}
   m_PrefabAsset: {fileID: 0}
+--- !u!23 &8409138894749211043 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 4114579181250585813, guid: 659fad11630e9474197f42b308e7fce1,
+    type: 3}
+  m_PrefabInstance: {fileID: 5596470970808941942}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7412349253628885265
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -102,6 +108,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -6148718503019512440, guid: 4341530679db66643bfdba4dceb50dda,
+        type: 3}
+      propertyPath: _modelRenderer
+      value: 
+      objectReference: {fileID: 8409138894749211043}
     - target: {fileID: -6148718503019512440, guid: 4341530679db66643bfdba4dceb50dda,
         type: 3}
       propertyPath: _localBounds.m_Extent.x
