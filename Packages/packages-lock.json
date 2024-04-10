@@ -42,6 +42,13 @@
       "dependencies": {},
       "hash": "2b5b3b3fb9219dfee585a8d5c89e84f1656b56f3"
     },
+    "com.hdhero.user-data": {
+      "version": "https://github.com/HDHeros/UniPacks.git?path=Packages/com.hdhero.user-data",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "9b5bf77f33e5149b261133fa27b2ca1965ad285b"
+    },
     "com.unity.burst": {
       "version": "1.8.12",
       "depth": 1,
@@ -204,6 +211,13 @@
         "com.unity.modules.jsonserialize": "1.0.0"
       },
       "url": "https://packages.unity.com"
+    },
+    "jillejr.newtonsoft.json-for-unity": {
+      "version": "https://github.com/jilleJr/Newtonsoft.Json-for-Unity.git#upm",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "f2c6cb09817832dccd0600f291053d8d55298ee9"
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",

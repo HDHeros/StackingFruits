@@ -24,7 +24,7 @@ namespace Infrastructure.GameStateMachine.States
         private async UniTaskVoid Setup()
         {
             _root = await Fields.SceneService.LoadSceneSingle<GameSceneRoot>(SceneId.GameScene);
-            _root.OnEnter(Fields.InputService, Fields.GoPool, Fields.GameConfig);
+            _root.OnEnter(Fields.InputService, Fields.GoPool, Fields.GameConfig, Fields.Levels);
         }
     }
 }

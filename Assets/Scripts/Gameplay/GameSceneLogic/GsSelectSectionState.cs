@@ -9,7 +9,7 @@ namespace Gameplay.GameSceneLogic
     {
         public override void OnFieldsReceived()
         {
-            Fields.SectionPicker.Initialize(Fields.GameConfig.Sections, Fields.Pool);
+            Fields.SectionPicker.Initialize(Fields.LevelsService, Fields.Pool);
         }
 
         public override void Enter()

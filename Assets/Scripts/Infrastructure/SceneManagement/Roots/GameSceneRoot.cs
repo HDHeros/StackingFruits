@@ -4,6 +4,7 @@ using Gameplay;
 using Gameplay.CameraLogic;
 using Gameplay.GameCore;
 using Gameplay.GameSceneLogic;
+using Gameplay.LevelsLogic;
 using GameStructConfigs;
 using HDH.Fsm;
 using HDH.GoPool;
@@ -34,12 +35,13 @@ namespace Infrastructure.SceneManagement.Roots
 
         [SerializeField] private SharedFields _fields;
         private Fsm<GsBaseState, SharedFields> _fsm;
-        public void OnEnter(InputService inputService, IGoPool pool, GameConfig gameConfig)
+        public void OnEnter(InputService inputService, IGoPool pool, GameConfig gameConfig, LevelsService levelsService)
         {
             _ctSource = new CancellationTokenSource();
             _fields.Input = inputService;
             _fields.GameConfig = gameConfig;
             _fields.Pool = pool;
+            _fields.LevelsService = levelsService;
             _fields.GameView.Initialize(inputService, pool, gameConfig.BlocksContainer);
             
             _fsm = Fsm<GsBaseState, SharedFields>
@@ -66,8 +68,9 @@ namespace Infrastructure.SceneManagement.Roots
             [NonSerialized] public GameConfig GameConfig;
             [NonSerialized] public InputService Input;
             [NonSerialized] public IGoPool Pool;
-            public SectionView PickedSection;
-            public LevelPreview PickedLevel;
+            [NonSerialized] public SectionView PickedSection;
+            [NonSerialized] public LevelPreview PickedLevel;
+            [NonSerialized] public LevelsService LevelsService;
         }
     }
 }

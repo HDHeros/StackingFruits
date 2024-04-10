@@ -113,6 +113,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _gameConfig: {fileID: 11400000, guid: 9e09169ffaf0e6b47bdb1fc2e8154959, type: 2}
+  _userDataConfig:
+    _saveFolderPath: 
+    _fileExtension: dat
+    _saveDelayInSeconds: 5
 --- !u!1 &7328896134566002004
 GameObject:
   m_ObjectHideFlags: 0

@@ -11,6 +11,7 @@ namespace GameStructConfigs
     [CreateAssetMenu(menuName = "Configs/Game/Level", fileName = "LevelConfig", order = 0)]
     public class LevelConfig : ScriptableObject
     {
+        public string Id;
         public BlockView EmptyBlock;
         public Vector2Int FieldSize;
         public BlockView[] Blocks;

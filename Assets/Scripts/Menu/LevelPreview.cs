@@ -1,6 +1,7 @@
 ﻿using System;
 using Gameplay.Blocks;
 using Gameplay.GameCore;
+using Gameplay.LevelsLogic;
 using GameStructConfigs;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -11,14 +12,21 @@ namespace Menu
     {
         public event Action<LevelPreview> OnClick;
         [SerializeField] private BoxCollider _collider;
+        [SerializeField] private MeshRenderer _modelRenderer;
         private LevelConfig _levelConfig;
         public LevelData<BlockView> LevelData => _levelConfig.GetLevelData();
 
-        public void Initialize(LevelConfig levelConfig, Bounds bounds)
+        public void Initialize(LevelsService.LevelModel levelModel, Bounds bounds)
         {
-            _levelConfig = levelConfig;
+            _levelConfig = levelModel.Config;
             transform.localPosition = bounds.center;
             transform.localScale *= FitInto(bounds);
+            SetCompletedView(levelModel.IsCompleted);
+        }
+
+        public void SetCompletedView(bool isCompleted)
+        {
+            _modelRenderer.material.color = isCompleted ? Color.white : Color.black;
         }
         
         private float FitInto(Bounds bounds)

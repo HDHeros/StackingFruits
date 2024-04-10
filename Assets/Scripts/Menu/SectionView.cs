@@ -1,6 +1,6 @@
 ﻿using System;
 using DG.Tweening;
-using GameStructConfigs;
+using Gameplay.LevelsLogic;
 using HDH.GoPool;
 using UnityEngine;
 
@@ -19,23 +19,21 @@ namespace Menu
         public Transform Transform => transform;
         public Vector3 DefaultLocalPosition => _defaultLocalPos;
 
-        private SectionConfig _config;
         private Vector3 _defaultLocalPos;
 
 
-        public void Initialize(SectionConfig config, Vector3 localPos, IGoPool pool)
+        public void Initialize(LevelsService.SectionModel sectionModel, Vector3 localPos, IGoPool pool)
         {
-            _config = config;
             _defaultLocalPos = localPos;
             Transform.localPosition = localPos;
-            if (config.Levels.Length > _availablePreviewBounds.Length) 
+            if (sectionModel.Levels.Length > _availablePreviewBounds.Length) 
                 throw new Exception();
-            _previews = new LevelPreview[config.Levels.Length];
-            for (var i = 0; i < config.Levels.Length; i++)
+            _previews = new LevelPreview[sectionModel.Levels.Length];
+            for (var i = 0; i < sectionModel.Levels.Length; i++)
             {
-                _previews[i] = pool.Get(config.Levels[i].LevelPreview, _model);
+                _previews[i] = pool.Get(sectionModel.Levels[i].Config.LevelPreview, _model);
                 _previews[i].gameObject.SetActive(true);
-                _previews[i].Initialize(config.Levels[i], _availablePreviewBounds[i]);
+                _previews[i].Initialize(sectionModel.Levels[i], _availablePreviewBounds[i]);
                 _previews[i].OnClick += OnPreviewClick;
             }
         }

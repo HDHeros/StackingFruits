@@ -1,5 +1,5 @@
 ﻿using DG.Tweening;
-using GameStructConfigs;
+using Gameplay.LevelsLogic;
 using HDH.GoPool;
 using HDH.UnityExt.Extensions;
 using UnityEngine;
@@ -21,17 +21,18 @@ namespace Menu
         private bool _controlBlocked;
         private bool _isInteractionLocked;
 
-        public void Initialize(SectionConfig[] configs, IGoPool pool)
+        public void Initialize(LevelsService levels, IGoPool pool)
         {
-            _views = new SectionView[configs.Length];
+            _views = new SectionView[levels.SectionsCount];
             _transform = transform;
             float width = 0;
-            for (var i = 0; i < configs.Length; i++)
+            for (var i = 0; i < levels.SectionsCount; i++)
             {
-                _views[i] = pool.Get(configs[i].ViewPrefab, _rightViewsParent);
+                LevelsService.SectionModel section = levels.GetSectionByIndex(i);
+                _views[i] = pool.Get(section.Config.ViewPrefab, _rightViewsParent);
                 SectionView view = _views[i];
                 view.gameObject.SetActive(true);
-                view.Initialize(configs[i], Vector3.zero.WithX(width + view.Bounds.x * 0.5f), pool);
+                view.Initialize(section, Vector3.zero.WithX(width + view.Bounds.x * 0.5f), pool);
                 view.Transform.rotation *= Quaternion.Euler(0, 0, Random.Range(_itemsRotationRange.x, _itemsRotationRange.y));
                 width += view.Bounds.x + Random.Range(_itemsSpacingRange.x, _itemsSpacingRange.y);
             }
