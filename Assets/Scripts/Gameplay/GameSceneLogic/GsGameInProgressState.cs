@@ -26,6 +26,10 @@ namespace Gameplay.GameSceneLogic
             while (ct.IsCancellationRequested == false)
             {
                 GameView.GameResult result = await Fields.GameView.StartGame(Fields.PickedLevel.LevelData);
+
+                Fields.CameraController.ActivateSelectLevelCamera();
+                await UniTask.WaitWhile(() => Fields.CameraController.IsBlending, cancellationToken: ct);
+
                 if (result.Progress > Fields.LevelsService.GetLevelProgress(Fields.PickedSection.Id, Fields.PickedLevel.Id))
                 {
                     Fields.LevelsService.SetLevelProgress(Fields.PickedSection.Id, Fields.PickedLevel.Id, result.Progress);

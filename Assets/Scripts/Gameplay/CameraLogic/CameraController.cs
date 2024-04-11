@@ -7,12 +7,14 @@ namespace Gameplay.CameraLogic
     public class CameraController : MonoBehaviour
     {
         [SerializeField] private Camera _camera;
+        [SerializeField] private CinemachineBrain _brain;
         [SerializeField] private CinemachineVirtualCamera _homeScreenCamera;
         [SerializeField] private CinemachineVirtualCamera _selectSectionVCam;
         [SerializeField] private CinemachineVirtualCamera _selectLevelVCam;
         [SerializeField] private CinemachineVirtualCamera _inGameVCam;
         private CinemachineVirtualCamera _activeVCam;
         public Camera Camera => _camera;
+        public bool IsBlending => _brain.IsBlending; 
 
         public void ActivateHomeScreenCamera() => 
             ActivateCamera(_homeScreenCamera);

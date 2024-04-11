@@ -23,7 +23,7 @@ namespace Gameplay.GameSceneLogic
         private void OnBackButtonPressed()
         {
             if (Fields.SectionPicker.UnpickSelected() == false) return;
-            StateSwitcher.SwitchState<GsSelectSectionState>();        
+            StateSwitcher.SwitchState<GsSelectSectionState>();
         }
 
         private void OnLevelClicked(LevelPreview preview)

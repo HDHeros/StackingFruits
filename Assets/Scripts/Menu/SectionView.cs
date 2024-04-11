@@ -51,12 +51,15 @@ namespace Menu
         {
             _model.DOKill();
             _model.DOLocalMove(Vector3.zero, duration).SetEase(Ease.OutQuint);
+
         }
 
         public void OnPicked(float duration)
         {
             _model.DOKill();
             _model.DOLocalMove(_onPickedOffset, duration).SetEase(Ease.OutBounce);
+            foreach (LevelPreview levelPreview in _previews) 
+                levelPreview.EnableSelection();
         }
 
         public void OnUnpicked(float duration)
@@ -68,6 +71,8 @@ namespace Menu
                 if (tween.IsActive() && tween.IsPlaying())
                     Transform.localPosition = _defaultLocalPos;
             });
+            foreach (LevelPreview levelPreview in _previews)
+                levelPreview.DisableSelection();
         }
 
         private void OnPreviewClick(LevelPreview preview) => 

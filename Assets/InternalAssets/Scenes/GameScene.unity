@@ -1536,6 +1536,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _camera: {fileID: 541004751}
+  _brain: {fileID: 541004755}
   _homeScreenCamera: {fileID: 537980512}
   _selectSectionVCam: {fileID: 1969921869}
   _selectLevelVCam: {fileID: 49562339}
