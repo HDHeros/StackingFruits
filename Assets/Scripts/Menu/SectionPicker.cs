@@ -1,13 +1,16 @@
-﻿using DG.Tweening;
+﻿using System;
+using DG.Tweening;
 using Gameplay.LevelsLogic;
 using HDH.GoPool;
 using HDH.UnityExt.Extensions;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Menu
 {
     public class SectionPicker : MonoBehaviour
     {
+        public event Action<SectionView> OnSectionPicked;
         [SerializeField] private Transform _leftViewsParent;
         [SerializeField] private Transform _rightViewsParent;
         [SerializeField] private Vector2 _itemsSpacingRange;
@@ -30,15 +33,27 @@ namespace Menu
             {
                 LevelsService.SectionModel section = levels.GetSectionByIndex(i);
                 _views[i] = pool.Get(section.Config.ViewPrefab, _rightViewsParent);
+                _views[i].OnSectionClick += OnAnySectionClick;
                 SectionView view = _views[i];
                 view.gameObject.SetActive(true);
-                view.Initialize(section, Vector3.zero.WithX(width + view.Bounds.x * 0.5f), pool);
+                view.Initialize(section, Vector3.zero.WithX(width + view.Bounds.x * 0.5f), pool, i);
                 view.Transform.rotation *= Quaternion.Euler(0, 0, Random.Range(_itemsRotationRange.x, _itemsRotationRange.y));
                 width += view.Bounds.x + Random.Range(_itemsSpacingRange.x, _itemsSpacingRange.y);
             }
             
             SelectByIndex(0, false);
             Hide(false);
+        }
+
+        private void OnAnySectionClick(SectionView view)
+        {
+            if (view == _selected)
+            {
+                if (PickSelected(out var pickedSection) == false) return;
+                OnSectionPicked?.Invoke(view);
+                return;
+            }
+            SelectByIndex(view.Index, true);
         }
 
         public void SelectNext() => 

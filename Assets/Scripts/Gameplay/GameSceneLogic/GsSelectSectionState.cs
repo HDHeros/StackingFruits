@@ -1,5 +1,6 @@
 ﻿using System;
 using Lean.Touch;
+using Menu;
 using UI;
 using UnityEngine;
 
@@ -19,14 +20,14 @@ namespace Gameplay.GameSceneLogic
             Fields.SectionPicker.Show(true);
             Fields.Input.OnBackButtonPressed += OnBackButtonPressed;
             Fields.Input.OnSwipe += OnSwipe;
-            Fields.Input.OnTap += OnTap;
+            Fields.SectionPicker.OnSectionPicked += OnSectionPicked;
         }
 
         public override void Exit(Action onExit)
         {
             Fields.Input.OnBackButtonPressed -= OnBackButtonPressed;
             Fields.Input.OnSwipe -= OnSwipe;
-            Fields.Input.OnTap -= OnTap;
+            Fields.SectionPicker.OnSectionPicked -= OnSectionPicked;
             base.Exit(onExit);
         }
 
@@ -44,9 +45,9 @@ namespace Gameplay.GameSceneLogic
             Fields.SectionPicker.Hide(true);
         }
 
-        private void OnTap(LeanFinger finger)
+        private void OnSectionPicked(SectionView section)
         {
-            if (Fields.SectionPicker.PickSelected(out Fields.PickedSection) == false) return;
+            Fields.PickedSection = section;
             StateSwitcher.SwitchState<GsSelectLevelState>();
         }
     }

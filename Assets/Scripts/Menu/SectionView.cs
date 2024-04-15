@@ -3,32 +3,36 @@ using DG.Tweening;
 using Gameplay.LevelsLogic;
 using GameStructConfigs;
 using HDH.GoPool;
+using HDH.UnityExt.Extensions;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Menu
 {
-    public class SectionView : MonoBehaviour
+    public class SectionView : MonoBehaviour, IPointerClickHandler
     {
         public event Action<LevelPreview> OnLevelPreviewClick;
-        [SerializeField] private Bounds _localBounds;
+        public event Action<SectionView> OnSectionClick;
         [SerializeField] private Transform _model;
         [SerializeField] private Vector3 _onSelectOffset;
         [SerializeField] private Vector3 _onPickedOffset;
         [SerializeField] private Bounds[] _availablePreviewBounds;
+        [SerializeField] private BoxCollider _collider;
         private LevelPreview[] _previews;
-        public Vector3 Bounds => _localBounds.size;
+        public Vector3 Bounds => _collider.bounds.size;
         public Transform Transform => transform;
         public Vector3 DefaultLocalPosition => _defaultLocalPos;
         public SectionId Id { get; private set; }
-
+        public int Index { get; private set; }
         private Vector3 _defaultLocalPos;
 
 
-        public void Initialize(LevelsService.SectionModel sectionModel, Vector3 localPos, IGoPool pool)
+        public void Initialize(LevelsService.SectionModel sectionModel, Vector3 localPos, IGoPool pool, int index)
         {
             Id = sectionModel.Id;
             _defaultLocalPos = localPos;
             Transform.localPosition = localPos;
+            Index = index;
             if (sectionModel.Levels.Length > _availablePreviewBounds.Length) 
                 throw new Exception();
             _previews = new LevelPreview[sectionModel.Levels.Length];
@@ -75,13 +79,14 @@ namespace Menu
                 levelPreview.DisableSelection();
         }
 
+        public void OnPointerClick(PointerEventData eventData) => 
+            OnSectionClick?.Invoke(this);
+
         private void OnPreviewClick(LevelPreview preview) => 
             OnLevelPreviewClick?.Invoke(preview);
 
         private void OnDrawGizmosSelected()
         {
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireCube(transform.position + _localBounds.center, _localBounds.size);
             foreach (Bounds bound in _availablePreviewBounds)
             {
                 Gizmos.color = Color.cyan;
