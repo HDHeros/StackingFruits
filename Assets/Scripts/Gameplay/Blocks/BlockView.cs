@@ -5,8 +5,10 @@ using DG.Tweening;
 using HDH.GoPool;
 using HDH.GoPool.Components;
 using HDH.UnityExt.Extensions;
+using Infrastructure.SoundsLogic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Zenject;
 using Random = UnityEngine.Random;
 
 namespace Gameplay.Blocks
@@ -25,6 +27,11 @@ namespace Gameplay.Blocks
         private BlockReplacer _replacer;
         private Transform _transform;
         private Vector3 _initialScale;
+        private SoundsService _sounds;
+
+        [Inject]
+        private void Inject(SoundsService sounds) => 
+            _sounds = sounds;
         
         public void Setup(Vector2Int position, BlockReplacer replacer)
         {
@@ -102,14 +109,15 @@ namespace Gameplay.Blocks
             _transform.rotation = Quaternion.identity;
         }
 
-        public UniTask MoveToStackingAnimationPos(Vector3 position)
+        public async UniTask MoveToStackingAnimationPos(Vector3 position, TimeSpan delay)
         {
+            await UniTask.Delay(delay);
             _transform.DOKill();
             Sequence sequence = DOTween.Sequence()
                 .Append(_transform.DOMove(position, 0.25f).SetEase(Ease.InSine))
                 .Join(_transform.DORotate(Vector3.zero.WithY(Random.Range(90, 180)), 0.25f));
-            
-            return UniTask.WaitWhile(() => sequence.IsActive() && sequence.IsPlaying());
+            _sounds.RaiseEvent(EventId.StackFruitFlight);
+            await UniTask.WaitWhile(() => sequence.IsActive() && sequence.IsPlaying());
         }
 
         public async UniTask PlayOnStackAnimation(IGoPool pool)

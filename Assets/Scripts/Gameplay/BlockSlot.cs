@@ -29,6 +29,7 @@ namespace Gameplay
         {
             if (_isContainBlock)
                 throw new Exception();
+            _isContainBlock = true;
             _currentBlock = block;
             block.SetSlot(this);
             return FitCurrentBlockInside(animated);

@@ -13,6 +13,7 @@ namespace Gameplay.GameCore
         }
         
         public LevelData<TBlock> LevelData => _levelData;
+        public int StacksPerformed => _stacksPerformed;
         private float GameProgress => (float)_stacksPerformed / _numberOfBlockTypesOnLevel;
         private LevelData<TBlock> _levelData;
         private CellInfo[,] _field;
@@ -55,6 +56,9 @@ namespace Gameplay.GameCore
         {
             if (IsInRange(from.x, from.y) == false || IsInRange(to.x, to.y) == false)
                 throw new ArgumentOutOfRangeException();
+
+            if (_field[to.x, to.y].Value.Equals(_levelData.EmptyBlockValue) == false)
+                throw new Exception();
 
             _performedMovements.Clear();
             _performedMovements.Add(ReplaceBlock(from, to));

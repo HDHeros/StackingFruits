@@ -11,6 +11,7 @@ namespace Gameplay
 {
     public class BlockReplacer
     {
+        public bool IsReplacementLocked { get; set; }
         private readonly Camera _camera;
         private readonly InputService _inputService;
         private readonly float _replacementDepth;
@@ -25,6 +26,7 @@ namespace Gameplay
         private bool _isCurrentBlockInSlot;
         private BlockSlot _currentSlot;
 
+
         public BlockReplacer(Camera camera, InputService inputService, float replacementDepth, Action<Vector2Int, Vector2Int> performMovement)
         {
             _camera = camera;
@@ -32,10 +34,10 @@ namespace Gameplay
             _replacementDepth = replacementDepth;
             _performMovement = performMovement;
         }
-        
+
         public bool TryBeginReplacement(PointerEventData eventData, BlockView block)
         {
-            if (_currentBlock.IsNotNull()) return false;
+            if (_currentBlock.IsNotNull() || IsReplacementLocked) return false;
             BeginReplacement(eventData, block);
             return true;
         }

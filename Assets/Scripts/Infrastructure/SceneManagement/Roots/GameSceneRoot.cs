@@ -2,7 +2,6 @@
 using System.Threading;
 using Gameplay;
 using Gameplay.CameraLogic;
-using Gameplay.GameCore;
 using Gameplay.GameSceneLogic;
 using Gameplay.LevelsLogic;
 using GameStructConfigs;
@@ -19,20 +18,6 @@ namespace Infrastructure.SceneManagement.Roots
     public class GameSceneRoot : SceneRoot
     {
         private CancellationTokenSource _ctSource;
-        private LevelData<int> _levelData = new()
-        {
-            EmptyBlockValue = 0,
-            FieldSize = new Vector2Int(4, 6),
-            Blocks = new []
-            {
-                1,1,2,3,
-                1,3,2,3,
-                0,2,0,0,
-                0,0,0,0,
-                0,0,0,0,
-                0,0,0,0,
-            }
-        };
 
         [SerializeField] private SharedFields _fields;
         private Fsm<GsBaseState, SharedFields> _fsm;
@@ -44,7 +29,7 @@ namespace Infrastructure.SceneManagement.Roots
             _fields.Pool = pool;
             _fields.LevelsService = levelsService;
             _fields.SoundService = sounds;
-            _fields.GameView.Initialize(inputService, pool, gameConfig.BlocksContainer);
+            _fields.GameView.Initialize(inputService, pool, gameConfig.BlocksContainer, sounds);
             
             _fsm = Fsm<GsBaseState, SharedFields>
                 .Create(_fields)
