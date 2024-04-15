@@ -107,6 +107,7 @@ namespace Gameplay
                         break;
                     case GameEventType.BlocksFell:
                         await UniTask.WhenAll(move.Current.Actions.Select(m => MoveBlock(m.From, m.To)));
+                        await UniTask.Delay(TimeSpan.FromSeconds(0.5f));
                         break;
                     case GameEventType.StackPerformed:
                         await AnimateStackPerform(move.Current.Actions);

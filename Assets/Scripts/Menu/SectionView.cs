@@ -60,6 +60,7 @@ namespace Menu
 
         public void OnPicked(float duration)
         {
+            _collider.enabled = false;
             _model.DOKill();
             _model.DOLocalMove(_onPickedOffset, duration).SetEase(Ease.OutBounce);
             foreach (LevelPreview levelPreview in _previews) 
@@ -68,6 +69,7 @@ namespace Menu
 
         public void OnUnpicked(float duration)
         {
+            _collider.enabled = true;
             _model.DOKill();
             Tween tween = _model.DOLocalMove(Vector3.zero, duration).SetEase(Ease.OutQuint);
             tween.OnKill(() =>
