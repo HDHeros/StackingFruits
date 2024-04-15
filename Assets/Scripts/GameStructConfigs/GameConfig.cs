@@ -1,4 +1,6 @@
 ﻿using Gameplay.Blocks;
+using HDH.Audio.Confgis;
+using Infrastructure.SoundsLogic;
 using UnityEngine;
 
 namespace GameStructConfigs
@@ -8,6 +10,8 @@ namespace GameStructConfigs
     {
         public BlocksContainer BlocksContainer;
         public SectionConfig[] Sections;
+        public AudioServiceConfig AudioServiceCfg;
+        public SoundsContainer SoundsContainer;
 
         public void Initialize()
         {

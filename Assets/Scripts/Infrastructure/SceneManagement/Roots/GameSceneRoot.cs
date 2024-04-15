@@ -9,6 +9,7 @@ using GameStructConfigs;
 using HDH.Fsm;
 using HDH.GoPool;
 using Infrastructure.SimpleInput;
+using Infrastructure.SoundsLogic;
 using Menu;
 using UI;
 using UnityEngine;
@@ -35,13 +36,14 @@ namespace Infrastructure.SceneManagement.Roots
 
         [SerializeField] private SharedFields _fields;
         private Fsm<GsBaseState, SharedFields> _fsm;
-        public void OnEnter(InputService inputService, IGoPool pool, GameConfig gameConfig, LevelsService levelsService)
+        public void OnEnter(InputService inputService, IGoPool pool, GameConfig gameConfig, LevelsService levelsService, SoundsService sounds)
         {
             _ctSource = new CancellationTokenSource();
             _fields.Input = inputService;
             _fields.GameConfig = gameConfig;
             _fields.Pool = pool;
             _fields.LevelsService = levelsService;
+            _fields.SoundService = sounds;
             _fields.GameView.Initialize(inputService, pool, gameConfig.BlocksContainer);
             
             _fsm = Fsm<GsBaseState, SharedFields>
@@ -71,6 +73,7 @@ namespace Infrastructure.SceneManagement.Roots
             [NonSerialized] public SectionView PickedSection;
             [NonSerialized] public LevelPreview PickedLevel;
             [NonSerialized] public LevelsService LevelsService;
+            [NonSerialized] public SoundsService SoundService;
         }
     }
 }

@@ -3,6 +3,7 @@ using DG.Tweening;
 using Gameplay.LevelsLogic;
 using HDH.GoPool;
 using HDH.UnityExt.Extensions;
+using Infrastructure.SoundsLogic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -19,15 +20,17 @@ namespace Menu
         private SectionView[] _views;
         private SectionView _selected;
         private Transform _transform;
+        private SoundsService _sounds;
         private int _selectedIndex;
         private Vector3 _selectedLocalPosCached;
         private bool _controlBlocked;
         private bool _isInteractionLocked;
 
-        public void Initialize(LevelsService levels, IGoPool pool)
+        public void Initialize(LevelsService levels, IGoPool pool, SoundsService sounds)
         {
             _views = new SectionView[levels.SectionsCount];
             _transform = transform;
+            _sounds = sounds;
             float width = 0;
             for (var i = 0; i < levels.SectionsCount; i++)
             {
@@ -36,7 +39,7 @@ namespace Menu
                 _views[i].OnSectionClick += OnAnySectionClick;
                 SectionView view = _views[i];
                 view.gameObject.SetActive(true);
-                view.Initialize(section, Vector3.zero.WithX(width + view.Bounds.x * 0.5f), pool, i);
+                view.Initialize(section, Vector3.zero.WithX(width + view.Bounds.x * 0.5f), pool, i, _sounds);
                 view.Transform.rotation *= Quaternion.Euler(0, 0, Random.Range(_itemsRotationRange.x, _itemsRotationRange.y));
                 width += view.Bounds.x + Random.Range(_itemsSpacingRange.x, _itemsSpacingRange.y);
             }
@@ -69,6 +72,7 @@ namespace Menu
             if (animated)
             {
                 _transform.DOMove(Vector3.zero, 0.5f).SetEase(Ease.OutBack).OnComplete(UnlockInteraction);
+                _sounds.RaiseEvent(EventId.WhooshSections);
             }
             else
             {
@@ -82,7 +86,10 @@ namespace Menu
             if (CheckInteraction() == false) return;
             _transform.DOKill();
             if (animated)
+            {
+                _sounds.RaiseEvent(EventId.WhooshSections);
                 _transform.DOMove(_hiddenPosition + _selected.Transform.localPosition, 0.5f).SetEase(Ease.InBack).OnComplete(UnlockInteraction);
+            }
             else
             {
                 _transform.position = _hiddenPosition + _selected.Transform.localPosition;
@@ -119,6 +126,7 @@ namespace Menu
                     _selected.Transform.SetParent(_rightViewsParent);
                     UnlockInteraction();
                 });
+            _sounds.RaiseEvent(EventId.WhooshSections);
             return true;
         }
 
@@ -149,6 +157,7 @@ namespace Menu
             Vector3 scrollPosition = -_selected.Transform.localPosition;
             if (animated)
             {
+                _sounds.RaiseEvent(EventId.WhooshSections);
                 _leftViewsParent.DOMove(scrollPosition, 0.5f).SetEase(Ease.OutBack);
                 _rightViewsParent.DOMove(scrollPosition, 0.5f).SetEase(Ease.OutBack).OnComplete(UnlockInteraction);
             }

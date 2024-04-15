@@ -19,3 +19,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 14c5e871483782e49a96f6842f75025a, type: 2}
   - {fileID: 11400000, guid: b947d024c3b6132419e338a094e50059, type: 2}
   - {fileID: 11400000, guid: 25094e14de55a194e93848cd7fd889d2, type: 2}
+  AudioServiceCfg:
+    Mixer: {fileID: 24100000, guid: 81130e3d5dc43424a9c212aca03b31bc, type: 2}
+    SourcesLimit2D: 10
+    SourcesLimit3D: 10
+    MusicTransitionDuration: 2
+    MixerVolumeParameters:
+    - MusicVolume
+    - SoundVolume
+    PlaybackPrioritiesAmount: 10
+  SoundsContainer: {fileID: 11400000, guid: 25c892e1d6c39c2448f5c25383663d0b, type: 2}

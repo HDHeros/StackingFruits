@@ -5,6 +5,7 @@ using HDH.GoPool;
 using Infrastructure.GameStateMachine.States;
 using Infrastructure.SceneManagement;
 using Infrastructure.SimpleInput;
+using Infrastructure.SoundsLogic;
 using UnityEngine;
 using Zenject;
 
@@ -15,7 +16,7 @@ namespace Infrastructure.GameStateMachine
         private Fsm<BaseGameState, SharedFields> _fsm;
         
         [Inject]
-        public void Inject(SceneService sceneService, InputService inputService, IGoPool pool, GameConfig gameConfig, LevelsService levelsService)
+        public void Inject(SceneService sceneService, InputService inputService, IGoPool pool, GameConfig gameConfig, LevelsService levelsService, SoundsService sounds)
         {
             var fields = new SharedFields
             {
@@ -24,6 +25,7 @@ namespace Infrastructure.GameStateMachine
                 GoPool = pool,
                 GameConfig = gameConfig,
                 Levels = levelsService,
+                SoundService = sounds,
             };
             
             _fsm = Fsm<BaseGameState, SharedFields>
@@ -49,6 +51,7 @@ namespace Infrastructure.GameStateMachine
             public IGoPool GoPool;
             public GameConfig GameConfig;
             public LevelsService Levels;
+            public SoundsService SoundService;
         }
     }
 }

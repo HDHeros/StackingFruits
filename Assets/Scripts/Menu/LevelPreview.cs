@@ -4,6 +4,7 @@ using Gameplay.Blocks;
 using Gameplay.GameCore;
 using Gameplay.LevelsLogic;
 using GameStructConfigs;
+using Infrastructure.SoundsLogic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -21,9 +22,11 @@ namespace Menu
         private LevelConfig _levelConfig;
         private bool _isSelectionEnabled;
         private Tween _materialColorTween;
+        private SoundsService _sounds;
 
-        public void Initialize(LevelsService.LevelModel levelModel, Bounds bounds)
+        public void Initialize(LevelsService.LevelModel levelModel, Bounds bounds, SoundsService sounds)
         {
+            _sounds = sounds;
             _levelConfig = levelModel.Config;
             transform.localPosition = bounds.center;
             transform.localScale *= FitInto(bounds);
@@ -74,6 +77,7 @@ namespace Menu
         public void OnPointerEnter(PointerEventData eventData)
         {
             if (_isSelectionEnabled == false) return;
+            _sounds.RaiseEvent(EventId.FruitSelected);
             _model.DOKill();
             _model.DOLocalMove(_model.InverseTransformDirection(Vector3.back) * _onMouseHoverOffset, 0.2f);
         }
@@ -81,6 +85,7 @@ namespace Menu
         public void OnPointerExit(PointerEventData eventData)
         {
             if (_isSelectionEnabled == false) return;
+            _sounds.RaiseEvent(EventId.FruitUnselected);
             _model.DOKill();
             _model.DOLocalMove(Vector3.zero * _onMouseHoverOffset, 0.2f);
         }

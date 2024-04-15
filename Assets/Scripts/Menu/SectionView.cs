@@ -4,6 +4,7 @@ using Gameplay.LevelsLogic;
 using GameStructConfigs;
 using HDH.GoPool;
 using HDH.UnityExt.Extensions;
+using Infrastructure.SoundsLogic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -18,21 +19,25 @@ namespace Menu
         [SerializeField] private Vector3 _onPickedOffset;
         [SerializeField] private Bounds[] _availablePreviewBounds;
         [SerializeField] private BoxCollider _collider;
-        private LevelPreview[] _previews;
         public Vector3 Bounds => _collider.bounds.size;
         public Transform Transform => transform;
         public Vector3 DefaultLocalPosition => _defaultLocalPos;
         public SectionId Id { get; private set; }
         public int Index { get; private set; }
+        private LevelPreview[] _previews;
         private Vector3 _defaultLocalPos;
+        private SoundsService _sounds;
+        private bool _isPicked;
 
 
-        public void Initialize(LevelsService.SectionModel sectionModel, Vector3 localPos, IGoPool pool, int index)
+        public void Initialize(LevelsService.SectionModel sectionModel, Vector3 localPos, IGoPool pool, int index,
+            SoundsService sounds)
         {
             Id = sectionModel.Id;
             _defaultLocalPos = localPos;
             Transform.localPosition = localPos;
             Index = index;
+            _sounds = sounds;
             if (sectionModel.Levels.Length > _availablePreviewBounds.Length) 
                 throw new Exception();
             _previews = new LevelPreview[sectionModel.Levels.Length];
@@ -40,7 +45,7 @@ namespace Menu
             {
                 _previews[i] = pool.Get(sectionModel.Levels[i].Config.LevelPreview, _model);
                 _previews[i].gameObject.SetActive(true);
-                _previews[i].Initialize(sectionModel.Levels[i], _availablePreviewBounds[i]);
+                _previews[i].Initialize(sectionModel.Levels[i], _availablePreviewBounds[i], _sounds);
                 _previews[i].OnClick += OnPreviewClick;
             }
         }
@@ -60,15 +65,19 @@ namespace Menu
 
         public void OnPicked(float duration)
         {
+            if (_isPicked) return;
+            _isPicked = true;
             _collider.enabled = false;
             _model.DOKill();
             _model.DOLocalMove(_onPickedOffset, duration).SetEase(Ease.OutBounce);
+            _sounds.RaiseEvent(EventId.SectionPick);
             foreach (LevelPreview levelPreview in _previews) 
                 levelPreview.EnableSelection();
         }
 
         public void OnUnpicked(float duration)
         {
+            _isPicked = false;
             _collider.enabled = true;
             _model.DOKill();
             Tween tween = _model.DOLocalMove(Vector3.zero, duration).SetEase(Ease.OutQuint);

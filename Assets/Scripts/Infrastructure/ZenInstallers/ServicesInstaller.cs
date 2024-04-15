@@ -1,9 +1,12 @@
 ﻿using Gameplay.LevelsLogic;
 using GameStructConfigs;
+using HDH.Audio;
+using HDH.Audio.Confgis;
 using HDH.GoPool;
 using HDH.UserData;
 using HDH.UserData.Dto;
 using Infrastructure.SceneManagement;
+using Infrastructure.SoundsLogic;
 using UnityEngine;
 using Zenject;
 
@@ -17,6 +20,7 @@ namespace Infrastructure.ZenInstallers
         public override void InstallBindings()
         {
             InstallGameConfig();
+            InstallAudio();
             InstallInputService();
             InstallSceneService();
             InstallGoPool();
@@ -24,6 +28,23 @@ namespace Infrastructure.ZenInstallers
             InstallLevelsService();
         }
 
+        private void InstallAudio()
+        {
+            Container
+                .Bind<AudioService>()
+                .FromNew()
+                .AsSingle()
+                .WithArgumentsExplicit(new[]
+                    { new TypeValuePair(typeof(AudioServiceConfig), _gameConfig.AudioServiceCfg) });
+
+            Container
+                .Bind<SoundsService>()
+                .FromNew()
+                .AsSingle()
+                .WithArgumentsExplicit(new[]
+                    { new TypeValuePair(typeof(SoundsContainer), _gameConfig.SoundsContainer) });
+        }
+        
         private void InstallGameConfig()
         {
             _gameConfig.Initialize();
