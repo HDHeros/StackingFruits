@@ -12,6 +12,7 @@ namespace Gameplay.GameSceneLogic
         {
             _ctSource = new CancellationTokenSource();
             Fields.CameraController.ActivateInGameCamera();
+            Fields.TapToStartLabel.SetActive(false);
             StartGameLoop(_ctSource.Token).Forget();
         }
 

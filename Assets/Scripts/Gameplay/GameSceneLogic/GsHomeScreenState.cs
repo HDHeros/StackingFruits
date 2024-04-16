@@ -11,6 +11,7 @@ namespace Gameplay.GameSceneLogic
             Fields.CameraController.ActivateHomeScreenCamera();
             Fields.Hud.ActivateScreen(Hud.ScreenType.HomeScreen);
             Fields.Input.OnTap += OnTap;
+            Fields.TapToStartLabel.SetActive(true);
         }
 
         public override void Exit(Action onExit)

@@ -31,6 +31,7 @@ namespace Menu
             transform.localPosition = bounds.center;
             transform.localScale *= FitInto(bounds);
             SetLevelProgress(levelModel.Progress, false);
+            _collider.enabled = false;
         }
 
         public void SetLevelProgress(float progress, bool animated = true)
@@ -66,11 +67,13 @@ namespace Menu
         public void EnableSelection()
         {
             _isSelectionEnabled = true;
+            _collider.enabled = true;
         }
 
         public void DisableSelection()
         {
             _isSelectionEnabled = false; 
+            _collider.enabled = false;
             ResetOnHoverAnimation();
         }
         

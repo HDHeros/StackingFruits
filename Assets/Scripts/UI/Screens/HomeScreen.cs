@@ -6,6 +6,5 @@ namespace UI.Screens
     public class HomeScreen : BaseScreen
     {
         [SerializeField] private Button _settingsButton;
-        
     }
 }

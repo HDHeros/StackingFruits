@@ -52,6 +52,7 @@ namespace Infrastructure.SceneManagement.Roots
             public GameView GameView;
             public Hud Hud;
             public SectionPicker SectionPicker;
+            public GameObject TapToStartLabel;
             [NonSerialized] public GameConfig GameConfig;
             [NonSerialized] public InputService Input;
             [NonSerialized] public IGoPool Pool;
