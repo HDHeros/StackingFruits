@@ -220,7 +220,7 @@ namespace Gameplay
         private void HandleWin(float progress) => 
             HandleFinishGame(progress);
 
-        private void HandleFinishGame(float progress)
+        private void HandleFinishGame(float progress, bool isForceFinish = false)
         {
             for (int y = 0; y < _game.LevelData.FieldSize.y; y++)
             for (int x = 0; x < _game.LevelData.FieldSize.x; x++)
@@ -233,7 +233,7 @@ namespace Gameplay
                 }
                 _pool.Return(_slots[x, y], _slotPrefab);
             }
-            _gameResult = new GameResult{Progress = progress};
+            _gameResult = new GameResult{Progress = progress, WasForceFinished = isForceFinish};
         }
 
         private void OnDrawGizmos()
@@ -245,7 +245,24 @@ namespace Gameplay
         public struct GameResult
         {
             public float Progress;
+            public bool WasForceFinished;
             public bool IsWin => Progress >= 1;
+        }
+        
+        public void Pause()
+        {
+            _replacer.ForceFinishReplacement();
+        }
+
+        public void Unpause()
+        {
+            
+        }
+
+        public void ForceFinishGame()
+        {
+            _replacer.ForceFinishReplacement();
+            HandleFinishGame(0, true);
         }
     }
 }

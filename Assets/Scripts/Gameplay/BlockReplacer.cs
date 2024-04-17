@@ -42,6 +42,12 @@ namespace Gameplay
             return true;
         }
 
+        public void ForceFinishReplacement()
+        {
+            if (_currentBlock.IsNotNull())
+                FinishReplacement(false);
+        }
+
         private void BeginReplacement(PointerEventData eventData, BlockView block)
         {
             _currentBlock = block;
@@ -72,10 +78,13 @@ namespace Gameplay
             _isCurrentBlockInSlot = true;
         }
 
-        private void FinishReplacement(Vector2 screenPosition)
+        private void FinishReplacement(Vector2 screenPosition) => 
+            FinishReplacement(true);
+
+        private void FinishReplacement(bool replaceToNewPosIfExist)
         {
             _syncCtSource?.Cancel();
-            if (_isCurrentBlockInSlot && _currentSlot != _currentBlock.Slot)
+            if (_isCurrentBlockInSlot && _currentSlot != _currentBlock.Slot && replaceToNewPosIfExist)
             {
                 Vector2Int oldBlockPos = _currentBlock.Slot.Position;
                 _performMovement.Invoke(oldBlockPos, _currentSlot.Position);   
@@ -99,7 +108,6 @@ namespace Gameplay
         private void CalculateTargetTransform(Vector2 screenPosition)
         {
             _targetPosition = GetWorldPos(screenPosition);
-            // _targetRotation = Quaternion.LookRotation(-_camera.transform.forward, Vector3.up);
         }
 
         private Vector3 GetWorldPos(Vector2 screenPosition) =>
@@ -111,8 +119,6 @@ namespace Gameplay
             {
                 _currentBlock.Transform.position = Vector3.SmoothDamp(_currentBlock.Transform.position, 
                     _targetPosition, ref _currentPosVelocity, 0.1f);
-                // _currentBlock.Transform.rotation = QuaternionExtensions.SmoothDamp(_currentBlock.Transform.rotation,
-                //     _targetRotation, ref _currentRotationVelocity, 0.1f);
                 
                 await UniTask.Yield(PlayerLoopTiming.Update);
             }

@@ -17,23 +17,53 @@ namespace Gameplay.GameSceneLogic
             Fields.TapToStartLabel.SetActive(false);
             Fields.Hud.PushScreen(Hud.ScreenType.CommonScreen);
             StartGameLoop(_ctSource.Token).Forget();
+            Fields.Input.OnBackButtonPressed += OnBackButtonPressed;
         }
 
         public override void Exit(Action onExit)
         {
             _ctSource.Cancel();
             Fields.Hud.PopScreen(Hud.ScreenType.CommonScreen);
+            Fields.Input.OnBackButtonPressed -= OnBackButtonPressed;
             base.Exit(onExit);
         }
+
+        private void OnBackButtonPressed()
+        {
+            PauseGame();
+            ShowConfirmationPopup(
+                LocalizationManager.GetTranslation("LEAVE_LEVEL_POPUP_HEADER"), 
+                LocalizationManager.GetTranslation("LEAVE_LEVEL_POPUP_TEXT"), 
+                LocalizationManager.GetTranslation("LEAVE_LEVEL_POPUP_BTN_POS"), 
+                LocalizationManager.GetTranslation("LEAVE_LEVEL_POPUP_BTN_NEG"),
+                ConfirmationButtonWrapper.Style.Negative,
+                ConfirmationButtonWrapper.Style.Positive,
+                FinishGame,
+                ContinueGame,
+                ContinueGame,
+                _ctSource.Token).Forget();
+        }
+
+        private void PauseGame() => 
+            Fields.GameView.Pause();
+
+        private void ContinueGame()
+        {
+            Fields.CameraController.ActivateInGameCamera();
+            Fields.GameView.Unpause();
+        }
+
+        private void FinishGame() => 
+            Fields.GameView.ForceFinishGame();
 
         private async UniTaskVoid StartGameLoop(CancellationToken ct)
         {
             Fields.CameraController.ActivateInGameCamera();
             GameView.GameResult result = await Fields.GameView.StartGame(Fields.PickedLevel.LevelData);
-            HandleFinishGame(result, ct).Forget();
+            HandleFinishGame(result, ct);
         }
 
-        private async UniTaskVoid HandleFinishGame(GameView.GameResult result, CancellationToken ct)
+        private void HandleFinishGame(GameView.GameResult result, CancellationToken ct)
         {
             if (result.Progress > Fields.LevelsService.GetLevelProgress(Fields.PickedSection.Id, Fields.PickedLevel.Id))
             {
@@ -42,12 +72,30 @@ namespace Gameplay.GameSceneLogic
             }
             
             Action returnToSelectLevelState = () => ReturnToSelectLevelAsync(_ctSource.Token).Forget();
-            if (result.IsWin)
+            if (result.IsWin || result.WasForceFinished)
             {
                 returnToSelectLevelState.Invoke();
                 return;
             }
             
+            ShowConfirmationPopup(
+                LocalizationManager.GetTranslation("LOSE_GAME_POPUP_HEADER"), 
+                LocalizationManager.GetTranslation("LOSE_GAME_POPUP_TEXT"), 
+                LocalizationManager.GetTranslation("LOSE_GAME_POPUP_BTN_RETRY"), 
+                LocalizationManager.GetTranslation("LOSE_GAME_POPUP_BTN_BACK"),
+                ConfirmationButtonWrapper.Style.Positive,
+                ConfirmationButtonWrapper.Style.Black,
+                ReloadLevel,
+                returnToSelectLevelState,
+                returnToSelectLevelState,
+                ct).Forget();
+        }
+
+        private async UniTaskVoid ShowConfirmationPopup(string headerText, string confirmationText,
+            string positiveBtnText, string negativeBtnText, ConfirmationButtonWrapper.Style positiveBtnStyle,
+            ConfirmationButtonWrapper.Style negativeBtnStyle, Action positiveCallback, Action negativeCallback,
+            Action onClosedCallback, CancellationToken ct)
+        {
             Fields.CameraController.ActivateGameLoseCamera();
             await UniTask.WaitWhile(() => Fields.CameraController.IsBlending, cancellationToken: ct);
             
@@ -58,15 +106,15 @@ namespace Gameplay.GameSceneLogic
 
             
             popup.Setup(
-                LocalizationManager.GetTranslation("LOSE_GAME_POPUP_HEADER"), 
-                LocalizationManager.GetTranslation("LOSE_GAME_POPUP_TEXT"), 
-                LocalizationManager.GetTranslation("LOSE_GAME_POPUP_BTN_RETRY"), 
-                LocalizationManager.GetTranslation("LOSE_GAME_POPUP_BTN_BACK"),
-                ConfirmationButtonWrapper.Style.Positive,
-                ConfirmationButtonWrapper.Style.Black,
-                ReloadLevel,
-                returnToSelectLevelState,
-                returnToSelectLevelState);
+                headerText, 
+                confirmationText, 
+                positiveBtnText, 
+                negativeBtnText,
+                positiveBtnStyle,
+                negativeBtnStyle,
+                positiveCallback,
+                negativeCallback,
+                onClosedCallback);
         }
 
         private void ReloadLevel() => 
