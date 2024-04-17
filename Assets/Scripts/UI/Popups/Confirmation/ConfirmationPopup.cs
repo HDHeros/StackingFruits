@@ -20,11 +20,15 @@ namespace UI.Popups.Confirmation
         [SerializeField] private TextMeshProUGUI _header;
         [SerializeField] private TextMeshProUGUI _confirmationText;
         private GlobalVolumeService _globalVolume;
+        private Hud _hud;
 
         [Inject]
-        private void Inject(GlobalVolumeService globalVolume) => 
+        private void Inject(GlobalVolumeService globalVolume, Hud hud)
+        {
             _globalVolume = globalVolume;
-        
+            _hud = hud;
+        }
+
         public void Setup(
             string headerText,
             string confirmationText,
@@ -59,11 +63,13 @@ namespace UI.Popups.Confirmation
         {
             base.OnShown();
             _globalVolume.SetActiveBlur(true);
+            _hud.PushScreen(Hud.ScreenType.EmptyScreen);
         }
 
         protected override void OnClosed()
         {
             base.OnClosed();
+            _hud.PopScreen(Hud.ScreenType.EmptyScreen);
             _globalVolume.SetActiveBlur(false);
         }
 

@@ -61,8 +61,11 @@ namespace Menu
             return minFactor;
         }
 
-        public void OnPointerClick(PointerEventData eventData) => 
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            _sounds.RaiseEvent(EventId.FruitClicked);
             OnClick?.Invoke(this);
+        }
 
         public void EnableSelection()
         {

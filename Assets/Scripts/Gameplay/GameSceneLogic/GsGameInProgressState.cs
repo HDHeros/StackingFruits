@@ -15,13 +15,14 @@ namespace Gameplay.GameSceneLogic
         {
             _ctSource = new CancellationTokenSource();
             Fields.TapToStartLabel.SetActive(false);
-            Fields.Hud.ActivateScreen(Hud.ScreenType.CommonScreen);
+            Fields.Hud.PushScreen(Hud.ScreenType.CommonScreen);
             StartGameLoop(_ctSource.Token).Forget();
         }
 
         public override void Exit(Action onExit)
         {
             _ctSource.Cancel();
+            Fields.Hud.PopScreen(Hud.ScreenType.CommonScreen);
             base.Exit(onExit);
         }
 
@@ -66,7 +67,6 @@ namespace Gameplay.GameSceneLogic
                 ReloadLevel,
                 returnToSelectLevelState,
                 returnToSelectLevelState);
-            Fields.Hud.ActivateScreen(Hud.ScreenType.EmptyScreen);
         }
 
         private void ReloadLevel() => 

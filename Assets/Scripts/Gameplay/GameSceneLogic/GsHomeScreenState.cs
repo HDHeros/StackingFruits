@@ -9,7 +9,7 @@ namespace Gameplay.GameSceneLogic
         public override void Enter()
         {
             Fields.CameraController.ActivateHomeScreenCamera();
-            Fields.Hud.ActivateScreen(Hud.ScreenType.HomeScreen);
+            Fields.Hud.PushScreen(Hud.ScreenType.HomeScreen);
             Fields.Input.OnTap += OnTap;
             Fields.TapToStartLabel.SetActive(true);
         }
@@ -17,6 +17,7 @@ namespace Gameplay.GameSceneLogic
         public override void Exit(Action onExit)
         {
             Fields.Input.OnTap -= OnTap;
+            Fields.Hud.PopScreen(Hud.ScreenType.HomeScreen);
             base.Exit(onExit);
         }
 

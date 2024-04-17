@@ -1,5 +1,4 @@
 ﻿using System;
-using Lean.Touch;
 using Menu;
 using UI;
 using UnityEngine;
@@ -15,7 +14,7 @@ namespace Gameplay.GameSceneLogic
 
         public override void Enter()
         {
-            Fields.Hud.ActivateScreen(Hud.ScreenType.CommonScreen);
+            Fields.Hud.PushScreen(Hud.ScreenType.CommonScreen);
             Fields.CameraController.ActivateSelectSectionCamera();
             Fields.SectionPicker.Show(true);
             Fields.Input.OnBackButtonPressed += OnBackButtonPressed;
@@ -25,6 +24,7 @@ namespace Gameplay.GameSceneLogic
 
         public override void Exit(Action onExit)
         {
+            Fields.Hud.PopScreen(Hud.ScreenType.CommonScreen);
             Fields.Input.OnBackButtonPressed -= OnBackButtonPressed;
             Fields.Input.OnSwipe -= OnSwipe;
             Fields.SectionPicker.OnSectionPicked -= OnSectionPicked;

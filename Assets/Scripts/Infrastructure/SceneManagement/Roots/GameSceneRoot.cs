@@ -22,8 +22,9 @@ namespace Infrastructure.SceneManagement.Roots
 
         [SerializeField] private SharedFields _fields;
         private Fsm<GsBaseState, SharedFields> _fsm;
+        
         public void OnEnter(InputService inputService, IGoPool pool, GameConfig gameConfig, LevelsService levelsService, 
-            SoundsService sounds, PopupsController popups)
+            SoundsService sounds, PopupsController popups, Hud hud)
         {
             _ctSource = new CancellationTokenSource();
             _fields.Input = inputService;
@@ -32,6 +33,7 @@ namespace Infrastructure.SceneManagement.Roots
             _fields.LevelsService = levelsService;
             _fields.SoundService = sounds;
             _fields.Popups = popups;
+            _fields.Hud = hud;
             _fields.GameView.Initialize(inputService, pool, gameConfig.BlocksContainer, sounds);
             
             _fsm = Fsm<GsBaseState, SharedFields>
@@ -53,7 +55,6 @@ namespace Infrastructure.SceneManagement.Roots
         {
             public CameraController CameraController;
             public GameView GameView;
-            public Hud Hud;
             public SectionPicker SectionPicker;
             public GameObject TapToStartLabel;
             [NonSerialized] public GameConfig GameConfig;
@@ -64,6 +65,7 @@ namespace Infrastructure.SceneManagement.Roots
             [NonSerialized] public LevelsService LevelsService;
             [NonSerialized] public SoundsService SoundService;
             [NonSerialized] public PopupsController Popups;
+            [NonSerialized] public Hud Hud;
         }
     }
 }

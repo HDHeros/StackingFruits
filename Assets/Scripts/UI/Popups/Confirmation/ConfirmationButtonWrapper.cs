@@ -15,7 +15,9 @@ namespace UI.Popups.Confirmation
         [SerializeField] private Button _button;
         [SerializeField] private TextMeshProUGUI _text;
         [SerializeField] private List<StyleConfig> _styles;
-        public Button Btn => _button;        
+        public Button Btn => _button;
+
+
         
         [Button]
         public void SetStyle(Style style)

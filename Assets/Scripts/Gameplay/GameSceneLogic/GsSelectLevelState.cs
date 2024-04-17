@@ -1,5 +1,6 @@
 ﻿using System;
 using Menu;
+using UI;
 
 namespace Gameplay.GameSceneLogic
 {
@@ -8,6 +9,7 @@ namespace Gameplay.GameSceneLogic
         public override void Enter()
         {
             Fields.CameraController.ActivateSelectLevelCamera();
+            Fields.Hud.PushScreen(Hud.ScreenType.CommonScreen);
             Fields.Input.OnBackButtonPressed += OnBackButtonPressed;
             Fields.PickedSection.OnLevelPreviewClick += OnLevelClicked;
             base.Enter();
@@ -15,6 +17,7 @@ namespace Gameplay.GameSceneLogic
 
         public override void Exit(Action onExit)
         {
+            Fields.Hud.PopScreen(Hud.ScreenType.CommonScreen);
             Fields.Input.OnBackButtonPressed -= OnBackButtonPressed;
             Fields.PickedSection.OnLevelPreviewClick -= OnLevelClicked;
             base.Exit(onExit);

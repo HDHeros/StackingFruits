@@ -48,6 +48,7 @@ GameObject:
   - component: {fileID: 298121687866181192}
   - component: {fileID: 1653872607182800833}
   - component: {fileID: 4323373046136720656}
+  - component: {fileID: 3401286230063141619}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -156,6 +157,21 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &3401286230063141619
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2012936164607358514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c03a07d5bc54e929efcb2c3cc9a0ef3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _onEnter: 0
+  _onExit: 0
+  _onClick: 22
 --- !u!1 &2840838271295146800
 GameObject:
   m_ObjectHideFlags: 0
@@ -236,7 +252,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1440, y: 2560}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -388,6 +404,7 @@ GameObject:
   - component: {fileID: 2523378947357835450}
   - component: {fileID: 7159666725607789456}
   - component: {fileID: 1708690061678075282}
+  - component: {fileID: 1709470381378531176}
   m_Layer: 5
   m_Name: BackButton
   m_TagString: Untagged
@@ -496,6 +513,21 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1709470381378531176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6781157601607978222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c03a07d5bc54e929efcb2c3cc9a0ef3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _onEnter: 0
+  _onExit: 0
+  _onClick: 22
 --- !u!1 &7960950548386171695
 GameObject:
   m_ObjectHideFlags: 0

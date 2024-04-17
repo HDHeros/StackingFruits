@@ -167,6 +167,8 @@ MonoBehaviour:
     _fileExtension: dat
     _saveDelayInSeconds: 5
   _globalVolume: {fileID: 1852780342411909820}
+  _hudPrefab: {fileID: 2510746049762929857, guid: b4358b499cace8646a062f6e4327213a,
+    type: 3}
   _popupParentPrefab: {fileID: 4371249964984612897, guid: 599e72ab28b96c94186dbb8ea71b0f93,
     type: 3}
   _popups:

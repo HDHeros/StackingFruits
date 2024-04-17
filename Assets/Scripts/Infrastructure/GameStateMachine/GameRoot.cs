@@ -7,6 +7,7 @@ using Infrastructure.GameStateMachine.States;
 using Infrastructure.SceneManagement;
 using Infrastructure.SimpleInput;
 using Infrastructure.SoundsLogic;
+using UI;
 using UnityEngine;
 using Zenject;
 
@@ -18,7 +19,7 @@ namespace Infrastructure.GameStateMachine
         
         [Inject]
         public void Inject(SceneService sceneService, InputService inputService, IGoPool pool, GameConfig gameConfig, 
-            LevelsService levelsService, SoundsService sounds, PopupsController popups)
+            LevelsService levelsService, SoundsService sounds, PopupsController popups, Hud hud)
         {
             var fields = new SharedFields
             {
@@ -29,6 +30,7 @@ namespace Infrastructure.GameStateMachine
                 Levels = levelsService,
                 SoundService = sounds,
                 Popups = popups,
+                Hud = hud,
             };
             
             _fsm = Fsm<BaseGameState, SharedFields>
@@ -56,6 +58,7 @@ namespace Infrastructure.GameStateMachine
             public LevelsService Levels;
             public SoundsService SoundService;
             public PopupsController Popups;
+            public Hud Hud;
         }
     }
 }

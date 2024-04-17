@@ -19,18 +19,40 @@ namespace UI
         
         [SerializeField] private Screen[] _screens;
         private Dictionary<ScreenType, BaseScreen> _screensDict;
+        private Stack<BaseScreen> _screensStack;
         private BaseScreen _activeScreen;
 
-        public void ActivateScreen(ScreenType type)
+        public void PushScreen(ScreenType type)
         {
             if (_activeScreen.IsNotNull())
                 _activeScreen.gameObject.SetActive(false);
             _activeScreen = _screensDict[type];
             _activeScreen.gameObject.SetActive(true);
+            _screensStack.Push(_activeScreen);
+        }
+
+        public void PopScreen(ScreenType type)
+        {
+            BaseScreen targetScreen = _screensDict[type];
+            if (targetScreen != _activeScreen)
+            {
+                Debug.LogWarning("Trying to pop screen that is not on the top of the stack");
+                return;
+            }
+            _activeScreen.gameObject.SetActive(false);
+            _activeScreen = null;
+            if (_screensStack.Count > 0)
+                _screensStack.Pop();
+            if (_screensStack.Count > 0)
+            {
+                _activeScreen = _screensStack.Peek();
+                _activeScreen.gameObject.SetActive(true);
+            }
         }
 
         private void Awake()
         {
+            _screensStack = new Stack<BaseScreen>(6);
             _screensDict = _screens.ToDictionary(p => p.Type, p => p.View);
             foreach (Screen screen in _screens) 
                 screen.View.gameObject.SetActive(false);

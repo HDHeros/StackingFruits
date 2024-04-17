@@ -10,6 +10,7 @@ using HDH.UserData.Dto;
 using Infrastructure.SceneManagement;
 using Infrastructure.SoundsLogic;
 using Sirenix.OdinInspector;
+using UI;
 using UI.Popups;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -22,30 +23,36 @@ namespace Infrastructure.ZenInstallers
         [SerializeField] private GameConfig _gameConfig;
         [SerializeField] private UserDataConfig _userDataConfig;
         [SerializeField] private Volume _globalVolume;
+        [SerializeField] private Hud _hudPrefab;
         [SerializeField, BoxGroup("Popups")] private PopupsParent _popupParentPrefab;
         [SerializeField, BoxGroup("Popups")] private PopupConfig[] _popups;
 
         public override void InstallBindings()
         {
+            InstallInputService();
+            InstallHud();
             InstallGlobalVolumeService();
             InstallGameConfig();
-            InstallPopups();
             InstallAudio();
-            InstallInputService();
+            InstallPopups();
             InstallSceneService();
             InstallGoPool();
             InstallUserDataService();
             InstallLevelsService();
         }
 
-        private void InstallGlobalVolumeService()
-        {
+        private void InstallHud() =>
+            Container
+                .Bind<Hud>()
+                .FromComponentInNewPrefab(_hudPrefab)
+                .AsSingle();
+
+        private void InstallGlobalVolumeService() =>
             Container
                 .Bind<GlobalVolumeService>()
                 .FromNew()
                 .AsSingle()
                 .WithArgumentsExplicit(new[] { new TypeValuePair(typeof(Volume), _globalVolume) });
-        }
 
         private void InstallAudio()
         {
