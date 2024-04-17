@@ -105,6 +105,21 @@ namespace Gameplay.GameCore
             yield return new GameEvent(GameEventType.GameLost, _performedMovements, GameProgress);
         }
 
+        public IEnumerator<Vector2Int> GetCellsToReplaceFrom(Vector2Int position)
+        {
+            for (int x = 0; x < _levelData.FieldSize.x; x++)
+            {
+                for (int y = -1; y < _levelData.FieldSize.y; y++)
+                {
+                    if (IsInRange(x, y + 1) && GetCellValue(x, y + 1).Equals(_levelData.EmptyBlockValue))
+                    {
+                        yield return new Vector2Int(x, y + 1);
+                        break;
+                    }
+                }
+            }
+        }
+
         private bool HandleStacks()
         {
             _blocksChecked = new Dictionary<TBlock, bool>();

@@ -29,6 +29,7 @@ namespace Gameplay
         private bool _isMovementLocked;
         private bool _isGamePaused;
         private GameResult? _gameResult;
+        private SlotsHighlighter _slotsHighlighter;
 
         public void Initialize(InputService input, IGoPool pool, BlocksContainer blocksContainer, SoundsService sounds)
         {
@@ -36,7 +37,8 @@ namespace Gameplay
             _blocksContainer = blocksContainer;
             _sounds = sounds;
             _game = new StackingGame<BlockView>();
-            _replacer = new BlockReplacer(_camera, input, _replacementDepth, Move);
+            _slotsHighlighter = new SlotsHighlighter(_game);
+            _replacer = new BlockReplacer(_camera, input, _replacementDepth, Move, _slotsHighlighter);
             _wallDecals.Initialize(_camera, pool);
         }
         
@@ -54,6 +56,7 @@ namespace Gameplay
         private void SetupField()
         {
             _slots = new BlockSlot[_game.LevelData.FieldSize.x, _game.LevelData.FieldSize.y];
+            _slotsHighlighter.Slots = _slots;
             Vector3 parentPosition = transform.position;
             Vector2 itemSize = _slotPrefab.Bounds.size;
             
@@ -235,6 +238,8 @@ namespace Gameplay
                 }
                 _pool.Return(_slots[x, y], _slotPrefab);
             }
+
+            _slotsHighlighter.Slots = null;
             _gameResult = new GameResult{Progress = progress, WasForceFinished = isForceFinish};
         }
 

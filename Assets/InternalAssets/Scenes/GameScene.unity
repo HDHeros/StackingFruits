@@ -754,7 +754,7 @@ Transform:
   m_GameObject: {fileID: 420298526}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -3.52, z: -8.5}
+  m_LocalPosition: {x: 0, y: -3.52, z: -7.222}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1136,7 +1136,7 @@ Transform:
   m_GameObject: {fileID: 537980510}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -3.52, z: -8}
+  m_LocalPosition: {x: 0, y: -3.52, z: -6.722}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1489,7 +1489,6 @@ MonoBehaviour:
   _fields:
     CameraController: {fileID: 1770374418}
     GameView: {fileID: 1458702033}
-    Hud: {fileID: 0}
     SectionPicker: {fileID: 127879981}
     TapToStartLabel: {fileID: 284344992}
 --- !u!1 &1287504096
@@ -1518,7 +1517,7 @@ Transform:
   m_GameObject: {fileID: 1287504096}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -3.52, z: -8.5}
+  m_LocalPosition: {x: 0, y: -3.52, z: -7.222}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1590,7 +1589,7 @@ Transform:
   m_GameObject: {fileID: 1458702031}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -3.52, z: 0}
+  m_LocalPosition: {x: 0, y: -3.52, z: 1.278}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

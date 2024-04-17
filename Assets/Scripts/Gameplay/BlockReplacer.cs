@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Gameplay.Blocks;
+using Gameplay.GameCore;
 using HDH.UnityExt.Extensions;
 using Infrastructure.SimpleInput;
 using UnityEngine;
@@ -13,11 +15,13 @@ namespace Gameplay
     {
         public bool IsReplacementLocked { get; set; }
         public bool IsCurrentlyReplace { get; private set; }
-
+        
         private readonly Camera _camera;
         private readonly InputService _inputService;
         private readonly float _replacementDepth;
         private readonly Action<Vector2Int, Vector2Int> _performMovement;
+        private readonly SlotsHighlighter _slotsHighlighter;
+        private readonly StackingGame<BlockView> _game;
         private BlockView _currentBlock;
         private Vector3 _targetPosition;
         private Quaternion _targetRotation;
@@ -29,12 +33,14 @@ namespace Gameplay
         private BlockSlot _currentSlot;
 
 
-        public BlockReplacer(Camera camera, InputService inputService, float replacementDepth, Action<Vector2Int, Vector2Int> performMovement)
+        public BlockReplacer(Camera camera, InputService inputService, float replacementDepth,
+            Action<Vector2Int, Vector2Int> performMovement, SlotsHighlighter slotsHighlighter)
         {
             _camera = camera;
             _inputService = inputService;
             _replacementDepth = replacementDepth;
             _performMovement = performMovement;
+            _slotsHighlighter = slotsHighlighter;
         }
 
         public void ForceFinishReplacement()
@@ -47,6 +53,7 @@ namespace Gameplay
         {
             if (_currentBlock.IsNotNull() || IsReplacementLocked) return;
 
+            _slotsHighlighter.OnReplacementBegin(block);
             IsCurrentlyReplace = true;
             _currentBlock = block;
             _currentBlock.gameObject.SetActive(true);
@@ -84,6 +91,7 @@ namespace Gameplay
             else
                 _currentBlock.Slot.FitCurrentBlockInside(true);
 
+            _slotsHighlighter.OnReplacementFinished();
             IsCurrentlyReplace = false;
             _currentBlock = null;
             _inputService.SimpleDrag -= OnReplace;

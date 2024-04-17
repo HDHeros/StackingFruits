@@ -25,5 +25,6 @@
         Stack4 = 115,
         Stack5 = 116,
         FruitClicked = 120,
+        SlotHighlightingStarted = 121,
     }
 }
