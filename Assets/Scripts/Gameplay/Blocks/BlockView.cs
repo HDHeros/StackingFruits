@@ -13,12 +13,20 @@ using Random = UnityEngine.Random;
 
 namespace Gameplay.Blocks
 {
-    public class BlockView : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler, IEquatable<BlockView>
+    public class BlockView : 
+        MonoBehaviour,
+        IPointerEnterHandler,
+        IPointerExitHandler,
+        IPointerDownHandler, 
+        IBeginDragHandler, 
+        IDragHandler, 
+        IEquatable<BlockView>
     {
         [SerializeField] private BlockType _type;
         [SerializeField] private PooledParticle[] _onStackParticles;
         [SerializeField] private ParticleSystem.MinMaxGradient _stackParticleColor;
         [SerializeField] private Color _decalColor;
+        [SerializeField] private Transform _model;
         public Transform Transform => _transform;
         public BlockSlot Slot { get; private set; }
         public BlockType Type => _type;
@@ -55,10 +63,8 @@ namespace Gameplay.Blocks
         {
         }
 
-        public void OnBeginDrag(PointerEventData eventData)
-        {
-            if(_replacer.TryBeginReplacement(eventData, this) == false) return;
-        }
+        public void OnBeginDrag(PointerEventData eventData) => 
+            _replacer.BeginReplacement(eventData, this);
 
         public void OnDrag(PointerEventData eventData)
         {
@@ -71,13 +77,6 @@ namespace Gameplay.Blocks
             Slot = slot;
         }
 
-        public UniTask AnimateStacking()
-        {
-            _transform.DOKill();
-            Tween tween = _transform.DOScale(0, 0.5f).SetEase(Ease.InBack);
-            return UniTask.WaitWhile(() => tween.IsActive() && tween.IsPlaying());
-        }
-
         public UniTask Drop()
         {
             return AnimateDrop(_transform.position.AddY(-20));
@@ -87,26 +86,11 @@ namespace Gameplay.Blocks
         {
             _transform.DOKill();
             _transform.localScale = _initialScale;
-            Slot = null;
-        }
-
-        private UniTask AnimateDrop(Vector3 position)
-        {
-            Tween tween = transform.DOMove(position, 20f).SetSpeedBased(true).SetEase(Ease.InSine);
-            return UniTask.WaitWhile(() => tween.IsActive() && tween.IsPlaying());
-        }
-
-        private void Awake()
-        {
-            _transform = transform;
-            _initialScale = _transform.localScale;
-        }
-
-        private void OnDisable()
-        {
-            ResetBlock();
-            _transform.localScale = _initialScale;
             _transform.rotation = Quaternion.identity;
+            _model.localScale = Vector3.one;
+            _model.DOKill();
+            
+            Slot = null;
         }
 
         public async UniTask MoveToStackingAnimationPos(Vector3 position, TimeSpan delay)
@@ -130,6 +114,42 @@ namespace Gameplay.Blocks
             await UniTask.WaitWhile(() => sequence.IsActive() && sequence.IsPlaying());
             SpawnStackingParticle(pool);
         }
+        
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            if (_replacer.IsCurrentlyReplace) return;
+            _model.DOKill();
+            _model.DOScale(Vector3.one * 1.1f, 0.25f).SetEase(Ease.OutBack);
+                _sounds.RaiseEvent(EventId.FruitSelected);
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            _model.DOKill();
+            _model.DOScale(Vector3.one, 0.25f).SetEase(Ease.OutQuint);
+        }
+
+        public bool Equals(BlockView other)
+        {
+            return other != null && other.Type == _type;
+        }
+        
+        private UniTask AnimateDrop(Vector3 position)
+        {
+            Tween tween = transform.DOMove(position, 20f).SetSpeedBased(true).SetEase(Ease.InSine);
+            return UniTask.WaitWhile(() => tween.IsActive() && tween.IsPlaying());
+        }
+
+        private void Awake()
+        {
+            _transform = transform;
+            _initialScale = _transform.localScale;
+        }
+
+        private void OnDisable()
+        {
+            ResetBlock();
+        }
 
         private void SpawnStackingParticle(IGoPool pool)
         {
@@ -139,11 +159,6 @@ namespace Gameplay.Blocks
             particleSystemMain.startColor = _stackParticleColor;
             pooledParticle
                 .PlayAndReturn(_transform.position, particlePrefab, pool, CancellationToken.None, Random.rotation);
-        }
-
-        public bool Equals(BlockView other)
-        {
-            return other != null && other.Type == _type;
         }
     }
 }

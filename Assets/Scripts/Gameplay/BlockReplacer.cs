@@ -12,6 +12,8 @@ namespace Gameplay
     public class BlockReplacer
     {
         public bool IsReplacementLocked { get; set; }
+        public bool IsCurrentlyReplace { get; private set; }
+
         private readonly Camera _camera;
         private readonly InputService _inputService;
         private readonly float _replacementDepth;
@@ -35,27 +37,21 @@ namespace Gameplay
             _performMovement = performMovement;
         }
 
-        public bool TryBeginReplacement(PointerEventData eventData, BlockView block)
-        {
-            if (_currentBlock.IsNotNull() || IsReplacementLocked) return false;
-            BeginReplacement(eventData, block);
-            return true;
-        }
-
         public void ForceFinishReplacement()
         {
             if (_currentBlock.IsNotNull())
                 FinishReplacement(false);
         }
 
-        private void BeginReplacement(PointerEventData eventData, BlockView block)
+        public void BeginReplacement(PointerEventData eventData, BlockView block)
         {
+            if (_currentBlock.IsNotNull() || IsReplacementLocked) return;
+
+            IsCurrentlyReplace = true;
             _currentBlock = block;
             _currentBlock.gameObject.SetActive(true);
             
             CalculateTargetTransform(eventData.position);
-            // _currentBlock.Transform.position = _targetPosition;
-            // _currentBlock.Transform.rotation = _targetRotation;
             _syncCtSource = new CancellationTokenSource();
             _inputService.SimpleDrag += OnReplace;
             _inputService.SimpleDragFinished += FinishReplacement;
@@ -69,11 +65,7 @@ namespace Gameplay
             
             if (RayCastSlot(out BlockSlot slot, out _) == false)
                 return;
-
-            // _targetPosition = slot.WorldPosition;
-
-            // _targetRotation = slot.Rotation;
-            // _targetScale = slot.Transform.localScale;
+            
             _currentSlot = slot;
             _isCurrentBlockInSlot = true;
         }
@@ -92,6 +84,7 @@ namespace Gameplay
             else
                 _currentBlock.Slot.FitCurrentBlockInside(true);
 
+            IsCurrentlyReplace = false;
             _currentBlock = null;
             _inputService.SimpleDrag -= OnReplace;
             _inputService.SimpleDragFinished -= FinishReplacement;

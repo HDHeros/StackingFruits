@@ -106,7 +106,6 @@ namespace Gameplay
             while (move.MoveNext())
             {
                 await UniTask.WaitWhile(() => _isGamePaused);
-                Debug.Log($"{move.Current.Type} - {move.Current.Actions.Count}");
                 switch (move.Current.Type)
                 {
                     case GameEventType.BlockMovedByUser:

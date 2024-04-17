@@ -78,7 +78,7 @@ namespace Gameplay.GameSceneLogic
                 LocalizationManager.GetTranslation("LOSE_GAME_POPUP_BTN_RETRY"), 
                 LocalizationManager.GetTranslation("LOSE_GAME_POPUP_BTN_BACK"),
                 ConfirmationButtonWrapper.Style.Positive,
-                ConfirmationButtonWrapper.Style.Black,
+                ConfirmationButtonWrapper.Style.Positive,
                 ReloadLevel,
                 returnToSelectLevelState,
                 returnToSelectLevelState,
@@ -97,7 +97,6 @@ namespace Gameplay.GameSceneLogic
             view.Show();
             if (view is ConfirmationPopup popup == false)
                 throw new InvalidCastException();
-
             
             popup.Setup(
                 headerText, 

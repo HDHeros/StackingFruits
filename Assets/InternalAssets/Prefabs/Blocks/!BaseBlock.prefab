@@ -168,3 +168,4 @@ MonoBehaviour:
     m_ColorMin: {r: 0, g: 0, b: 0, a: 0}
     m_ColorMax: {r: 0, g: 0, b: 0, a: 0}
   _decalColor: {r: 0, g: 0, b: 0, a: 0}
+  _model: {fileID: 7785636066918084514}
