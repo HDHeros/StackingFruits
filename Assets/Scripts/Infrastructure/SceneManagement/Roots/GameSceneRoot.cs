@@ -7,6 +7,7 @@ using Gameplay.LevelsLogic;
 using GameStructConfigs;
 using HDH.Fsm;
 using HDH.GoPool;
+using HDH.Popups;
 using Infrastructure.SimpleInput;
 using Infrastructure.SoundsLogic;
 using Menu;
@@ -21,7 +22,8 @@ namespace Infrastructure.SceneManagement.Roots
 
         [SerializeField] private SharedFields _fields;
         private Fsm<GsBaseState, SharedFields> _fsm;
-        public void OnEnter(InputService inputService, IGoPool pool, GameConfig gameConfig, LevelsService levelsService, SoundsService sounds)
+        public void OnEnter(InputService inputService, IGoPool pool, GameConfig gameConfig, LevelsService levelsService, 
+            SoundsService sounds, PopupsController popups)
         {
             _ctSource = new CancellationTokenSource();
             _fields.Input = inputService;
@@ -29,6 +31,7 @@ namespace Infrastructure.SceneManagement.Roots
             _fields.Pool = pool;
             _fields.LevelsService = levelsService;
             _fields.SoundService = sounds;
+            _fields.Popups = popups;
             _fields.GameView.Initialize(inputService, pool, gameConfig.BlocksContainer, sounds);
             
             _fsm = Fsm<GsBaseState, SharedFields>
@@ -60,6 +63,7 @@ namespace Infrastructure.SceneManagement.Roots
             [NonSerialized] public LevelPreview PickedLevel;
             [NonSerialized] public LevelsService LevelsService;
             [NonSerialized] public SoundsService SoundService;
+            [NonSerialized] public PopupsController Popups;
         }
     }
 }

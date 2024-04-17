@@ -1,5 +1,54 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &54518514798181899
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4233783492208026852}
+  - component: {fileID: 1852780342411909820}
+  m_Layer: 0
+  m_Name: Global Volume
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4233783492208026852
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 54518514798181899}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1477243611229369111}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1852780342411909820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 54518514798181899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IsGlobal: 1
+  priority: 0
+  blendDistance: 0
+  weight: 1
+  sharedProfile: {fileID: 11400000, guid: f417401942879294a8d8a2d5cbd4a977, type: 2}
 --- !u!1 &2470670330644765486
 GameObject:
   m_ObjectHideFlags: 0
@@ -117,6 +166,13 @@ MonoBehaviour:
     _saveFolderPath: 
     _fileExtension: dat
     _saveDelayInSeconds: 5
+  _globalVolume: {fileID: 1852780342411909820}
+  _popupParentPrefab: {fileID: 4371249964984612897, guid: 599e72ab28b96c94186dbb8ea71b0f93,
+    type: 3}
+  _popups:
+  - Prefab: {fileID: -3462384113640533456, guid: c9fd66a816960a2469d2ab06a55cc53a,
+      type: 3}
+    InstantiateOnAwake: 1
 --- !u!1 &7328896134566002004
 GameObject:
   m_ObjectHideFlags: 0
@@ -150,6 +206,7 @@ Transform:
   - {fileID: 7681675162999456630}
   - {fileID: 3548028005383511392}
   - {fileID: 8868351497308796201}
+  - {fileID: 4233783492208026852}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1778927599507602405

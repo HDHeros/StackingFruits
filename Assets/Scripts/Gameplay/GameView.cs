@@ -245,6 +245,7 @@ namespace Gameplay
         public struct GameResult
         {
             public float Progress;
+            public bool IsWin => Progress >= 1;
         }
     }
 }

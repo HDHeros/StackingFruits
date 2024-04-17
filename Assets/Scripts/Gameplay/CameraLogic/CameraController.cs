@@ -12,6 +12,7 @@ namespace Gameplay.CameraLogic
         [SerializeField] private CinemachineVirtualCamera _selectSectionVCam;
         [SerializeField] private CinemachineVirtualCamera _selectLevelVCam;
         [SerializeField] private CinemachineVirtualCamera _inGameVCam;
+        [SerializeField] private CinemachineVirtualCamera _gameLoseCamera;
         private CinemachineVirtualCamera _activeVCam;
         public Camera Camera => _camera;
         public bool IsBlending => _brain.IsBlending; 
@@ -27,6 +28,9 @@ namespace Gameplay.CameraLogic
 
         public void ActivateInGameCamera() =>
             ActivateCamera(_inGameVCam);
+        
+        public void ActivateGameLoseCamera() =>
+            ActivateCamera(_gameLoseCamera);
 
         private void ActivateCamera(CinemachineVirtualCamera vCam)
         {
