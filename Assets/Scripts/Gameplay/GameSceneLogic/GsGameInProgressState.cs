@@ -65,13 +65,7 @@ namespace Gameplay.GameSceneLogic
 
         private void HandleFinishGame(GameView.GameResult result, CancellationToken ct)
         {
-            if (result.Progress > Fields.LevelsService.GetLevelProgress(Fields.PickedSection.Id, Fields.PickedLevel.Id))
-            {
-                Fields.LevelsService.SetLevelProgress(Fields.PickedSection.Id, Fields.PickedLevel.Id, result.Progress);
-                Fields.PickedLevel.SetLevelProgress(result.Progress);
-            }
-            
-            Action returnToSelectLevelState = () => ReturnToSelectLevelAsync(_ctSource.Token).Forget();
+            Action returnToSelectLevelState = () => ReturnToSelectLevelAsync(_ctSource.Token, result).Forget();
             if (result.IsWin || result.WasForceFinished)
             {
                 returnToSelectLevelState.Invoke();
@@ -120,10 +114,15 @@ namespace Gameplay.GameSceneLogic
         private void ReloadLevel() => 
             StartGameLoop(_ctSource.Token).Forget();
 
-        private async UniTaskVoid ReturnToSelectLevelAsync(CancellationToken ct)
+        private async UniTaskVoid ReturnToSelectLevelAsync(CancellationToken ct, GameView.GameResult result)
         {
             Fields.CameraController.ActivateSelectLevelCamera();
             await UniTask.WaitWhile(() => Fields.CameraController.IsBlending, cancellationToken: ct);
+            if (result.Progress > Fields.LevelsService.GetLevelProgress(Fields.PickedSection.Id, Fields.PickedLevel.Id))
+            {
+                Fields.LevelsService.SetLevelProgress(Fields.PickedSection.Id, Fields.PickedLevel.Id, result.Progress);
+                Fields.PickedLevel.SetLevelProgress(result.Progress);
+            }
             StateSwitcher.SwitchState<GsSelectLevelState>();
         }
     }

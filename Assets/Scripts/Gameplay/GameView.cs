@@ -27,6 +27,7 @@ namespace Gameplay
         private BlocksContainer _blocksContainer;
         private SoundsService _sounds;
         private bool _isMovementLocked;
+        private bool _isGamePaused;
         private GameResult? _gameResult;
 
         public void Initialize(InputService input, IGoPool pool, BlocksContainer blocksContainer, SoundsService sounds)
@@ -45,6 +46,7 @@ namespace Gameplay
             _game.Reinitialize(levelData);
             SetupField();
             _gameResult = null;
+            _isGamePaused = false;
             await UniTask.WaitUntil(() => _gameResult.HasValue);
             return _gameResult ?? new GameResult();
         }
@@ -103,6 +105,7 @@ namespace Gameplay
 
             while (move.MoveNext())
             {
+                await UniTask.WaitWhile(() => _isGamePaused);
                 Debug.Log($"{move.Current.Type} - {move.Current.Actions.Count}");
                 switch (move.Current.Type)
                 {
@@ -252,11 +255,12 @@ namespace Gameplay
         public void Pause()
         {
             _replacer.ForceFinishReplacement();
+            _isGamePaused = true;
         }
 
         public void Unpause()
         {
-            
+            _isGamePaused = false;
         }
 
         public void ForceFinishGame()
