@@ -1,6 +1,5 @@
 ﻿using System;
 using DG.Tweening;
-using Gameplay.Blocks;
 using Gameplay.GameCore;
 using Gameplay.LevelsLogic;
 using GameStructConfigs;
@@ -17,7 +16,7 @@ namespace Menu
         [SerializeField] private MeshRenderer _modelRenderer;
         [SerializeField] private Transform _model;
         [SerializeField] private float _onMouseHoverOffset;
-        public LevelData<BlockView> LevelData => _levelConfig.GetLevelData();
+        public LevelData LevelData => _levelConfig.GetLevelData();
         public string Id => _levelConfig.Id;
         private LevelConfig _levelConfig;
         private bool _isSelectionEnabled;

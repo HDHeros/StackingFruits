@@ -2,6 +2,7 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using Gameplay.GameCore;
 using HDH.GoPool;
 using HDH.GoPool.Components;
 using HDH.UnityExt.Extensions;
@@ -27,6 +28,8 @@ namespace Gameplay.Blocks
         [SerializeField] private ParticleSystem.MinMaxGradient _stackParticleColor;
         [SerializeField] private Color _decalColor;
         [SerializeField] private Transform _model;
+        [SerializeField] private bool _isStackable;
+        [SerializeField] private bool _isMovable;
         public Transform Transform => _transform;
         public BlockSlot Slot { get; private set; }
         public BlockType Type => _type;
@@ -63,8 +66,11 @@ namespace Gameplay.Blocks
         {
         }
 
-        public void OnBeginDrag(PointerEventData eventData) => 
+        public void OnBeginDrag(PointerEventData eventData)
+        {
+            if (_isStackable == false) return;
             _replacer.BeginReplacement(eventData, this);
+        }
 
         public void OnDrag(PointerEventData eventData)
         {
@@ -79,7 +85,7 @@ namespace Gameplay.Blocks
 
         public UniTask Drop()
         {
-            return AnimateDrop(_transform.position.AddY(-20));
+            return _isMovable == false ? UniTask.CompletedTask : AnimateDrop(_transform.position.AddY(-20));
         }
 
         public void ResetBlock()
@@ -117,7 +123,7 @@ namespace Gameplay.Blocks
         
         public void OnPointerEnter(PointerEventData eventData)
         {
-            if (_replacer.IsCurrentlyReplace) return;
+            if (_replacer.IsCurrentlyReplace || _isStackable == false) return;
             _model.DOKill();
             _model.DOScale(Vector3.one * 1.1f, 0.25f).SetEase(Ease.OutBack);
                 _sounds.RaiseEvent(EventId.FruitSelected);
@@ -125,6 +131,7 @@ namespace Gameplay.Blocks
 
         public void OnPointerExit(PointerEventData eventData)
         {
+            if (_isStackable == false) return;
             _model.DOKill();
             _model.DOScale(Vector3.one, 0.25f).SetEase(Ease.OutQuint);
         }
@@ -159,6 +166,11 @@ namespace Gameplay.Blocks
             particleSystemMain.startColor = _stackParticleColor;
             pooledParticle
                 .PlayAndReturn(_transform.position, particlePrefab, pool, CancellationToken.None, Random.rotation);
+        }
+
+        public BlockData GetBlockData()
+        {
+            return new BlockData(_type, this, _isStackable, _isMovable);
         }
     }
 }

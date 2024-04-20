@@ -7,11 +7,11 @@ namespace Gameplay
 {
     public class SlotsHighlighter
     {
-        private readonly StackingGame<BlockView> _game;
+        private readonly StackingGame _game;
         private readonly List<BlockSlot> _highlightedSlots;
         public BlockSlot[,] Slots;
 
-        public SlotsHighlighter(StackingGame<BlockView> game)
+        public SlotsHighlighter(StackingGame game)
         {
             _game = game;
             _highlightedSlots = new List<BlockSlot>(game.LevelData.FieldSize.x * 2);

@@ -89,7 +89,6 @@ namespace Infrastructure.ZenInstallers
         
         private void InstallGameConfig()
         {
-            _gameConfig.Initialize();
             Container
                 .Bind<GameConfig>()
                 .FromInstance(_gameConfig)

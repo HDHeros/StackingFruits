@@ -20,29 +20,29 @@ namespace Gameplay
         [SerializeField] private WallDecals _wallDecals;
         [SerializeField] private float _replacementDepth;
         [SerializeField] private Bounds _gameFieldBounds;
-        private StackingGame<BlockView> _game;
+        private StackingGame _game;
         private BlockSlot[,] _slots;
         private BlockReplacer _replacer;
         private IGoPool _pool;
-        private BlocksContainer _blocksContainer;
         private SoundsService _sounds;
+        private Dictionary<BlockType, BlockView> _blocksPrefabsInGame;
         private bool _isMovementLocked;
         private bool _isGamePaused;
         private GameResult? _gameResult;
         private SlotsHighlighter _slotsHighlighter;
 
-        public void Initialize(InputService input, IGoPool pool, BlocksContainer blocksContainer, SoundsService sounds)
+        public void Initialize(InputService input, IGoPool pool, SoundsService sounds)
         {
             _pool = pool;
-            _blocksContainer = blocksContainer;
             _sounds = sounds;
-            _game = new StackingGame<BlockView>();
+            _game = new StackingGame();
+            _blocksPrefabsInGame = new Dictionary<BlockType, BlockView>(6);
             _slotsHighlighter = new SlotsHighlighter(_game);
             _replacer = new BlockReplacer(_camera, input, _replacementDepth, Move, _slotsHighlighter);
             _wallDecals.Initialize(_camera, pool);
         }
         
-        public async UniTask<GameResult> StartGame(LevelData<BlockView> levelData)
+        public async UniTask<GameResult> StartGame(LevelData levelData)
         {
             _wallDecals.Clear();
             _game.Reinitialize(levelData);
@@ -69,9 +69,10 @@ namespace Gameplay
                     Vector3 worldPosition = parentPosition + new Vector3(GetLocalXPos(x), GetLocalYPos(y));
                     slot.Setup(inGamePosition, worldPosition);
                     _slots[x, y] = slot;
-                    BlockView block = _game.GetCellValue(x, y);
-                    if (block.Type == BlockType.None) continue;
-                    BlockView blockView = _pool.Get(_blocksContainer.BlocksDict[block.Type], transform);
+                    BlockData blockData = _game.GetCellValue(x, y);
+                    _blocksPrefabsInGame.TryAdd(blockData.Type, blockData.ViewPrefab);
+                    if (blockData.Type == BlockType.Empty) continue;
+                    BlockView blockView = _pool.Get(blockData.ViewPrefab, transform);
                     blockView.Setup(inGamePosition, _replacer);
                     slot.SetBlock(blockView, false);
                 }
@@ -190,7 +191,7 @@ namespace Gameplay
             }
 
             void RemoveBlock(BlockView block) => 
-                _pool.Return(block, _blocksContainer.BlocksDict[block.Type]);
+                _pool.Return(block, _blocksPrefabsInGame[block.Type]);
 
             void PlayStackFinishSound(int stackNum)
             {
@@ -234,7 +235,7 @@ namespace Gameplay
                 if (block.IsNotNull())
                 {
                     block.ResetBlock();
-                    _pool.Return(block, _blocksContainer.BlocksDict[block.Type]);
+                    _pool.Return(block, _blocksPrefabsInGame[block.Type]);
                 }
                 _pool.Return(_slots[x, y], _slotPrefab);
             }

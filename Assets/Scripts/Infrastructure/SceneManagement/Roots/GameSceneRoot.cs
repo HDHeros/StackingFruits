@@ -34,7 +34,7 @@ namespace Infrastructure.SceneManagement.Roots
             _fields.SoundService = sounds;
             _fields.Popups = popups;
             _fields.Hud = hud;
-            _fields.GameView.Initialize(inputService, pool, gameConfig.BlocksContainer, sounds);
+            _fields.GameView.Initialize(inputService, pool, sounds);
             
             _fsm = Fsm<GsBaseState, SharedFields>
                 .Create(_fields)

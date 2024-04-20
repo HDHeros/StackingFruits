@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Gameplay.Blocks;
@@ -21,7 +20,7 @@ namespace Gameplay
         private readonly float _replacementDepth;
         private readonly Action<Vector2Int, Vector2Int> _performMovement;
         private readonly SlotsHighlighter _slotsHighlighter;
-        private readonly StackingGame<BlockView> _game;
+        private readonly StackingGame _game;
         private BlockView _currentBlock;
         private Vector3 _targetPosition;
         private Quaternion _targetRotation;

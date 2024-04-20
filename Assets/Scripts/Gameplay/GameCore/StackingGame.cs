@@ -1,26 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using Gameplay.Blocks;
 using UnityEngine;
 
 namespace Gameplay.GameCore
 {
-    public class StackingGame<TBlock> where TBlock : IEquatable<TBlock>
+    public class StackingGame
     {
         private struct CellInfo
         {
-            public TBlock Value;
+            public BlockData Value;
             public bool Counted;
         }
         
-        public LevelData<TBlock> LevelData => _levelData;
+        public LevelData LevelData => _levelData;
         public int StacksPerformed => _stacksPerformed;
-        private float GameProgress => (float)_stacksPerformed / _numberOfBlockTypesOnLevel;
-        private LevelData<TBlock> _levelData;
+        private float GameProgress => (float)_stacksPerformed / _totalStackAmountOnLevel;
+        private LevelData _levelData;
         private CellInfo[,] _field;
-        private Dictionary<TBlock, int> _blocksCount;
-        private Dictionary<TBlock, bool> _blocksChecked;
+        private Dictionary<BlockData, int> _blocksCount;
+        private Dictionary<BlockData, bool> _blocksChecked;
         private List<PerformedMovement> _performedMovements;
-        private int _numberOfBlockTypesOnLevel;
+        private int _totalStackAmountOnLevel;
         private bool _isFieldNormalized;
         private int _stacksPerformed;
 
@@ -28,16 +29,18 @@ namespace Gameplay.GameCore
         public StackingGame() => 
             _performedMovements = null;
 
-        public void Reinitialize(LevelData<TBlock> levelData)
+        public void Reinitialize(LevelData levelData)
         {
             _performedMovements ??= new List<PerformedMovement>(levelData.FieldSize.y);
             _levelData = levelData;
             _field = new CellInfo[levelData.FieldSize.x, levelData.FieldSize.y];
-            _blocksCount = new Dictionary<TBlock, int>(8);
-            _blocksChecked = new Dictionary<TBlock, bool>(8);
+            _blocksCount = new Dictionary<BlockData, int>(8);
+            _blocksChecked = new Dictionary<BlockData, bool>(8);
+            _totalStackAmountOnLevel = 0;
             for (var i = 0; i < levelData.Blocks.Length; i++)
             {
-                TBlock block = levelData.Blocks[i];
+                BlockData block = levelData.Blocks[i];
+                _totalStackAmountOnLevel += block.IsStackable ? 1 : 0;
                 int x = i % levelData.FieldSize.x;
                 int y = Mathf.FloorToInt((float) i / levelData.FieldSize.x);
                 _field[x, y] = new CellInfo{Value = block};
@@ -46,10 +49,9 @@ namespace Gameplay.GameCore
                 _blocksCount[block]++;
             }
 
-            _numberOfBlockTypesOnLevel = _blocksCount.Count - 1;
         }
 
-        public TBlock GetCellValue(int x, int y) => 
+        public BlockData GetCellValue(int x, int y) => 
             _field[x, y].Value;
 
         public IEnumerator<GameEvent> MoveBlock(Vector2Int from, Vector2Int to)
@@ -90,7 +92,7 @@ namespace Gameplay.GameCore
             if (_stacksPerformed == 0)
                 yield break;
             
-            if (_stacksPerformed == _numberOfBlockTypesOnLevel)
+            if (_stacksPerformed == _totalStackAmountOnLevel)
             {
                 yield return new GameEvent(GameEventType.GameWon, _performedMovements, GameProgress);
                 yield break;
@@ -122,8 +124,8 @@ namespace Gameplay.GameCore
 
         private bool HandleStacks()
         {
-            _blocksChecked = new Dictionary<TBlock, bool>();
-            foreach (TBlock blockType in _blocksCount.Keys) 
+            _blocksChecked = new Dictionary<BlockData, bool>();
+            foreach (BlockData blockType in _blocksCount.Keys) 
                 _blocksChecked[blockType] = false;
             
             for (int y = 0; y < _levelData.FieldSize.y; y++)
@@ -134,8 +136,8 @@ namespace Gameplay.GameCore
             {
                 for (int x = 0; x < _levelData.FieldSize.x; x++)
                 {
-                    TBlock blockType = _field[x, y].Value;
-                    if (blockType.Equals(_levelData.EmptyBlockValue) || _blocksChecked[blockType]) continue;
+                    BlockData blockType = _field[x, y].Value;
+                    if (blockType.Equals(_levelData.EmptyBlockValue) || blockType.IsStackable == false || _blocksChecked[blockType]) continue;
                     _blocksChecked[blockType] = true;
                     _performedMovements.Clear();
                     int stackSize = CountSelfAndNearBlocks(x, y);
@@ -192,15 +194,17 @@ namespace Gameplay.GameCore
         private bool TryShiftDown(int x, int y, out PerformedMovement movement)
         {
             movement = default;
-            TBlock block = GetCellValue(x, y);
+            BlockData block = GetCellValue(x, y);
+            if (block.IsMovable == false) return false;
             if (block.Equals(_levelData.EmptyBlockValue)) return false;
             int targetY = -1;
             for (int i = y - 1; i >= 0; i--)
             {
-                if (TryGetBlock(x, i, out _)) break;
-                targetY = i;
+                if (TryGetBlock(x, i, out var foundedBlock) && foundedBlock.Value.Type != BlockType.Blocker) break;
+                if (foundedBlock.Value.Type != BlockType.Blocker)
+                    targetY = i;
             }
-            if (targetY == -1) return false;
+            if (targetY == -1 || (GetCellValue(x, targetY).IsMovable == false)) return false;
             movement = ReplaceBlock(new Vector2Int(x, y), new Vector2Int(x, targetY));
             return true;
         }
@@ -215,7 +219,7 @@ namespace Gameplay.GameCore
 
         private PerformedMovement ReplaceBlock(Vector2Int from, Vector2Int to)
         {
-            TBlock replacedBlockType = GetCellValue(from.x, from.y);
+            BlockData replacedBlockType = GetCellValue(from.x, from.y);
             SetCell(to.x, to.y, replacedBlockType);
             SetCell(from.x, from.y, _levelData.EmptyBlockValue);
             _blocksChecked[replacedBlockType] = false;
@@ -225,7 +229,7 @@ namespace Gameplay.GameCore
         private void RemoveFromField(int x, int y) => 
             SetCell(x, y, _levelData.EmptyBlockValue);
 
-        private void SetCell(int x, int y, TBlock value)
+        private void SetCell(int x, int y, BlockData value)
         {
             _isFieldNormalized = false;
             _field[x, y].Value = value;

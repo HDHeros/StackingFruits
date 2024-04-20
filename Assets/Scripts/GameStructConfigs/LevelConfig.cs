@@ -1,4 +1,5 @@
-﻿using Gameplay.Blocks;
+﻿using System.Linq;
+using Gameplay.Blocks;
 using Gameplay.GameCore;
 using Menu;
 using Sirenix.OdinInspector;
@@ -16,15 +17,15 @@ namespace GameStructConfigs
         public Vector2Int FieldSize;
         public BlockView[] Blocks;
         public LevelPreview LevelPreview;
-        [TableMatrix(RowHeight = 60, DrawElementMethod = "DrawCell"), ShowInInspector]
-        private BlockView[,] Blocks2D;
+        [TableMatrix(RowHeight = 60), ShowInInspector]
+        private GameObject[,] Blocks2D;
 
-        public LevelData<BlockView> GetLevelData()
+        public LevelData GetLevelData()
         {
-            return new LevelData<BlockView>()
+            return new LevelData()
             {
-                Blocks = Blocks,
-                EmptyBlockValue = EmptyBlock,
+                Blocks = Blocks.Select(b => b.GetBlockData()).ToArray(),
+                EmptyBlockValue = EmptyBlock.GetBlockData(),
                 FieldSize = FieldSize,
             };
         }
@@ -38,9 +39,9 @@ namespace GameStructConfigs
                 for (int x = 0; x < FieldSize.x; x++)
                 {
                     int modY = FieldSize.y - y - 1;
-                    Blocks[y * FieldSize.x + x] = Blocks2D[x, modY];
+                    Blocks[y * FieldSize.x + x] = Blocks2D[x, modY].GetComponent<BlockView>();
                     if (Blocks2D[x, modY] == null)
-                        Blocks2D[x, modY] = EmptyBlock;
+                        Blocks2D[x, modY] = EmptyBlock.gameObject;
                 }
             }
             
@@ -50,20 +51,20 @@ namespace GameStructConfigs
         [Button]
         private void LoadMatrixFromArray()
         {
-            Blocks2D = new BlockView[FieldSize.x, FieldSize.y];
+            Blocks2D = new GameObject[FieldSize.x, FieldSize.y];
             for (var i = 0; i < Blocks.Length; i++)
             {
                 BlockView block = Blocks[i];
                 int x = i % FieldSize.x;
                 int y = FieldSize.y - 1 - Mathf.FloorToInt((float) i / FieldSize.x);
-                Blocks2D[x, y] = block;
+                Blocks2D[x, y] = block.gameObject;
             }
         }
         
         [Button]
         private void ResetMatrix()
         {
-            Blocks2D = new BlockView[FieldSize.x, FieldSize.y];
+            Blocks2D = new GameObject[FieldSize.x, FieldSize.y];
         }
 
         [Button]
@@ -89,7 +90,28 @@ namespace GameStructConfigs
                     EditorGUI.DrawPreviewTexture(rect, AssetPreview.GetAssetPreview(view.gameObject) ?? Texture2D.grayTexture, null, ScaleMode.ScaleToFit);
             }
             
+            if (Event.current.type == EventType.MouseDrag)
+            {
+                DragAndDrop.PrepareStartDrag();
+
+                // Set up what we want to drag
+                DragAndDrop.paths = new[] { AssetDatabase.GetAssetPath(view) };
+
+                // Start the actual drag
+                DragAndDrop.StartDrag("Dragging title");
+
+                // Make sure no one uses the event after us
+                Event.current.Use();
+            }
+            
             return view;
+        }
+
+        private void OnEnable()
+        {
+            #if UNITY_EDITOR
+            LoadMatrixFromArray();
+            #endif
         }
     }
 }
