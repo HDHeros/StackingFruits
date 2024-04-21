@@ -172,5 +172,13 @@ namespace Gameplay.Blocks
         {
             return new BlockData(_type, this, _isStackable, _isMovable);
         }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.green;
+            Gizmos.matrix = transform.localToWorldMatrix;
+            if (Application.isPlaying == false && TryGetComponent<BoxCollider>(out var coll))
+                Gizmos.DrawWireCube(coll.bounds.center, coll.size);
+        }
     }
 }
