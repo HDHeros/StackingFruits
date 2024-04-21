@@ -3,7 +3,6 @@ using DG.Tweening;
 using Gameplay.LevelsLogic;
 using GameStructConfigs;
 using HDH.GoPool;
-using HDH.UnityExt.Extensions;
 using Infrastructure.SoundsLogic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -43,9 +42,10 @@ namespace Menu
             _previews = new LevelPreview[sectionModel.Levels.Length];
             for (var i = 0; i < sectionModel.Levels.Length; i++)
             {
+                int inViewIndex = sectionModel.Levels[i].Config.InSectionViewIndex;
                 _previews[i] = pool.Get(sectionModel.Levels[i].Config.LevelPreview, _model);
                 _previews[i].gameObject.SetActive(true);
-                _previews[i].Initialize(sectionModel.Levels[i], _availablePreviewBounds[i], _sounds);
+                _previews[i].Initialize(sectionModel.Levels[i], _availablePreviewBounds[inViewIndex], _sounds);
                 _previews[i].OnClick += OnPreviewClick;
             }
         }

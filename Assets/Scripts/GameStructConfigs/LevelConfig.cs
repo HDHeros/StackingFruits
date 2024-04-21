@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Gameplay.Blocks;
 using Gameplay.GameCore;
+using HDH.UnityExt.Extensions;
 using Menu;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities.Editor;
@@ -15,6 +16,7 @@ namespace GameStructConfigs
         public string Id;
         public BlockView EmptyBlock;
         public Vector2Int FieldSize;
+        public int InSectionViewIndex;
         public BlockView[] Blocks;
         public LevelPreview LevelPreview;
         [TableMatrix(RowHeight = 60), ShowInInspector]
@@ -47,8 +49,7 @@ namespace GameStructConfigs
             
             EditorUtility.SetDirty(this);
         }
-
-        [Button]
+        
         private void LoadMatrixFromArray()
         {
             Blocks2D = new GameObject[FieldSize.x, FieldSize.y];
@@ -57,10 +58,23 @@ namespace GameStructConfigs
                 BlockView block = Blocks[i];
                 int x = i % FieldSize.x;
                 int y = FieldSize.y - 1 - Mathf.FloorToInt((float) i / FieldSize.x);
-                Blocks2D[x, y] = block.gameObject;
+                Blocks2D[x, y] = block.IsNull() ? null : block.gameObject;
             }
         }
-        
+
+        private void OnValidate()
+        {
+            if (Blocks2D == null) return;
+            for (int y = 0; y < FieldSize.y; y++)
+            {
+                for (int x = 0; x < FieldSize.x; x++)
+                {
+                    if (Blocks2D[x, y] == null && EmptyBlock.IsNotNull())
+                        Blocks2D[x, y] = EmptyBlock.gameObject;
+                }
+            }
+        }
+
         [Button]
         private void ResetMatrix()
         {

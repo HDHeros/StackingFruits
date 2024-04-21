@@ -82,24 +82,30 @@ MonoBehaviour:
   _onSelectOffset: {x: 0, y: 0.2, z: -0.8}
   _onPickedOffset: {x: 0, y: 0, z: 0.5}
   _availablePreviewBounds:
-  - m_Center: {x: -0.334, y: 0.55, z: -0.1975}
-    m_Extent: {x: 0.125, y: 0.15, z: 0.2}
-  - m_Center: {x: 0.005, y: 0.4925, z: -0.1975}
-    m_Extent: {x: 0.15, y: 0.125, z: 0.2}
-  - m_Center: {x: 0.365, y: 0.5625, z: -0.1975}
-    m_Extent: {x: 0.15, y: 0.15, z: 0.2}
-  - m_Center: {x: -0.39, y: 0.0275, z: -0.1975}
-    m_Extent: {x: 0.125, y: 0.15, z: 0.2}
-  - m_Center: {x: 0.0225, y: -0.0675, z: -0.1975}
-    m_Extent: {x: 0.15, y: 0.15, z: 0.2}
-  - m_Center: {x: 0.36, y: 0.0025, z: -0.1975}
-    m_Extent: {x: 0.125, y: 0.125, z: 0.2}
-  - m_Center: {x: -0.3525, y: -0.5775, z: -0.1975}
-    m_Extent: {x: 0.175, y: 0.175, z: 0.2}
-  - m_Center: {x: -0.01, y: -0.6275, z: -0.1975}
-    m_Extent: {x: 0.125, y: 0.175, z: 0.2}
-  - m_Center: {x: 0.3325, y: -0.4925, z: -0.1975}
-    m_Extent: {x: 0.175, y: 0.175, z: 0.2}
+  - m_Center: {x: -0.35, y: 0.6, z: -0.1975}
+    m_Extent: {x: 0.15, y: 0.15, z: 0.15}
+  - m_Center: {x: 0.005, y: 0.6, z: -0.1975}
+    m_Extent: {x: 0.15, y: 0.15, z: 0.15}
+  - m_Center: {x: 0.365, y: 0.6, z: -0.1975}
+    m_Extent: {x: 0.15, y: 0.15, z: 0.15}
+  - m_Center: {x: -0.35, y: 0.21, z: -0.1975}
+    m_Extent: {x: 0.15, y: 0.15, z: 0.15}
+  - m_Center: {x: 0, y: 0.21, z: -0.1975}
+    m_Extent: {x: 0.15, y: 0.15, z: 0.15}
+  - m_Center: {x: 0.35, y: 0.21, z: -0.1975}
+    m_Extent: {x: 0.15, y: 0.15, z: 0.15}
+  - m_Center: {x: -0.36, y: -0.19, z: -0.1975}
+    m_Extent: {x: 0.15, y: 0.15, z: 0.15}
+  - m_Center: {x: 0, y: -0.19, z: -0.1975}
+    m_Extent: {x: 0.15, y: 0.15, z: 0.15}
+  - m_Center: {x: 0.33, y: -0.19, z: -0.1975}
+    m_Extent: {x: 0.15, y: 0.15, z: 0.15}
+  - m_Center: {x: -0.36, y: -0.59, z: -0.1975}
+    m_Extent: {x: 0.15, y: 0.15, z: 0.15}
+  - m_Center: {x: 0, y: -0.59, z: -0.1975}
+    m_Extent: {x: 0.15, y: 0.15, z: 0.15}
+  - m_Center: {x: 0.34, y: -0.59, z: -0.1975}
+    m_Extent: {x: 0.15, y: 0.15, z: 0.15}
   _collider: {fileID: 2483720205080945317}
 --- !u!65 &2483720205080945317
 BoxCollider:

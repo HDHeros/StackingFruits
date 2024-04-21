@@ -3,9 +3,11 @@ using DG.Tweening;
 using Gameplay.GameCore;
 using Gameplay.LevelsLogic;
 using GameStructConfigs;
+using HDH.UnityExt.Extensions;
 using Infrastructure.SoundsLogic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Random = UnityEngine.Random;
 
 namespace Menu
 {
@@ -27,8 +29,9 @@ namespace Menu
         {
             _sounds = sounds;
             _levelConfig = levelModel.Config;
-            transform.localPosition = bounds.center;
-            transform.localScale *= FitInto(bounds);
+            transform.localPosition = bounds.center + (Random.insideUnitCircle * 0.05f).To3();
+            transform.localScale *= FitInto(bounds) * Random.Range(0.9f, 1f);
+            transform.rotation = Quaternion.Euler(0, 0, Random.Range(-10f, 10f));
             SetLevelProgress(levelModel.Progress, false);
             _collider.enabled = false;
         }

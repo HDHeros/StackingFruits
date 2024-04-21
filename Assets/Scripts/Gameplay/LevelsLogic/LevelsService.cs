@@ -30,13 +30,16 @@ namespace Gameplay.LevelsLogic
                         Levels = new LevelModel[sectionsConfigs[i].Levels.Length],
                     };
                 section.Config = sectionsConfigs[i];
+                
+                if (section.Levels.Length != section.Config.Levels.Length)
+                    section.Levels = new LevelModel[sectionsConfigs[i].Levels.Length]; 
 
 
                 for (var j = 0; j < sectionsConfigs[i].Levels.Length; j++)
                 {
                     LevelConfig levelConfig = sectionsConfigs[i].Levels[j];
                     if (section.TryGetLevel(levelConfig.Id, out LevelModel levelModel) == false)
-                        levelModel = new LevelModel()
+                        levelModel = new LevelModel
                         {
                             Id = levelConfig.Id
                         };
