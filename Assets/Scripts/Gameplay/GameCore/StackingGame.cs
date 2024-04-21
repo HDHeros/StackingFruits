@@ -18,8 +18,8 @@ namespace Gameplay.GameCore
         private float GameProgress => (float)_stacksPerformed / _totalStackAmountOnLevel;
         private LevelData _levelData;
         private CellInfo[,] _field;
-        private Dictionary<BlockData, int> _blocksCount;
-        private Dictionary<BlockData, bool> _blocksChecked;
+        private Dictionary<BlockType, int> _blocksCount;
+        private Dictionary<BlockType, bool> _blocksChecked;
         private List<PerformedMovement> _performedMovements;
         private int _totalStackAmountOnLevel;
         private bool _isFieldNormalized;
@@ -34,19 +34,21 @@ namespace Gameplay.GameCore
             _performedMovements ??= new List<PerformedMovement>(levelData.FieldSize.y);
             _levelData = levelData;
             _field = new CellInfo[levelData.FieldSize.x, levelData.FieldSize.y];
-            _blocksCount = new Dictionary<BlockData, int>(8);
-            _blocksChecked = new Dictionary<BlockData, bool>(8);
+            _blocksCount = new Dictionary<BlockType, int>(8);
+            _blocksChecked = new Dictionary<BlockType, bool>(8);
             _totalStackAmountOnLevel = 0;
             for (var i = 0; i < levelData.Blocks.Length; i++)
             {
                 BlockData block = levelData.Blocks[i];
-                _totalStackAmountOnLevel += block.IsStackable ? 1 : 0;
                 int x = i % levelData.FieldSize.x;
                 int y = Mathf.FloorToInt((float) i / levelData.FieldSize.x);
                 _field[x, y] = new CellInfo{Value = block};
-                _blocksCount.TryAdd(block, 0);
-                _blocksChecked.TryAdd(block, false);
-                _blocksCount[block]++;
+                if (_blocksCount.TryAdd(block.Type, 0))
+                {
+                    _totalStackAmountOnLevel += block.IsStackable ? 1 : 0;
+                }
+                _blocksCount[block.Type]++;
+                _blocksChecked.TryAdd(block.Type, false);
             }
 
         }
@@ -124,8 +126,8 @@ namespace Gameplay.GameCore
 
         private bool HandleStacks()
         {
-            _blocksChecked = new Dictionary<BlockData, bool>();
-            foreach (BlockData blockType in _blocksCount.Keys) 
+            _blocksChecked = new Dictionary<BlockType, bool>();
+            foreach (BlockType blockType in _blocksCount.Keys) 
                 _blocksChecked[blockType] = false;
             
             for (int y = 0; y < _levelData.FieldSize.y; y++)
@@ -136,12 +138,12 @@ namespace Gameplay.GameCore
             {
                 for (int x = 0; x < _levelData.FieldSize.x; x++)
                 {
-                    BlockData blockType = _field[x, y].Value;
-                    if (blockType.Equals(_levelData.EmptyBlockValue) || blockType.IsStackable == false || _blocksChecked[blockType]) continue;
-                    _blocksChecked[blockType] = true;
+                    BlockData blockData = _field[x, y].Value;
+                    if (blockData.Equals(_levelData.EmptyBlockValue) || blockData.IsStackable == false || _blocksChecked[blockData.Type]) continue;
+                    _blocksChecked[blockData.Type] = true;
                     _performedMovements.Clear();
                     int stackSize = CountSelfAndNearBlocks(x, y);
-                    if (stackSize != _blocksCount[blockType]) continue;
+                    if (stackSize != _blocksCount[blockData.Type]) continue;
 
                     foreach (PerformedMovement performedMovement in _performedMovements) 
                         RemoveFromField(performedMovement.From.x, performedMovement.From.y);
@@ -219,10 +221,10 @@ namespace Gameplay.GameCore
 
         private PerformedMovement ReplaceBlock(Vector2Int from, Vector2Int to)
         {
-            BlockData replacedBlockType = GetCellValue(from.x, from.y);
-            SetCell(to.x, to.y, replacedBlockType);
+            BlockData replacedBlock = GetCellValue(from.x, from.y);
+            SetCell(to.x, to.y, replacedBlock);
             SetCell(from.x, from.y, _levelData.EmptyBlockValue);
-            _blocksChecked[replacedBlockType] = false;
+            _blocksChecked[replacedBlock.Type] = false;
             return new PerformedMovement(from, to);
         }
 
