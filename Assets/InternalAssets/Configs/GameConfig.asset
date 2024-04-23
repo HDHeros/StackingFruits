@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0066cb461e69446cac017ee50c8a76b0, type: 3}
+  m_Name: GameConfig
+  m_EditorClassIdentifier: 
+  Sections:
+  - {fileID: 11400000, guid: f8252c47a09aa7942bd9a38741a5b3f5, type: 2}
+  - {fileID: 11400000, guid: a4d577fe7335ac34eb57a48233d838d9, type: 2}
+  - {fileID: 11400000, guid: 14c5e871483782e49a96f6842f75025a, type: 2}
+  - {fileID: 11400000, guid: b947d024c3b6132419e338a094e50059, type: 2}
+  AudioServiceCfg:
+    Mixer: {fileID: 24100000, guid: 81130e3d5dc43424a9c212aca03b31bc, type: 2}
+    SourcesLimit2D: 10
+    SourcesLimit3D: 10
+    MusicTransitionDuration: 2
+    MixerVolumeParameters:
+    - MusicVolume
+    - SoundVolume
+    PlaybackPrioritiesAmount: 10
+  SoundsContainer: {fileID: 11400000, guid: 25c892e1d6c39c2448f5c25383663d0b, type: 2}

@@ -20,11 +20,11 @@ namespace Infrastructure.GameStateMachine.States
             _root.OnExit();
             base.Exit(onExit);
         }
-
+        
         private async UniTaskVoid Setup()
         {
             _root = await Fields.SceneService.LoadSceneSingle<GameSceneRoot>(SceneId.GameScene);
-            _root.OnEnter(Fields.InputService, Fields.GoPool);
+            _root.OnEnter(Fields.InputService, Fields.GoPool, Fields.GameConfig, Fields.Levels, Fields.SoundService, Fields.Popups, Fields.Hud);
         }
     }
 }

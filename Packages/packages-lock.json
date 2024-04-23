@@ -1,14 +1,5 @@
 {
   "dependencies": {
-    "com.codewriter.triinspector": {
-      "version": "https://github.com/codewriter-packages/Tri-Inspector.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {
-        "com.unity.localization": "1.0.0"
-      },
-      "hash": "57e726cc4f2c8d3488011f312d5b22dab2b19dc5"
-    },
     "com.cysharp.unitask": {
       "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
       "depth": 0,
@@ -35,7 +26,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "2b5b3b3fb9219dfee585a8d5c89e84f1656b56f3"
+      "hash": "9b5bf77f33e5149b261133fa27b2ca1965ad285b"
     },
     "com.hdhero.pupups": {
       "version": "https://github.com/HDHeros/UniPacks.git?path=Packages/com.hdhero.pupups",
@@ -51,19 +42,12 @@
       "dependencies": {},
       "hash": "2b5b3b3fb9219dfee585a8d5c89e84f1656b56f3"
     },
-    "com.unity.addressables": {
-      "version": "1.21.19",
-      "depth": 2,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.scriptablebuildpipeline": "1.21.21",
-        "com.unity.modules.assetbundle": "1.0.0",
-        "com.unity.modules.imageconversion": "1.0.0",
-        "com.unity.modules.jsonserialize": "1.0.0",
-        "com.unity.modules.unitywebrequest": "1.0.0",
-        "com.unity.modules.unitywebrequestassetbundle": "1.0.0"
-      },
-      "url": "https://packages.unity.com"
+    "com.hdhero.user-data": {
+      "version": "https://github.com/HDHeros/UniPacks.git?path=Packages/com.hdhero.user-data",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "9b5bf77f33e5149b261133fa27b2ca1965ad285b"
     },
     "com.unity.burst": {
       "version": "1.8.12",
@@ -72,6 +56,15 @@
       "dependencies": {
         "com.unity.mathematics": "1.2.1",
         "com.unity.modules.jsonserialize": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.cinemachine": {
+      "version": "2.9.7",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.test-framework": "1.1.31"
       },
       "url": "https://packages.unity.com"
     },
@@ -114,16 +107,6 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
-    "com.unity.localization": {
-      "version": "1.4.4",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.addressables": "1.21.8",
-        "com.unity.nuget.newtonsoft-json": "3.0.2"
-      },
-      "url": "https://packages.unity.com"
-    },
     "com.unity.mathematics": {
       "version": "1.2.6",
       "depth": 1,
@@ -131,11 +114,13 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
-    "com.unity.nuget.newtonsoft-json": {
-      "version": "3.2.1",
-      "depth": 2,
+    "com.unity.recorder": {
+      "version": "4.0.2",
+      "depth": 0,
       "source": "registry",
-      "dependencies": {},
+      "dependencies": {
+        "com.unity.timeline": "1.0.0"
+      },
       "url": "https://packages.unity.com"
     },
     "com.unity.render-pipelines.core": {
@@ -168,13 +153,6 @@
       "dependencies": {
         "com.unity.render-pipelines.core": "14.0.9"
       }
-    },
-    "com.unity.scriptablebuildpipeline": {
-      "version": "1.21.21",
-      "depth": 3,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://packages.unity.com"
     },
     "com.unity.searcher": {
       "version": "4.9.2",
@@ -242,6 +220,13 @@
         "com.unity.modules.jsonserialize": "1.0.0"
       },
       "url": "https://packages.unity.com"
+    },
+    "jillejr.newtonsoft.json-for-unity": {
+      "version": "https://github.com/jilleJr/Newtonsoft.Json-for-Unity.git#upm",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "f2c6cb09817832dccd0600f291053d8d55298ee9"
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",

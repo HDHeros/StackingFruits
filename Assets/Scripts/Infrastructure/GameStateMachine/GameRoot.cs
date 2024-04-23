@@ -1,8 +1,13 @@
-﻿using HDH.Fsm;
+﻿using Gameplay.LevelsLogic;
+using GameStructConfigs;
+using HDH.Fsm;
 using HDH.GoPool;
+using HDH.Popups;
 using Infrastructure.GameStateMachine.States;
-using Infrastructure.InputLogic;
 using Infrastructure.SceneManagement;
+using Infrastructure.SimpleInput;
+using Infrastructure.SoundsLogic;
+using UI;
 using UnityEngine;
 using Zenject;
 
@@ -13,13 +18,19 @@ namespace Infrastructure.GameStateMachine
         private Fsm<BaseGameState, SharedFields> _fsm;
         
         [Inject]
-        public void Inject(SceneService sceneService, InputService inputService, IGoPool pool)
+        public void Inject(SceneService sceneService, InputService inputService, IGoPool pool, GameConfig gameConfig, 
+            LevelsService levelsService, SoundsService sounds, PopupsController popups, Hud hud)
         {
             var fields = new SharedFields
             {
                 SceneService = sceneService,
                 InputService = inputService,
                 GoPool = pool,
+                GameConfig = gameConfig,
+                Levels = levelsService,
+                SoundService = sounds,
+                Popups = popups,
+                Hud = hud,
             };
             
             _fsm = Fsm<BaseGameState, SharedFields>
@@ -43,6 +54,11 @@ namespace Infrastructure.GameStateMachine
             public SceneService SceneService;
             public InputService InputService;
             public IGoPool GoPool;
+            public GameConfig GameConfig;
+            public LevelsService Levels;
+            public SoundsService SoundService;
+            public PopupsController Popups;
+            public Hud Hud;
         }
     }
 }
