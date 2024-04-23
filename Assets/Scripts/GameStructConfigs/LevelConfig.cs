@@ -4,7 +4,6 @@ using Gameplay.GameCore;
 using HDH.UnityExt.Extensions;
 using Menu;
 using Sirenix.OdinInspector;
-using Sirenix.Utilities.Editor;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,7 +30,7 @@ namespace GameStructConfigs
                 FieldSize = FieldSize,
             };
         }
-
+#if UNITY_EDITOR
         [Button]
         private void SerializeMatrix()
         {
@@ -88,44 +87,12 @@ namespace GameStructConfigs
             EditorUtility.SetDirty(this);
         }
 
-        // ReSharper disable once UnusedMember.Local
-        private static BlockView DrawCell(Rect rect, BlockView view)
-        {
-            if (DragAndDropUtilities.IsDragging &&
-                rect.Contains(Event.current.mousePosition))
-            {
-                view = DragAndDropUtilities.DropZone(rect, view, false);
-                DragAndDropUtilities.DrawDropZone(rect, view == null ? null : view.gameObject, 
-                    new GUIContent(view == null ? Texture2D.blackTexture : AssetPreview.GetMiniTypeThumbnail(typeof(GameObject))), DragAndDropUtilities.CurrentDragId);
-            }
-            else
-            {
-                if (view != null )
-                    EditorGUI.DrawPreviewTexture(rect, AssetPreview.GetAssetPreview(view.gameObject) ?? Texture2D.grayTexture, null, ScaleMode.ScaleToFit);
-            }
-            
-            if (Event.current.type == EventType.MouseDrag)
-            {
-                DragAndDrop.PrepareStartDrag();
-
-                // Set up what we want to drag
-                DragAndDrop.paths = new[] { AssetDatabase.GetAssetPath(view) };
-
-                // Start the actual drag
-                DragAndDrop.StartDrag("Dragging title");
-
-                // Make sure no one uses the event after us
-                Event.current.Use();
-            }
-            
-            return view;
-        }
-
         private void OnEnable()
         {
             #if UNITY_EDITOR
             LoadMatrixFromArray();
             #endif
         }
+#endif
     }
 }
