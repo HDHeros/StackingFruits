@@ -27,3 +27,4 @@ MonoBehaviour:
     - SoundVolume
     PlaybackPrioritiesAmount: 10
   SoundsContainer: {fileID: 11400000, guid: 25c892e1d6c39c2448f5c25383663d0b, type: 2}
+  TutorConfig: {fileID: 11400000, guid: f7a3b78fb75c539418368accae156c98, type: 2}

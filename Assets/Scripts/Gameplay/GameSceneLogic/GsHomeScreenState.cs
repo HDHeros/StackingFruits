@@ -23,7 +23,10 @@ namespace Gameplay.GameSceneLogic
 
         private void OnTap(LeanFinger finger)
         {
-            StateSwitcher.SwitchState<GsSelectSectionState>();
+            if (Fields.TutorInfo.IsTutorCompleted)
+                StateSwitcher.SwitchState<GsSelectSectionState>();
+            else
+                StateSwitcher.SwitchState<GsTutorialState>();
         }
     }
 }
