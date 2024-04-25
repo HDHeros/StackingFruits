@@ -4,6 +4,7 @@ using I2.Loc;
 using Lean.Touch;
 using UI;
 using UI.Popups.Confirmation;
+using UI.Popups.Settings;
 using UI.Screens;
 
 namespace Gameplay.GameSceneLogic
@@ -17,6 +18,7 @@ namespace Gameplay.GameSceneLogic
             Fields.CameraController.ActivateHomeScreenCamera();
             _homeScreen = Fields.Hud.PushScreen<HomeScreen>(Hud.ScreenType.HomeScreen);
             _homeScreen.TutorButtonClick += OnTutorButtonClick;
+            _homeScreen.SettingsButtonClick += OnSettingsButtonClick;
             Fields.Input.OnTap += OnTap;
             Fields.TapToStartLabel.SetActive(true);
         }
@@ -24,6 +26,7 @@ namespace Gameplay.GameSceneLogic
         public override void Exit(Action onExit)
         {
             _homeScreen.TutorButtonClick += OnTutorButtonClick;
+            _homeScreen.SettingsButtonClick -= OnSettingsButtonClick;
             Fields.Input.OnTap -= OnTap;
             Fields.Hud.PopScreen(Hud.ScreenType.HomeScreen);
             base.Exit(onExit);
@@ -55,6 +58,9 @@ namespace Gameplay.GameSceneLogic
                 null
                 );
         }
+
+        private void OnSettingsButtonClick() => 
+            Fields.Popups[typeof(SettingsPopup)].Open();
 
         private void StartTutorial() => 
             StateSwitcher.SwitchState<GsTutorialState>();

@@ -27,6 +27,16 @@ MonoBehaviour:
       - Iptal
       Flags: 00000000
       Languages_Touch: []
+    - Term: FLAG_IMG
+      TermType: 5
+      Description: 
+      Languages:
+      - rus
+      - bel
+      - eng
+      - turkey
+      Flags: 00000000
+      Languages_Touch: []
     - Term: LEAVE_LEVEL_POPUP_BTN_NEG
       TermType: 0
       Description: 
@@ -129,6 +139,46 @@ MonoBehaviour:
       - "\u041F\u0430\u0447\u0430\u0446\u044C"
       - Start
       - "Ba\u015Flamak"
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: STNG_HEADER
+      TermType: 0
+      Description: 
+      Languages:
+      - "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438"
+      - "\u041D\u0430\u043B\u0430\u0434\u044B"
+      - Settings
+      - Ayarlar
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: STNG_LANGUAGE
+      TermType: 0
+      Description: 
+      Languages:
+      - "\u042F\u0437\u044B\u043A"
+      - "\u041C\u043E\u0432\u0430"
+      - Language
+      - Dil
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: STNG_MUSIC
+      TermType: 0
+      Description: 
+      Languages:
+      - "\u041C\u0443\u0437\u044B\u043A\u0430"
+      - "\u041C\u0443\u0437\u044B\u043A\u0430"
+      - Music
+      - "M\xFCzik"
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: STNG_SOUNDS
+      TermType: 0
+      Description: 
+      Languages:
+      - "\u0417\u0432\u0443\u043A\u0438"
+      - "\u0413\u0443\u043A\u0456"
+      - Sounds
+      - Sesler
       Flags: 00000000
       Languages_Touch: []
     - Term: TAP_TO_PLAY
@@ -260,7 +310,11 @@ MonoBehaviour:
     GoogleInEditorCheckFrequency: 2
     GoogleUpdateSynchronization: 1
     GoogleUpdateDelay: 0
-    Assets: []
+    Assets:
+    - {fileID: 21300000, guid: 1445e3c2a671adf43aca12a0a445d347, type: 3}
+    - {fileID: 21300000, guid: a89b9e0f28a9a2046b283a0cd88daff0, type: 3}
+    - {fileID: 21300000, guid: bbfd39ca7be3c304195917271aab4dbf, type: 3}
+    - {fileID: 21300000, guid: 7a0e40581d3ac5d46aa5bb65bafa3391, type: 3}
     Spreadsheet_LocalFileName: 
     Spreadsheet_LocalCSVSeparator: ','
     Spreadsheet_LocalCSVEncoding: utf-8

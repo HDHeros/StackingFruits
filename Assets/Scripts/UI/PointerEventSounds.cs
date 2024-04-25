@@ -5,12 +5,14 @@ using Zenject;
 
 namespace UI
 {
-    public class ButtonSounds : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+    public class PointerEventSounds : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler
     {
         private SoundsService _sounds;
         [SerializeField] private EventId _onEnter = EventId.ButtonPointerEnter;
         [SerializeField] private EventId _onExit = EventId.ButtonPointerExit;
         [SerializeField] private EventId _onClick = EventId.ButtonClick;
+        [SerializeField] private EventId _onPointerDown;
+        [SerializeField] private EventId _onPointerUp;
 
         [Inject]
         private void Inject(SoundsService sounds) => 
@@ -32,6 +34,18 @@ namespace UI
         {
             if (_onClick == EventId.None) return;
             _sounds.RaiseEvent(_onClick);
+        }
+
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            if (_onPointerDown == EventId.None) return;
+            _sounds.RaiseEvent(_onPointerDown);
+        }
+
+        public void OnPointerUp(PointerEventData eventData)
+        {
+            if (_onPointerUp == EventId.None) return;
+            _sounds.RaiseEvent(_onPointerUp);        
         }
     }
 }
