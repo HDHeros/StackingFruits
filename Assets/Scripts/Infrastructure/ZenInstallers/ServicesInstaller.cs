@@ -71,6 +71,13 @@ namespace Infrastructure.ZenInstallers
                 .AsSingle()
                 .WithArgumentsExplicit(new[]
                     { new TypeValuePair(typeof(SoundsContainer), _gameConfig.SoundsContainer) });
+            
+            Container
+                .Bind<MusicPlayer>()
+                .FromNew()
+                .AsSingle()
+                .WithArgumentsExplicit(new[] { new TypeValuePair(typeof(AudioConfig), _gameConfig.BackgroundMusic) })
+                .NonLazy();
         }
 
         private void InstallPopups()

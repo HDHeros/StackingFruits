@@ -12,7 +12,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "2b5b3b3fb9219dfee585a8d5c89e84f1656b56f3"
+      "hash": "58bd6df168836c683085c90df7724c439c7eb1ab"
     },
     "com.hdhero.fsm": {
       "version": "https://github.com/HDHeros/UniPacks.git?path=Packages/com.hdhero.fsm",

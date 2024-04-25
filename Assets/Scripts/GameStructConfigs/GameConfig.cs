@@ -11,6 +11,7 @@ namespace GameStructConfigs
         public SectionConfig[] Sections;
         public AudioServiceConfig AudioServiceCfg;
         public SoundsContainer SoundsContainer;
+        public AudioConfig BackgroundMusic;
         public TutorConfig TutorConfig;
     }
 }
