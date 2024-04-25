@@ -79,6 +79,13 @@ namespace UI.Popups.Confirmation
                 .AppendCallback(() => _contentCanvasGroup.interactable = true);
         }
 
+        protected override void OnClosed()
+        {
+            base.OnClosed();
+            _hud.PopScreen(Hud.ScreenType.EmptyScreen);
+            _globalVolume.SetActiveBlur(false);
+        }
+
         protected override void ResetPopup()
         {
             _positiveBtn.Btn.onClick.RemoveAllListeners();
@@ -95,12 +102,7 @@ namespace UI.Popups.Confirmation
             _appearingSequence = DOTween.Sequence()
                 .Append(_content.DOScale(1.3f, 0.1f).SetEase(Ease.InQuart))
                 .Join(_contentCanvasGroup.DOFade(0f, 0.1f).SetEase(Ease.InQuart))
-                .AppendCallback(() =>
-                {
-                    Close();
-                    _hud.PopScreen(Hud.ScreenType.EmptyScreen);
-                    _globalVolume.SetActiveBlur(false);
-                });
+                .AppendCallback(Close);
         }
         
         [Sirenix.OdinInspector.Button]

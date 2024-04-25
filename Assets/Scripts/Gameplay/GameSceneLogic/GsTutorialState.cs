@@ -3,6 +3,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using GameStructConfigs;
 using HDH.Popups;
+using I2.Loc;
 using UI;
 using UI.Popups.Confirmation;
 
@@ -30,24 +31,25 @@ namespace Gameplay.GameSceneLogic
 
         private async UniTaskVoid StartTutorialLoop(CancellationToken ct)
         {
-            await ShowInfoPopup("Поставь фрукты друг на друга", "OK", ct);
+            await ShowInfoPopup(LocalizationManager.GetTranslation("TUTOR1_STEP1"), LocalizationManager.GetTranslation("OK"), ct);
             await StartLevel(Fields.TutorInfo.Config.Level1);            
             
-            await ShowInfoPopup("Ставь рядом одинаковые фрукты, чтобы стакнуть их ", "OK", ct);
+            await ShowInfoPopup(LocalizationManager.GetTranslation("TUTOR1_STEP2"), LocalizationManager.GetTranslation("OK"), ct);
             await StartLevel(Fields.TutorInfo.Config.Level2);
             await StartLevel(Fields.TutorInfo.Config.Level3);
             
-            await ShowInfoPopup("Фрукты упадут, если останутся висеть ", "OK", ct);
+            await ShowInfoPopup(LocalizationManager.GetTranslation("TUTOR1_STEP3"), LocalizationManager.GetTranslation("OK"), ct);
             await StartLevel(Fields.TutorInfo.Config.Level4);
             await StartLevel(Fields.TutorInfo.Config.Level5);
             
-            await ShowInfoPopup("Фркуты стакаются по вертикали и по горизонтали", "OK", ct);
+            await ShowInfoPopup(LocalizationManager.GetTranslation("TUTOR1_STEP4"), LocalizationManager.GetTranslation("OK"), ct);
             await StartLevel(Fields.TutorInfo.Config.Level6);
             await StartLevel(Fields.TutorInfo.Config.Level7);
             
-            await ShowInfoPopup("Игра заканчивается, когда сделан первый стак.", "OK", ct);
+            await ShowInfoPopup(LocalizationManager.GetTranslation("TUTOR1_STEP5"), LocalizationManager.GetTranslation("OK"), ct);
             await StartLevel(Fields.TutorInfo.Config.Level8);
-            
+
+            Fields.TutorInfo.IsTutorCompleted = true;
             StateSwitcher.SwitchState<GsHomeScreenState>();
         }
 

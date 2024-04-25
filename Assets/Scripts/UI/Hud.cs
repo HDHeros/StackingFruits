@@ -22,13 +22,17 @@ namespace UI
         private Stack<BaseScreen> _screensStack;
         private BaseScreen _activeScreen;
 
-        public void PushScreen(ScreenType type)
+        public void PushScreen(ScreenType type) => 
+            PushScreen<BaseScreen>(type);
+
+        public T PushScreen<T>(ScreenType type) where T : BaseScreen
         {
             if (_activeScreen.IsNotNull())
                 _activeScreen.gameObject.SetActive(false);
             _activeScreen = _screensDict[type];
             _activeScreen.gameObject.SetActive(true);
             _screensStack.Push(_activeScreen);
+            return _activeScreen as T;
         }
 
         public void PopScreen(ScreenType type)
