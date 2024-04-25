@@ -1,4 +1,5 @@
 ﻿using System;
+using DG.Tweening;
 using HDH.Popups;
 using HDH.UnityExt.Extensions;
 using Infrastructure;
@@ -19,8 +20,12 @@ namespace UI.Popups.Confirmation
         [SerializeField] private Button _closeBtn;
         [SerializeField] private TextMeshProUGUI _header;
         [SerializeField] private TextMeshProUGUI _confirmationText;
+        [SerializeField] private RectTransform _content;
+        [SerializeField] private CanvasGroup _contentCanvasGroup;
+        public bool IsClosing { get; private set; }
         private GlobalVolumeService _globalVolume;
         private Hud _hud;
+        private Tween _appearingSequence;
 
         [Inject]
         private void Inject(GlobalVolumeService globalVolume, Hud hud)
@@ -48,9 +53,9 @@ namespace UI.Popups.Confirmation
             _positiveBtn.SetStyle(positiveBtnStyle);
             _negativeBtn.SetStyle(negativeBtnStyle);
             
-            _positiveBtn.Btn.onClick.AddListener(Close);
-            _negativeBtn.Btn.onClick.AddListener(Close);
-            _closeBtn.onClick.AddListener(Close);
+            _positiveBtn.Btn.onClick.AddListener(CustomClose);
+            _negativeBtn.Btn.onClick.AddListener(CustomClose);
+            _closeBtn.onClick.AddListener(CustomClose);
             if (onPositiveCallback != null)
                 _positiveBtn.Btn.onClick.AddListener(onPositiveCallback.Invoke);
             if (onNegativeCallback != null)
@@ -62,15 +67,16 @@ namespace UI.Popups.Confirmation
         protected override void OnShown()
         {
             base.OnShown();
+            IsClosing = false;
             _globalVolume.SetActiveBlur(true);
             _hud.PushScreen(Hud.ScreenType.EmptyScreen);
-        }
-
-        protected override void OnClosed()
-        {
-            base.OnClosed();
-            _hud.PopScreen(Hud.ScreenType.EmptyScreen);
-            _globalVolume.SetActiveBlur(false);
+            _content.localScale = Vector3.one * 1.3f;
+            _contentCanvasGroup.alpha = 0f;
+            _appearingSequence?.Kill();
+            _appearingSequence = DOTween.Sequence()
+                .Append(_content.DOScale(1f, 0.1f).SetEase(Ease.InQuart))
+                .Join(_contentCanvasGroup.DOFade(1f, 0.1f).SetEase(Ease.InQuart))
+                .AppendCallback(() => _contentCanvasGroup.interactable = true);
         }
 
         protected override void ResetPopup()
@@ -78,6 +84,23 @@ namespace UI.Popups.Confirmation
             _positiveBtn.Btn.onClick.RemoveAllListeners();
             _negativeBtn.Btn.onClick.RemoveAllListeners();
             _closeBtn.onClick.RemoveAllListeners();
+        }
+
+        private void CustomClose()
+        {
+            _contentCanvasGroup.interactable = false;
+            IsClosing = true;
+            
+            _appearingSequence?.Kill();
+            _appearingSequence = DOTween.Sequence()
+                .Append(_content.DOScale(1.3f, 0.1f).SetEase(Ease.InQuart))
+                .Join(_contentCanvasGroup.DOFade(0f, 0.1f).SetEase(Ease.InQuart))
+                .AppendCallback(() =>
+                {
+                    Close();
+                    _hud.PopScreen(Hud.ScreenType.EmptyScreen);
+                    _globalVolume.SetActiveBlur(false);
+                });
         }
         
         [Sirenix.OdinInspector.Button]

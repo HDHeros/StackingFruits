@@ -12,4 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1360b9894f71474395cb6738d2e71f53, type: 3}
   m_Name: '!TutorConfig'
   m_EditorClassIdentifier: 
-  Level1Cfg: {fileID: 11400000, guid: 7af9f74d1d2824c4a8a526273c1398a3, type: 2}
+  Level1: {fileID: 11400000, guid: 7af9f74d1d2824c4a8a526273c1398a3, type: 2}
+  Level2: {fileID: 11400000, guid: 4a4709be15a07494995a22492a57e960, type: 2}
+  Level3: {fileID: 11400000, guid: 4cebfb4632aaf014bb14d7f1b8f58c4a, type: 2}
+  Level4: {fileID: 11400000, guid: 90c8a6e3274c9d148afcc79c87c8c755, type: 2}
+  Level5: {fileID: 11400000, guid: 0da6323e61ddc4f458a89490727c1caf, type: 2}
+  Level6: {fileID: 11400000, guid: 8f8411e786b2b7a4c9e857558fc06e7f, type: 2}
+  Level7: {fileID: 11400000, guid: d8720b3a2d18fae498b8d793d1c2365f, type: 2}
+  Level8: {fileID: 11400000, guid: e0fb0bb1dbf7b874c8aa95aa046c25b6, type: 2}
