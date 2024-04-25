@@ -43,6 +43,7 @@ namespace Menu
             {
                 _materialColorTween?.Kill();
                 _materialColorTween = _modelRenderer.material.DOColor(targetColor, 0.5f).SetEase(Ease.OutQuart);
+
             }
             else
             {

@@ -78,7 +78,7 @@ namespace Gameplay.GameSceneLogic
                 LocalizationManager.GetTranslation("LOSE_GAME_POPUP_BTN_RETRY"), 
                 LocalizationManager.GetTranslation("LOSE_GAME_POPUP_BTN_BACK"),
                 ConfirmationButtonWrapper.Style.Positive,
-                ConfirmationButtonWrapper.Style.Positive,
+                ConfirmationButtonWrapper.Style.Negative,
                 ReloadLevel,
                 returnToSelectLevelState,
                 returnToSelectLevelState,
@@ -121,6 +121,8 @@ namespace Gameplay.GameSceneLogic
             {
                 Fields.LevelsService.SetLevelProgress(Fields.PickedSection.Id, Fields.PickedLevel.Id, result.Progress);
                 Fields.PickedLevel.SetLevelProgress(result.Progress);
+                if (result.IsWin)
+                    Fields.SectionPicker.CheckNextSectionAvailability(Fields.PickedSection);
             }
             StateSwitcher.SwitchState<GsSelectLevelState>();
         }

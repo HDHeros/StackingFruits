@@ -18,6 +18,7 @@ namespace Menu
         [SerializeField] private Vector3 _onPickedOffset;
         [SerializeField] private Bounds[] _availablePreviewBounds;
         [SerializeField] private BoxCollider _collider;
+        [SerializeField] private MeshRenderer _renderer;
         public Vector3 Bounds => _collider.bounds.size;
         public Transform Transform => transform;
         public Vector3 DefaultLocalPosition => _defaultLocalPos;
@@ -26,6 +27,7 @@ namespace Menu
         private LevelPreview[] _previews;
         private Vector3 _defaultLocalPos;
         private SoundsService _sounds;
+        private Tween _materialColorTween;
         private bool _isPicked;
 
 
@@ -50,6 +52,20 @@ namespace Menu
             }
         }
 
+        public void SetAvailable(bool isAvailable, bool animated)
+        {
+            Color targetColor = isAvailable ? Color.white : Color.grey;
+            if (animated)
+            {
+                _materialColorTween?.Kill();
+                _materialColorTween = _renderer.material.DOColor(targetColor, 0.5f).SetEase(Ease.OutQuart);
+            }
+            else
+            {
+                _renderer.material.color = targetColor;
+            }
+        }
+
         public void Select(float duration)
         {
             _model.DOKill();
@@ -60,7 +76,6 @@ namespace Menu
         {
             _model.DOKill();
             _model.DOLocalMove(Vector3.zero, duration).SetEase(Ease.OutQuint);
-
         }
 
         public void OnPicked(float duration)
@@ -92,6 +107,11 @@ namespace Menu
 
         public void OnPointerClick(PointerEventData eventData) => 
             OnSectionClick?.Invoke(this);
+
+        public void AnimateUnavailable()
+        {
+            
+        }
 
         private void OnPreviewClick(LevelPreview preview) => 
             OnLevelPreviewClick?.Invoke(preview);

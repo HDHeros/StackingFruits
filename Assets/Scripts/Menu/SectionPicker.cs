@@ -4,6 +4,7 @@ using Gameplay.LevelsLogic;
 using HDH.GoPool;
 using HDH.UnityExt.Extensions;
 using Infrastructure.SoundsLogic;
+using ModestTree;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -21,6 +22,7 @@ namespace Menu
         private SectionView _selected;
         private Transform _transform;
         private SoundsService _sounds;
+        private LevelsService _levels;
         private int _selectedIndex;
         private Vector3 _selectedLocalPosCached;
         private bool _controlBlocked;
@@ -31,6 +33,7 @@ namespace Menu
             _views = new SectionView[levels.SectionsCount];
             _transform = transform;
             _sounds = sounds;
+            _levels = levels;
             float width = 0;
             for (var i = 0; i < levels.SectionsCount; i++)
             {
@@ -40,6 +43,7 @@ namespace Menu
                 SectionView view = _views[i];
                 view.gameObject.SetActive(true);
                 view.Initialize(section, Vector3.zero.WithX(width + view.Bounds.x * 0.5f), pool, i, _sounds);
+                view.SetAvailable(levels.IsSectionAvailable(section.Id), false);
                 view.Transform.rotation *= Quaternion.Euler(0, 0, Random.Range(_itemsRotationRange.x, _itemsRotationRange.y));
                 width += view.Bounds.x + Random.Range(_itemsSpacingRange.x, _itemsSpacingRange.y);
             }
@@ -52,7 +56,12 @@ namespace Menu
         {
             if (view == _selected)
             {
-                if (PickSelected(out var pickedSection) == false) return;
+                if (_levels.IsSectionAvailable(view.Id) == false)
+                {
+                    view.AnimateUnavailable();
+                    return;
+                }
+                if (PickSelected(out _) == false) return;
                 OnSectionPicked?.Invoke(view);
                 return;
             }
@@ -130,6 +139,17 @@ namespace Menu
             return true;
         }
 
+        public void CheckNextSectionAvailability(SectionView section)
+        {
+            int nextSectionIndex = _views.IndexOf(section) + 1;
+            if (nextSectionIndex >= _views.Length) return;
+            SectionView targetSection = _views[nextSectionIndex];
+            if (_levels.IsSectionAvailable(targetSection.Id))
+            {
+                targetSection.SetAvailable(true, true);
+            }
+        }
+
         private bool CheckInteraction()
         {
             if (_isInteractionLocked) return false;
@@ -139,7 +159,7 @@ namespace Menu
 
         private void UnlockInteraction() => 
             _isInteractionLocked = false;
-        
+
         private void SelectByIndex(int index, bool animated)
         {
             if (index.InRangeInA(0, _views.Length) == false) return;
