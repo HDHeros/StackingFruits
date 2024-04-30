@@ -129,7 +129,14 @@ namespace Gameplay.GameSceneLogic
             }
             StateSwitcher.SwitchState<GsSelectLevelState>();
             if (result.WasForceFinished == false)
-                Fields.AdService.ShowAdWithCountdown();
+            {
+                if (Fields.RateAppService.IsRateAvailable() && result.IsWin)
+                {
+                    Fields.RateAppService.RateApp();
+                }
+                else
+                    Fields.AdService.ShowAdWithCountdown();
+            }
         }
     }
 }
