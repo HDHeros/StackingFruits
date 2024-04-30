@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GameStructConfigs;
 using HDH.UserData;
 
@@ -71,6 +72,18 @@ namespace Gameplay.LevelsLogic
         public SectionModel GetSectionByIndex(int index) => 
             _sections[index];
 
+        public bool IsSectionAvailable(SectionId sectionId)
+        {
+            for (int i = 0; i < _sections.Length; i++)
+            {
+                if (_sections[i].Id != sectionId) continue;
+                if (i == 0) return true;
+                return _sections[i - 1].IsAllLevelsCompleted;
+            }
+
+            throw new ArgumentException("No such section found");
+        }
+
         private void ForceSaveModel()
         {
             _dataModel.Sections = _sections;
@@ -104,6 +117,8 @@ namespace Gameplay.LevelsLogic
             [NonSerialized] public SectionConfig Config;
             public SectionId Id;
             public LevelModel[] Levels;
+
+            public bool IsAllLevelsCompleted => Levels.All(l => l.Progress >= 1);
 
             public bool TryGetLevel(string levelId, out LevelModel levelModel)
             {

@@ -175,6 +175,9 @@ MonoBehaviour:
   - Prefab: {fileID: -3462384113640533456, guid: c9fd66a816960a2469d2ab06a55cc53a,
       type: 3}
     InstantiateOnAwake: 1
+  - Prefab: {fileID: 7475165776319212586, guid: 840084f480c6b4349890f75709911f0f,
+      type: 3}
+    InstantiateOnAwake: 0
 --- !u!1 &7328896134566002004
 GameObject:
   m_ObjectHideFlags: 0

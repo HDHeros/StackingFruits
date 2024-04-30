@@ -10,6 +10,7 @@ using HDH.GoPool;
 using HDH.Popups;
 using Infrastructure.SimpleInput;
 using Infrastructure.SoundsLogic;
+using Infrastructure.Tutor;
 using Menu;
 using UI;
 using UnityEngine;
@@ -24,7 +25,7 @@ namespace Infrastructure.SceneManagement.Roots
         private Fsm<GsBaseState, SharedFields> _fsm;
         
         public void OnEnter(InputService inputService, IGoPool pool, GameConfig gameConfig, LevelsService levelsService, 
-            SoundsService sounds, PopupsController popups, Hud hud)
+            SoundsService sounds, PopupsController popups, Hud hud, TutorInfoService tutorInfo)
         {
             _ctSource = new CancellationTokenSource();
             _fields.Input = inputService;
@@ -34,6 +35,7 @@ namespace Infrastructure.SceneManagement.Roots
             _fields.SoundService = sounds;
             _fields.Popups = popups;
             _fields.Hud = hud;
+            _fields.TutorInfo = tutorInfo;
             _fields.GameView.Initialize(inputService, pool, sounds);
             
             _fsm = Fsm<GsBaseState, SharedFields>
@@ -42,6 +44,7 @@ namespace Infrastructure.SceneManagement.Roots
                 .AddState<GsSelectSectionState>()
                 .AddState<GsSelectLevelState>()
                 .AddState<GsGameInProgressState>()
+                .AddState<GsTutorialState>()
                 .Start();
         }
 
@@ -66,6 +69,7 @@ namespace Infrastructure.SceneManagement.Roots
             [NonSerialized] public SoundsService SoundService;
             [NonSerialized] public PopupsController Popups;
             [NonSerialized] public Hud Hud;
+            [NonSerialized] public TutorInfoService TutorInfo;
         }
     }
 }

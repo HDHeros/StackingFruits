@@ -10,7 +10,9 @@ namespace UI.Popups.Confirmation
 {
     public class ConfirmationButtonWrapper : MonoBehaviour
     {
-        public enum Style {Positive, Negative, Transparent, Black}
+        public enum Style {Positive, Negative, Transparent, Black,
+            None,
+        }
         [SerializeField] private Image _background;
         [SerializeField] private Button _button;
         [SerializeField] private TextMeshProUGUI _text;
@@ -22,6 +24,12 @@ namespace UI.Popups.Confirmation
         [Button]
         public void SetStyle(Style style)
         {
+            if (style == Style.None)
+            {
+                gameObject.SetActive(false);
+                return;
+            }
+            gameObject.SetActive(true);
             StyleConfig config = _styles.First(s => s.Style == style);
             _background.sprite = config.Sprite;
             _background.pixelsPerUnitMultiplier = config.PixelsPerUnitMultiplier;

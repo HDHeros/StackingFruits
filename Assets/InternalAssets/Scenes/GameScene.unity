@@ -364,7 +364,7 @@ MonoBehaviour:
   _rightViewsParent: {fileID: 707319989}
   _itemsSpacingRange: {x: 0.2, y: 0.3}
   _itemsRotationRange: {x: -5, y: 5}
-  _hiddenPosition: {x: 5, y: 0, z: 0}
+  _hiddenPosition: {x: 10, y: 0, z: 0}
 --- !u!1 &178185607
 GameObject:
   m_ObjectHideFlags: 0
@@ -1250,7 +1250,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 119
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0

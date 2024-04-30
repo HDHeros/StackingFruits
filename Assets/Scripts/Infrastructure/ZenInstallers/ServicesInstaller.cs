@@ -9,6 +9,7 @@ using HDH.UserData;
 using HDH.UserData.Dto;
 using Infrastructure.SceneManagement;
 using Infrastructure.SoundsLogic;
+using Infrastructure.Tutor;
 using Sirenix.OdinInspector;
 using UI;
 using UI.Popups;
@@ -39,6 +40,7 @@ namespace Infrastructure.ZenInstallers
             InstallGoPool();
             InstallUserDataService();
             InstallLevelsService();
+            InstallTutorInfoService();
         }
 
         private void InstallHud() =>
@@ -69,8 +71,15 @@ namespace Infrastructure.ZenInstallers
                 .AsSingle()
                 .WithArgumentsExplicit(new[]
                     { new TypeValuePair(typeof(SoundsContainer), _gameConfig.SoundsContainer) });
+            
+            Container
+                .Bind<MusicPlayer>()
+                .FromNew()
+                .AsSingle()
+                .WithArgumentsExplicit(new[] { new TypeValuePair(typeof(AudioConfig), _gameConfig.BackgroundMusic) })
+                .NonLazy();
         }
-        
+
         private void InstallPopups()
         {
             PopupsParent parent = Instantiate(_popupParentPrefab, Vector3.zero, Quaternion.identity, null);
@@ -86,7 +95,7 @@ namespace Infrastructure.ZenInstallers
                 .AsSingle()
                 .NonLazy();
         }
-        
+
         private void InstallGameConfig()
         {
             Container
@@ -127,5 +136,12 @@ namespace Infrastructure.ZenInstallers
                 .Bind<LevelsService>()
                 .FromNew()
                 .AsSingle();
+
+        private void InstallTutorInfoService() =>
+            Container
+                .Bind<TutorInfoService>()
+                .FromNew()
+                .AsSingle()
+                .WithArgumentsExplicit(new []{new TypeValuePair(typeof(TutorConfig), _gameConfig.TutorConfig)});
     }
 }
