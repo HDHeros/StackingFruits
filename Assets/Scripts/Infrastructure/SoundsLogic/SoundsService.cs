@@ -45,5 +45,15 @@ namespace Infrastructure.SoundsLogic
             Debug.LogWarning($"There is no configs configs for '{id.ToString()}' event");
             return false;
         }
+        
+        public void Pause()
+        {
+            _audioService.SetPauseGroup(SoundGroupNames.SoundsGroup, true);
+        }
+
+        public void Unpause()
+        {
+            _audioService.SetPauseGroup(SoundGroupNames.SoundsGroup, false);
+        }
     }
 }

@@ -7,6 +7,8 @@ using HDH.Popups;
 using HDH.Popups.Configs;
 using HDH.UserData;
 using HDH.UserData.Dto;
+using Infrastructure.AdLogic;
+using Infrastructure.Pause;
 using Infrastructure.SceneManagement;
 using Infrastructure.SoundsLogic;
 using Infrastructure.Tutor;
@@ -33,6 +35,8 @@ namespace Infrastructure.ZenInstallers
             InstallInputService();
             InstallHud();
             InstallGlobalVolumeService();
+            InstallPauseService();
+            InstallAd();//not implemented
             InstallGameConfig();
             InstallAudio();
             InstallPopups();
@@ -43,6 +47,19 @@ namespace Infrastructure.ZenInstallers
             InstallTutorInfoService();
         }
 
+        private void InstallAd() =>
+            Container
+                .Bind<AdService>()
+                .To<AdServiceDummy>()
+                .FromNew()
+                .AsSingle();
+        
+        private void InstallPauseService() =>
+            Container
+                .Bind<PauseService>()
+                .FromNew()
+                .AsSingle();
+        
         private void InstallHud() =>
             Container
                 .Bind<Hud>()

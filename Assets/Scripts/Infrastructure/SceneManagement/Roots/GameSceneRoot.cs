@@ -8,6 +8,7 @@ using GameStructConfigs;
 using HDH.Fsm;
 using HDH.GoPool;
 using HDH.Popups;
+using Infrastructure.AdLogic;
 using Infrastructure.SimpleInput;
 using Infrastructure.SoundsLogic;
 using Infrastructure.Tutor;
@@ -25,7 +26,7 @@ namespace Infrastructure.SceneManagement.Roots
         private Fsm<GsBaseState, SharedFields> _fsm;
         
         public void OnEnter(InputService inputService, IGoPool pool, GameConfig gameConfig, LevelsService levelsService, 
-            SoundsService sounds, PopupsController popups, Hud hud, TutorInfoService tutorInfo)
+            SoundsService sounds, PopupsController popups, Hud hud, TutorInfoService tutorInfo, AdService adService)
         {
             _ctSource = new CancellationTokenSource();
             _fields.Input = inputService;
@@ -36,6 +37,7 @@ namespace Infrastructure.SceneManagement.Roots
             _fields.Popups = popups;
             _fields.Hud = hud;
             _fields.TutorInfo = tutorInfo;
+            _fields.AdService = adService;
             _fields.GameView.Initialize(inputService, pool, sounds);
             
             _fsm = Fsm<GsBaseState, SharedFields>
@@ -70,6 +72,7 @@ namespace Infrastructure.SceneManagement.Roots
             [NonSerialized] public PopupsController Popups;
             [NonSerialized] public Hud Hud;
             [NonSerialized] public TutorInfoService TutorInfo;
+            [NonSerialized] public AdService AdService;
         }
     }
 }
