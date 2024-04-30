@@ -21,6 +21,7 @@ namespace UI.Popups.Settings
         private GlobalVolumeService _globalVolume;
         private Hud _hud;
         private Tween _appearingSequence;
+        
 
         [Inject]
         private void Inject(AudioService audioService, GlobalVolumeService globalVolume, Hud hud)
