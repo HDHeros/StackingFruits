@@ -8,7 +8,7 @@ namespace Infrastructure.SceneManagement
     public class SceneService
     {
         public event Action SceneLoaded;
-        
+
         public SceneId GetActiveSceneId() => 
             GetActiveSceneRoot<SceneRoot>().Id;
 
@@ -19,6 +19,7 @@ namespace Infrastructure.SceneManagement
             {
                 await UniTask.Yield(PlayerLoopTiming.Update);
             }
+
             SceneLoaded?.Invoke();
             return GetActiveSceneRoot<T>();
         }
