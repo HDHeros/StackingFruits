@@ -12,7 +12,12 @@ namespace Infrastructure.RateAppLogic
         
         public RateAppDummy(PopupsController popups) => 
             _popups = popups;
-        
+
+        public virtual bool IsRateAvailable()
+        {
+            return true;
+        }
+
         public virtual void RateApp()
         { 
             ShowRateAppPopup();
@@ -41,11 +46,6 @@ namespace Infrastructure.RateAppLogic
         protected virtual void OnPositiveBtnClick()
         {
             
-        }
-
-        public bool IsRateAvailable()
-        {
-            return true;
         }
     }
 }

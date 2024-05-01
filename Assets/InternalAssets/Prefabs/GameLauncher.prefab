@@ -55,7 +55,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6338971529636585716}
-  - component: {fileID: 4367312369459379862}
   m_Layer: 0
   m_Name: AT
   m_TagString: Untagged
@@ -78,18 +77,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7791191059724955913}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4367312369459379862
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5443468814485524643}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61bb4b982ead49329d772bf66e9e8848, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &2389584829634775869
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -171,8 +158,45 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2211564899198745197, guid: caf9732433f4dc044845763962493607,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 382842867615324632}
   m_SourcePrefab: {fileID: 100100000, guid: caf9732433f4dc044845763962493607, type: 3}
+--- !u!1 &4582566771612823888 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2211564899198745197, guid: caf9732433f4dc044845763962493607,
+    type: 3}
+  m_PrefabInstance: {fileID: 2389584829634775869}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &382842867615324632
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4582566771612823888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a50aa89408dd46a4d9e4c2ed0c463947, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  forUnauthorized: 0
+  showOnMobileDevice: 1
+  updateDataOnEnable: 0
+  ReviewAvailable:
+    m_PersistentCalls:
+      m_Calls: []
+  ReviewNotAvailable:
+    m_PersistentCalls:
+      m_Calls: []
+  LeftReview:
+    m_PersistentCalls:
+      m_Calls: []
+  NotLeftReview:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &4582566771612823890 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2211564899198745199, guid: caf9732433f4dc044845763962493607,

@@ -546,8 +546,9 @@ PlayerSettings:
     GP_TOKEN: 
     IGB_GAME_DISTRIBUTION_GAME_ID: 
     IGB_VK_PLAY_GAME_ID: 
-    LOCK_ASPECT_RATIO: if(!isDeviceNavigator){lock(canvas, 16/9);}else{lock(canvas,
-      9/16);}
+    LOCK_ASPECT_RATIO: if(isDeviceNavigator) {     if (window.innerWidth / window.innerHeight
+      > 1){         lock(canvas, 16 / 9);      }     else{         lock(canvas, 9
+      / 16);      } }
     YG_BANNER_DYNAMIC_1: 
     YG_BANNER_DYNAMIC_2: 
     YG_BANNER_STATIC_1: 

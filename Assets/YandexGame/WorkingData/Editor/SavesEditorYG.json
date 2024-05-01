@@ -1,0 +1,172 @@
+{
+    "idSave": 2,
+    "isFirstSession": false,
+    "language": "ru",
+    "promptDone": false,
+    "money": 1,
+    "newPlayerName": "Hello!",
+    "openLevels": [
+        false,
+        true,
+        false
+    ],
+    "LevelsDataModel": {
+        "Sections": [
+            {
+                "Id": 1,
+                "Levels": [
+                    {
+                        "Id": "S1_L1",
+                        "Progress": 0.0
+                    },
+                    {
+                        "Id": "S1_L2",
+                        "Progress": 0.0
+                    },
+                    {
+                        "Id": "S1_L3",
+                        "Progress": 0.0
+                    },
+                    {
+                        "Id": "S1_L4",
+                        "Progress": 0.0
+                    },
+                    {
+                        "Id": "S1_L5",
+                        "Progress": 1.0
+                    },
+                    {
+                        "Id": "S1_L6",
+                        "Progress": 0.0
+                    },
+                    {
+                        "Id": "S1_L7",
+                        "Progress": 0.0
+                    }
+                ]
+            },
+            {
+                "Id": 2,
+                "Levels": [
+                    {
+                        "Id": "S2_L1",
+                        "Progress": 0.0
+                    },
+                    {
+                        "Id": "S2_L2",
+                        "Progress": 0.0
+                    },
+                    {
+                        "Id": "S2_L3",
+                        "Progress": 0.0
+                    },
+                    {
+                        "Id": "S2_L4",
+                        "Progress": 0.0
+                    },
+                    {
+                        "Id": "S2_L5",
+                        "Progress": 0.0
+                    },
+                    {
+                        "Id": "S2_L6",
+                        "Progress": 0.0
+                    }
+                ]
+            },
+            {
+                "Id": 3,
+                "Levels": [
+                    {
+                        "Id": "S3_L1",
+                        "Progress": 0.0
+                    },
+                    {
+                        "Id": "S3_L2",
+                        "Progress": 0.0
+                    },
+                    {
+                        "Id": "S3_L3",
+                        "Progress": 0.0
+                    },
+                    {
+                        "Id": "S3_L4",
+                        "Progress": 0.0
+                    },
+                    {
+                        "Id": "S3_L5",
+                        "Progress": 0.0
+                    },
+                    {
+                        "Id": "S3_L6",
+                        "Progress": 0.0
+                    },
+                    {
+                        "Id": "S3_L7",
+                        "Progress": 0.0
+                    },
+                    {
+                        "Id": "S3_L8",
+                        "Progress": 0.0
+                    }
+                ]
+            },
+            {
+                "Id": 4,
+                "Levels": [
+                    {
+                        "Id": "S4_L1",
+                        "Progress": 0.0
+                    },
+                    {
+                        "Id": "S4_L2",
+                        "Progress": 0.0
+                    },
+                    {
+                        "Id": "S4_L3",
+                        "Progress": 0.0
+                    },
+                    {
+                        "Id": "S4_L4",
+                        "Progress": 0.0
+                    },
+                    {
+                        "Id": "S4_L5",
+                        "Progress": 0.0
+                    },
+                    {
+                        "Id": "S4_L6",
+                        "Progress": 0.0
+                    },
+                    {
+                        "Id": "S4_L7",
+                        "Progress": 0.0
+                    },
+                    {
+                        "Id": "S4_L8",
+                        "Progress": 0.0
+                    },
+                    {
+                        "Id": "S4_L9",
+                        "Progress": 0.0
+                    },
+                    {
+                        "Id": "S4_L10",
+                        "Progress": 0.0
+                    },
+                    {
+                        "Id": "S4_L11",
+                        "Progress": 0.0
+                    },
+                    {
+                        "Id": "S4_L12",
+                        "Progress": 0.0
+                    }
+                ]
+            }
+        ]
+    },
+    "TutorDataModel": {
+        "IsTutorCompleted": true
+    }
+}

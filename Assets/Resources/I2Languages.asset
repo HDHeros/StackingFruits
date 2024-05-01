@@ -33,10 +33,10 @@ MonoBehaviour:
       TermType: 0
       Description: 
       Languages:
-      - "\u0410\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u044F"
-      - "\u0410\u045E\u0442\u0430\u0440\u044B\u0437\u0430\u0446\u044B\u044F"
-      - Authorization
-      - Yetki
+      - "\u0410\u0432\u0442\u043E\u0440\u0438\u0437\u043E\u0432\u0430\u0442\u044C\u0441\u044F?"
+      - "\u0410\u045E\u0442\u0430\u0440\u044B\u0437\u0430\u0432\u0430\u0446\u0446\u0430?"
+      - Log In?
+      - "Giri\u015F Yapmak?"
       Flags: 00000000
       Languages_Touch: []
     - Term: CANCEL
@@ -103,6 +103,16 @@ MonoBehaviour:
       - "Seviye se\xE7imine d\xF6n\xFCp mevcut ilerlemeyi kaybedecek misiniz?"
       Flags: 00000000
       Languages_Touch: []
+    - Term: LOG_IN
+      TermType: 0
+      Description: 
+      Languages:
+      - "\u0410\u0432\u0442\u043E\u0440\u0438\u0437\u043E\u0432\u0430\u0442\u044C\u0441\u044F"
+      - "\u0423\u0432\u0430\u0439\u0441\u0446\u0456"
+      - Log in
+      - "Giri\u015F yapmak"
+      Flags: 00000000
+      Languages_Touch: []
     - Term: LOSE_GAME_POPUP_BTN_BACK
       TermType: 0
       Description: 
@@ -157,8 +167,8 @@ MonoBehaviour:
       TermType: 0
       Description: 
       Languages:
-      - "\u0425\u043E\u0440\u043E\u0448\u043E"
-      - "\u0414\u043E\u0431\u0440\u0430"
+      - "\u041E\u043A"
+      - "\u041E\u043A"
       - Ok
       - Tamam
       Flags: 00000000

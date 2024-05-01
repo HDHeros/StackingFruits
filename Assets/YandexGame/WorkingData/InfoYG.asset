@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scopes: 1
   playerPhotoSize: 0
-  autoGameReadyAPI: 1
+  autoGameReadyAPI: 0
   playerInfoSimulation:
-    authorized: 1
+    authorized: 0
     isMobile: 0
     language: ru
     name: Player this
@@ -27,7 +27,7 @@ MonoBehaviour:
   rewardedAfterClosing: 1
   adDisplayCalls: 0
   fullscreenAdInterval: 60
-  durationOfAdSimulation: 0.5
+  durationOfAdSimulation: 2
   loadAdWithDelaySimulation: 0
   testErrorOfRewardedAdsInEditor: 0
   saveCloud: 1

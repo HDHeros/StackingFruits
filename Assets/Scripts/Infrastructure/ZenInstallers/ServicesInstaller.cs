@@ -18,6 +18,7 @@ using UI;
 using UI.Popups;
 using UnityEngine;
 using UnityEngine.Rendering;
+using YandexGamesIntegration;
 using Zenject;
 
 namespace Infrastructure.ZenInstallers
@@ -37,14 +38,14 @@ namespace Infrastructure.ZenInstallers
             InstallHud();
             InstallGlobalVolumeService();
             InstallPauseService();
-            InstallAd();//not implemented
-            InstallRateAppService();//not implemented
+            InstallAd();//implemented
+            InstallRateAppService();//implemented
             InstallGameConfig();
             InstallAudio();
             InstallPopups();
             InstallSceneService();
             InstallGoPool();
-            InstallUserDataService();//not implemented
+            InstallUserDataService();//implemented
             InstallLevelsService();
             InstallTutorInfoService();
         }
@@ -52,14 +53,14 @@ namespace Infrastructure.ZenInstallers
         private void InstallRateAppService() =>
             Container
                 .Bind<IRateAppService>()
-                .To<RateAppDummy>()
+                .To<YandexRateApp>()
                 .FromNew()
                 .AsSingle();
 
         private void InstallAd() =>
             Container
                 .Bind<AdService>()
-                .To<AdServiceDummy>()
+                .To<YandexAds>()
                 .FromNew()
                 .AsSingle();
         
@@ -154,7 +155,7 @@ namespace Infrastructure.ZenInstallers
         private void InstallUserDataService() =>
             Container
                 .Bind<UserDataService>()
-                .FromInstance(new UserDataService(_userDataConfig))
+                .FromInstance(new UserDataService(_userDataConfig, new SaveLoadYandex()))
                 .AsSingle();
 
         private void InstallLevelsService() =>

@@ -1,4 +1,7 @@
 ﻿
+using Gameplay.LevelsLogic;
+using Infrastructure.Tutor;
+
 namespace YG
 {
     [System.Serializable]
@@ -22,6 +25,8 @@ namespace YG
 
         // Поля (сохранения) можно удалять и создавать новые. При обновлении игры сохранения ломаться не должны
 
+        public LevelsModel LevelsDataModel;
+        public TutorModel TutorDataModel;
 
         // Вы можете выполнить какие то действия при загрузке сохранений
         public SavesYG()
