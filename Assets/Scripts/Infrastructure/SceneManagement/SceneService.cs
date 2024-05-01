@@ -7,6 +7,7 @@ namespace Infrastructure.SceneManagement
 {
     public class SceneService
     {
+        
         public SceneId GetActiveSceneId() => 
             GetActiveSceneRoot<SceneRoot>().Id;
 

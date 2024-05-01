@@ -3,7 +3,9 @@ using GameStructConfigs;
 using HDH.Fsm;
 using HDH.GoPool;
 using HDH.Popups;
+using Infrastructure.AdLogic;
 using Infrastructure.GameStateMachine.States;
+using Infrastructure.RateAppLogic;
 using Infrastructure.SceneManagement;
 using Infrastructure.SimpleInput;
 using Infrastructure.SoundsLogic;
@@ -21,7 +23,7 @@ namespace Infrastructure.GameStateMachine
         [Inject]
         public void Inject(SceneService sceneService, InputService inputService, IGoPool pool, GameConfig gameConfig,
             LevelsService levelsService, SoundsService sounds, PopupsController popups, Hud hud,
-            TutorInfoService tutorInfo)
+            TutorInfoService tutorInfo, AdService adService, IRateAppService rateAppService)
         {
             var fields = new SharedFields
             {
@@ -33,7 +35,9 @@ namespace Infrastructure.GameStateMachine
                 SoundService = sounds,
                 Popups = popups,
                 Hud = hud,
-                TutorInfo = tutorInfo
+                TutorInfo = tutorInfo,
+                AdService = adService,
+                RateAppService = rateAppService,
             };
             
             _fsm = Fsm<BaseGameState, SharedFields>
@@ -63,6 +67,8 @@ namespace Infrastructure.GameStateMachine
             public PopupsController Popups;
             public Hud Hud;
             public TutorInfoService TutorInfo;
+            public AdService AdService;
+            public IRateAppService RateAppService;
         }
     }
 }

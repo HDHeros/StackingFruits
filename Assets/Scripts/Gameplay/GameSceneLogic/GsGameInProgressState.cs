@@ -110,8 +110,11 @@ namespace Gameplay.GameSceneLogic
                 onClosedCallback);
         }
 
-        private void ReloadLevel() => 
+        private void ReloadLevel()
+        {
             StartGameLoop(_ctSource.Token).Forget();
+            Fields.AdService.ShowAdWithCountdown();
+        }
 
         private async UniTaskVoid ReturnToSelectLevelAsync(CancellationToken ct, GameView.GameResult result)
         {
@@ -125,6 +128,15 @@ namespace Gameplay.GameSceneLogic
                     Fields.SectionPicker.CheckNextSectionAvailability(Fields.PickedSection);
             }
             StateSwitcher.SwitchState<GsSelectLevelState>();
+            if (result.WasForceFinished == false)
+            {
+                if (Fields.RateAppService.IsRateAvailable() && result.IsWin)
+                {
+                    Fields.RateAppService.RateApp();
+                }
+                else
+                    Fields.AdService.ShowAdWithCountdown();
+            }
         }
     }
 }

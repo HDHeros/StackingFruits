@@ -7,6 +7,9 @@ using HDH.Popups;
 using HDH.Popups.Configs;
 using HDH.UserData;
 using HDH.UserData.Dto;
+using Infrastructure.AdLogic;
+using Infrastructure.Pause;
+using Infrastructure.RateAppLogic;
 using Infrastructure.SceneManagement;
 using Infrastructure.SoundsLogic;
 using Infrastructure.Tutor;
@@ -33,16 +36,39 @@ namespace Infrastructure.ZenInstallers
             InstallInputService();
             InstallHud();
             InstallGlobalVolumeService();
+            InstallPauseService();
+            InstallAd();//not implemented
+            InstallRateAppService();//not implemented
             InstallGameConfig();
             InstallAudio();
             InstallPopups();
             InstallSceneService();
             InstallGoPool();
-            InstallUserDataService();
+            InstallUserDataService();//not implemented
             InstallLevelsService();
             InstallTutorInfoService();
         }
 
+        private void InstallRateAppService() =>
+            Container
+                .Bind<IRateAppService>()
+                .To<RateAppDummy>()
+                .FromNew()
+                .AsSingle();
+
+        private void InstallAd() =>
+            Container
+                .Bind<AdService>()
+                .To<AdServiceDummy>()
+                .FromNew()
+                .AsSingle();
+        
+        private void InstallPauseService() =>
+            Container
+                .Bind<PauseService>()
+                .FromNew()
+                .AsSingle();
+        
         private void InstallHud() =>
             Container
                 .Bind<Hud>()

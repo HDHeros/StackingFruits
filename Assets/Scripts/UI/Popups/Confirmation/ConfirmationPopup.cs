@@ -53,15 +53,15 @@ namespace UI.Popups.Confirmation
             _positiveBtn.SetStyle(positiveBtnStyle);
             _negativeBtn.SetStyle(negativeBtnStyle);
             
-            _positiveBtn.Btn.onClick.AddListener(CustomClose);
-            _negativeBtn.Btn.onClick.AddListener(CustomClose);
-            _closeBtn.onClick.AddListener(CustomClose);
             if (onPositiveCallback != null)
                 _positiveBtn.Btn.onClick.AddListener(onPositiveCallback.Invoke);
             if (onNegativeCallback != null)
                 _negativeBtn.Btn.onClick.AddListener(onNegativeCallback.Invoke);
             if (onClosedCallback != null)
                 _closeBtn.onClick.AddListener(onClosedCallback.Invoke);
+            _positiveBtn.Btn.onClick.AddListener(CustomClose);
+            _negativeBtn.Btn.onClick.AddListener(CustomClose);
+            _closeBtn.onClick.AddListener(CustomClose);
         }
 
         protected override void OnShown()
