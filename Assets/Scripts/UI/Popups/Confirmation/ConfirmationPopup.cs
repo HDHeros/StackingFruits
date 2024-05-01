@@ -22,16 +22,28 @@ namespace UI.Popups.Confirmation
         [SerializeField] private TextMeshProUGUI _confirmationText;
         [SerializeField] private RectTransform _content;
         [SerializeField] private CanvasGroup _contentCanvasGroup;
-        public bool IsClosing { get; private set; }
         private GlobalVolumeService _globalVolume;
         private Hud _hud;
         private Tween _appearingSequence;
+        private Action _onPositiveCallback;
+        private Action _onNegativeCallback;
+        private Action _onClosedCallback;
 
         [Inject]
         private void Inject(GlobalVolumeService globalVolume, Hud hud)
         {
             _globalVolume = globalVolume;
             _hud = hud;
+        }
+
+        private void Start()
+        {
+            Closed += OnFinalClose;
+        }
+
+        private void OnFinalClose()
+        {
+            _onClosedCallback?.Invoke();
         }
 
         public void Setup(
@@ -53,21 +65,17 @@ namespace UI.Popups.Confirmation
             _positiveBtn.SetStyle(positiveBtnStyle);
             _negativeBtn.SetStyle(negativeBtnStyle);
             
-            if (onPositiveCallback != null)
-                _positiveBtn.Btn.onClick.AddListener(onPositiveCallback.Invoke);
-            if (onNegativeCallback != null)
-                _negativeBtn.Btn.onClick.AddListener(onNegativeCallback.Invoke);
-            if (onClosedCallback != null)
-                _closeBtn.onClick.AddListener(onClosedCallback.Invoke);
-            _positiveBtn.Btn.onClick.AddListener(CustomClose);
-            _negativeBtn.Btn.onClick.AddListener(CustomClose);
+            _onPositiveCallback = onPositiveCallback;
+            _onNegativeCallback = onNegativeCallback;
+            _onClosedCallback = onClosedCallback;
+            _positiveBtn.Btn.onClick.AddListener(OnPositiveClick);
+            _negativeBtn.Btn.onClick.AddListener(OnNegativeClick);
             _closeBtn.onClick.AddListener(CustomClose);
         }
 
         protected override void OnShown()
         {
             base.OnShown();
-            IsClosing = false;
             _globalVolume.SetActiveBlur(true);
             _hud.PushScreen(Hud.ScreenType.EmptyScreen);
             _content.localScale = Vector3.one * 1.3f;
@@ -86,17 +94,25 @@ namespace UI.Popups.Confirmation
             _globalVolume.SetActiveBlur(false);
         }
 
-        protected override void ResetPopup()
+        private void OnPositiveClick()
         {
-            _positiveBtn.Btn.onClick.RemoveAllListeners();
-            _negativeBtn.Btn.onClick.RemoveAllListeners();
-            _closeBtn.onClick.RemoveAllListeners();
+            _onClosedCallback += _onPositiveCallback;
+            CustomClose();
         }
 
+        private void OnNegativeClick()
+        {
+            _onClosedCallback += _onNegativeCallback;
+            CustomClose();
+        }
+        
         private void CustomClose()
         {
             _contentCanvasGroup.interactable = false;
-            IsClosing = true;
+            
+            _positiveBtn.Btn.onClick.RemoveAllListeners();
+            _negativeBtn.Btn.onClick.RemoveAllListeners();
+            _closeBtn.onClick.RemoveAllListeners();
             
             _appearingSequence?.Kill();
             _appearingSequence = DOTween.Sequence()

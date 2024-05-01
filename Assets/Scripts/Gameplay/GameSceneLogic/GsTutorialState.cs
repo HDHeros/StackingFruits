@@ -82,9 +82,7 @@ namespace Gameplay.GameSceneLogic
                 ConfirmationButtonWrapper.Style.Positive,
                 null,
                 null,
-                null);
-            await UniTask.WaitUntil(() => cPopup.IsClosing, cancellationToken: ct);
-            Fields.CameraController.ActivateInGameCamera();
+                () => Fields.CameraController.ActivateInGameCamera());
         }
     }
 }
