@@ -29,6 +29,7 @@ namespace Menu
         private SoundsService _sounds;
         private Tween _materialColorTween;
         private bool _isPicked;
+        private Vector3 _defaultColliderCenter;
 
 
         public void Initialize(LevelsService.SectionModel sectionModel, Vector3 localPos, IGoPool pool, int index,
@@ -39,6 +40,7 @@ namespace Menu
             Transform.localPosition = localPos;
             Index = index;
             _sounds = sounds;
+            _defaultColliderCenter = _collider.center;
             if (sectionModel.Levels.Length > _availablePreviewBounds.Length) 
                 throw new Exception();
             _previews = new LevelPreview[sectionModel.Levels.Length];
@@ -70,12 +72,14 @@ namespace Menu
         {
             _model.DOKill();
             _model.DOLocalMove(_onSelectOffset, duration).SetEase(Ease.OutQuint);
+            _collider.center += _onSelectOffset;
         }
 
         public void Deselect(float duration)
         {
             _model.DOKill();
             _model.DOLocalMove(Vector3.zero, duration).SetEase(Ease.OutQuint);
+            _collider.center = _defaultColliderCenter;
         }
 
         public void OnPicked(float duration)
@@ -86,12 +90,14 @@ namespace Menu
             _model.DOKill();
             _model.DOLocalMove(_onPickedOffset, duration).SetEase(Ease.OutBounce);
             _sounds.RaiseEvent(EventId.SectionPick);
+            _collider.center += _onSelectOffset;
             foreach (LevelPreview levelPreview in _previews) 
                 levelPreview.EnableSelection();
         }
 
         public void OnUnpicked(float duration)
         {
+            _collider.center = _defaultColliderCenter;
             _isPicked = false;
             _collider.enabled = true;
             _model.DOKill();
