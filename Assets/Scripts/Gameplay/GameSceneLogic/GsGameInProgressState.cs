@@ -40,7 +40,7 @@ namespace Gameplay.GameSceneLogic
                 ConfirmationButtonWrapper.Style.Positive,
                 FinishGame,
                 ContinueGame,
-                ContinueGame,
+                null,
                 _ctSource.Token).Forget();
         }
 
@@ -81,7 +81,7 @@ namespace Gameplay.GameSceneLogic
                 ConfirmationButtonWrapper.Style.Negative,
                 ReloadLevel,
                 returnToSelectLevelState,
-                returnToSelectLevelState,
+                null,
                 ct).Forget();
         }
 
