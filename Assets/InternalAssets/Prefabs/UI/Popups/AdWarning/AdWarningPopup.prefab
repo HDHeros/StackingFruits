@@ -138,6 +138,7 @@ MonoBehaviour:
   _content: {fileID: 8018549167569611445}
   _contentCanvasGroup: {fileID: 6113602844936918563}
   _countdown: {fileID: 3711717118724398915}
+  _textTransform: {fileID: 5389180227217856878}
 --- !u!1 &5405018927441777948
 GameObject:
   m_ObjectHideFlags: 0
@@ -406,7 +407,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "\u0420\u0435\u043A\u043B\u0430\u043C\u0430 \u0447\u0435\u0440\u0435\u0437
-    {[VALUE]} \u0441\u0435\u043A\u0443\u043D\u0434"
+    3 \u0441\u0435\u043A\u0443\u043D\u0434"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: bb0df80db397a044db4b612925cf511c, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: ebffe6432872c3a469674aa391ef9564, type: 2}

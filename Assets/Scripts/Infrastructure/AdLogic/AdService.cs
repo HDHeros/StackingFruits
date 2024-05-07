@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using Infrastructure.Pause;
 
 namespace Infrastructure.AdLogic
@@ -14,5 +16,7 @@ namespace Infrastructure.AdLogic
         
         public virtual void ShowAdWithCountdown() => 
             OnCountdownAdRequestReceived?.Invoke();
+
+        public abstract UniTask AwaitAdFinish();
     }
 }
