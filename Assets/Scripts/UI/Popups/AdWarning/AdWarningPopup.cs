@@ -74,7 +74,7 @@ namespace UI.Popups.AdWarning
             _textTransform.DOScale(1.1f, 0.5f).SetEase(Ease.InOutSine).SetLoops(-1, LoopType.Yoyo);
         }
 
-        private void Reset()
+        protected override void ResetPopup()
         {
             _countdown.SetParameterValue("VALUE", 3.ToString());
             _textTransform.DOKill();
