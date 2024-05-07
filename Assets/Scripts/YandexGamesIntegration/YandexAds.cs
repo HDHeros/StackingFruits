@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using Cysharp.Threading.Tasks;
 using HDH.Popups;
 using Infrastructure.AdLogic;
 using Infrastructure.Pause;
@@ -15,6 +16,7 @@ namespace YandexGamesIntegration
         private readonly CancellationTokenSource _ctSource;
         private readonly SceneService _sceneService;
         private readonly PopupsController _popups;
+        private bool _fullscreenRequested;
 
         public YandexAds(PauseService pauseService, SceneService sceneService, PopupsController popups) : base(pauseService)
         {
@@ -53,9 +55,13 @@ namespace YandexGamesIntegration
             _popups[typeof(AdWarningPopup)].Open();
         }
 
+        public override UniTask AwaitAdFinish() => 
+            UniTask.WaitWhile(() => YandexGame.nowFullAd || _fullscreenRequested);
+
         public override void ShowAd()
         {
             YandexGame.FullscreenShow();
+            _fullscreenRequested = true;
         }
         
         private void OnOpenFullAd()
@@ -66,6 +72,7 @@ namespace YandexGamesIntegration
         private void OnCloseFullAd()
         {
             Pause.AdUnpause();
+            _fullscreenRequested = false;
         }
     }
 }
