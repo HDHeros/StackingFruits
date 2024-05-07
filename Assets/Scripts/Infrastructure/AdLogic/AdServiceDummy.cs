@@ -1,3 +1,5 @@
+using System;
+using Cysharp.Threading.Tasks;
 using HDH.Popups;
 using Infrastructure.Pause;
 using UI.Popups.AdWarning;
@@ -24,5 +26,8 @@ namespace Infrastructure.AdLogic
             base.ShowAdWithCountdown();
             _popups[typeof(AdWarningPopup)].Open();
         }
+
+        public override UniTask AwaitAdFinish() => 
+            UniTask.Delay(TimeSpan.FromSeconds(2f));
     }
 }

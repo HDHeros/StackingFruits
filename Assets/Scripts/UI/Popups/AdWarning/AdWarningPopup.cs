@@ -5,6 +5,7 @@ using HDH.Popups;
 using I2.Loc;
 using Infrastructure;
 using Infrastructure.AdLogic;
+using TMPro;
 using UnityEngine;
 using Zenject;
 
@@ -15,6 +16,7 @@ namespace UI.Popups.AdWarning
         [SerializeField] private RectTransform _content;
         [SerializeField] private CanvasGroup _contentCanvasGroup;
         [SerializeField] private LocalizationParamsManager _countdown;
+        [SerializeField] private RectTransform _textTransform;
         private GlobalVolumeService _globalVolume;
         private Hud _hud;
         private Tween _appearingSequence;
@@ -46,6 +48,13 @@ namespace UI.Popups.AdWarning
                 });
         }
 
+        protected override void OnClosed()
+        {
+            base.OnClosed();
+            _hud.PopScreen(Hud.ScreenType.EmptyScreen);
+            _globalVolume.SetActiveBlur(false);
+        }
+
         private async UniTaskVoid StartCountdown()
         {
             float countdownInterval = 0.85f;
@@ -55,19 +64,21 @@ namespace UI.Popups.AdWarning
                 await UniTask.Delay(TimeSpan.FromSeconds(countdownInterval));
             }
             _adService.ShowAd();
+            AnimateAwaiting();
+            await _adService.AwaitAdFinish();
             Close();
         }
 
-        protected override void OnClosed()
+        private void AnimateAwaiting()
         {
-            base.OnClosed();
-            _hud.PopScreen(Hud.ScreenType.EmptyScreen);
-            _globalVolume.SetActiveBlur(false);
+            _textTransform.DOScale(1.1f, 0.5f).SetEase(Ease.InOutSine).SetLoops(-1, LoopType.Yoyo);
         }
 
         private void Reset()
         {
             _countdown.SetParameterValue("VALUE", 3.ToString());
+            _textTransform.DOKill();
+            _textTransform.localScale = Vector3.one;
         }
 
         private void CustomClose()
