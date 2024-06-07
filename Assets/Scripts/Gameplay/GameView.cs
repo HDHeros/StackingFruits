@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using Gameplay.Blocks;
@@ -9,12 +10,22 @@ using HDH.UnityExt.Extensions;
 using Infrastructure.SimpleInput;
 using Infrastructure.SoundsLogic;
 using Sirenix.OdinInspector;
+using UI.Screens;
 using UnityEngine;
 
 namespace Gameplay
 {
     public class GameView : MonoBehaviour
     {
+        private static ReadOnlyDictionary<GameEventType, int> _actionPoints =
+            new(new Dictionary<GameEventType, int>()
+            {
+                { GameEventType.BlockMovedByUser , -1},
+                // { GameEventType.BlocksFell , 0},
+                { GameEventType.StackPerformed , 5},
+                // { GameEventType.GameWon , 0},
+                // { GameEventType.GameLost , 0},
+            });
         [SerializeField] private BlockSlot _slotPrefab;
         [SerializeField] private Camera _camera;
         [SerializeField] private WallDecals _wallDecals;
@@ -30,6 +41,8 @@ namespace Gameplay
         private bool _isGamePaused;
         private GameResult? _gameResult;
         private SlotsHighlighter _slotsHighlighter;
+        private IGameCounterView _counterView;
+        private int _pointsCounter;
 
         public void Initialize(InputService input, IGoPool pool, SoundsService sounds)
         {
@@ -42,8 +55,11 @@ namespace Gameplay
             _wallDecals.Initialize(_camera, pool);
         }
         
-        public async UniTask<GameResult> StartGame(LevelData levelData)
+        public async UniTask<GameResult> StartGame(LevelData levelData, IGameCounterView counterView)
         {
+            _counterView = counterView;
+            _pointsCounter = 0;
+            _counterView.SetPointsCount(_pointsCounter);
             _wallDecals.Clear();
             _game.Reinitialize(levelData);
             SetupField();
@@ -135,10 +151,21 @@ namespace Gameplay
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
+
+                UpdateCounter(move.Current.Type);
             }
             
             _isMovementLocked = false;
             _replacer.IsReplacementLocked = false;
+        }
+
+        private void UpdateCounter(GameEventType eventType)
+        {
+            if (_actionPoints.TryGetValue(eventType, out int pointsForAction))
+            {
+                _pointsCounter += pointsForAction;
+                _counterView.SetPointsCount(_pointsCounter, true);
+            }
         }
 
         private UniTask HandleBlocksFell(IEnumerator<GameEvent> move)

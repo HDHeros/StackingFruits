@@ -9,7 +9,8 @@ namespace Infrastructure.AdLogic
     public class AdServiceDummy : AdService
     {
         private readonly PopupsController _popups;
-
+        private bool _isInterstitialsAvailable = false;
+        
         public AdServiceDummy(PauseService pauseService, PopupsController popups) : base(pauseService)
         {
             _popups = popups;
@@ -17,11 +18,13 @@ namespace Infrastructure.AdLogic
 
         public override void ShowAd()
         {
-            Pause.AdUnpause();
+            if (_isInterstitialsAvailable)
+                Pause.AdUnpause();
         }
 
         public override void ShowAdWithCountdown()
         {
+            if (_isInterstitialsAvailable == false) return;
             Pause.AdPause();
             base.ShowAdWithCountdown();
             _popups[typeof(AdWarningPopup)].Open();

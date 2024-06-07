@@ -6,12 +6,17 @@ using HDH.Popups;
 using I2.Loc;
 using UI;
 using UI.Popups.Confirmation;
+using UI.Screens;
 
 namespace Gameplay.GameSceneLogic
 {
     public class GsTutorialState : GsBaseState
     {
         private CancellationTokenSource _ctSource;
+        private IGameCounterView _counterDummy;
+
+        public override void OnFieldsReceived() => 
+            _counterDummy = new GameCounterDummy();
 
         public override void Enter()
         {
@@ -58,7 +63,7 @@ namespace Gameplay.GameSceneLogic
             GameView.GameResult result = default;
             while (result.IsWin == false)
             {
-                result = await Fields.GameView.StartGame(config.GetLevelData());
+                result = await Fields.GameView.StartGame(config.GetLevelData(), _counterDummy);
             }
         }
         

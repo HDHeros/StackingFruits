@@ -4,18 +4,20 @@ using Cysharp.Threading.Tasks;
 using I2.Loc;
 using UI;
 using UI.Popups.Confirmation;
+using UI.Screens;
 
 namespace Gameplay.GameSceneLogic
 {
     public class GsGameInProgressState : GsBaseState
     {
         private CancellationTokenSource _ctSource;
+        private GameInProgressScreen _uiScreen;
 
         public override void Enter()
         {
             _ctSource = new CancellationTokenSource();
             Fields.TapToStartLabel.SetActive(false);
-            Fields.Hud.PushScreen(Hud.ScreenType.CommonScreen);
+            _uiScreen = Fields.Hud.PushScreen<GameInProgressScreen>(Hud.ScreenType.GameInProgressScreen);
             StartGameLoop(_ctSource.Token).Forget();
             Fields.Input.OnBackButtonPressed += OnBackButtonPressed;
         }
@@ -59,7 +61,7 @@ namespace Gameplay.GameSceneLogic
         private async UniTaskVoid StartGameLoop(CancellationToken ct)
         {
             Fields.CameraController.ActivateInGameCamera();
-            GameView.GameResult result = await Fields.GameView.StartGame(Fields.PickedLevel.LevelData);
+            GameView.GameResult result = await Fields.GameView.StartGame(Fields.PickedLevel.LevelData, _uiScreen);
             HandleFinishGame(result, ct);
         }
 
