@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Cysharp.Threading.Tasks;
+using DamageNumbersPro;
 using Gameplay.Blocks;
 using Gameplay.GameCore;
 using HDH.GoPool;
@@ -9,17 +11,29 @@ using HDH.UnityExt.Extensions;
 using Infrastructure.SimpleInput;
 using Infrastructure.SoundsLogic;
 using Sirenix.OdinInspector;
+using UI.Screens;
 using UnityEngine;
 
 namespace Gameplay
 {
     public class GameView : MonoBehaviour
     {
+        private static ReadOnlyDictionary<GameEventType, int> _actionPoints =
+            new(new Dictionary<GameEventType, int>()
+            {
+                { GameEventType.BlockMovedByUser , -1},
+                // { GameEventType.BlocksFell , 0},
+                { GameEventType.StackPerformed , 5},
+                // { GameEventType.GameWon , 0},
+                // { GameEventType.GameLost , 0},
+            });
         [SerializeField] private BlockSlot _slotPrefab;
         [SerializeField] private Camera _camera;
         [SerializeField] private WallDecals _wallDecals;
         [SerializeField] private float _replacementDepth;
         [SerializeField] private Bounds _gameFieldBounds;
+        [SerializeField] private DamageNumber _greenDamageNumber;
+        [SerializeField] private DamageNumber _redDamageNumber;
         private StackingGame _game;
         private BlockSlot[,] _slots;
         private BlockReplacer _replacer;
@@ -30,6 +44,9 @@ namespace Gameplay
         private bool _isGamePaused;
         private GameResult? _gameResult;
         private SlotsHighlighter _slotsHighlighter;
+        private IGameCounterView _counterView;
+        private int _pointsCounter;
+        private bool _damageNumbersEnabled;
 
         public void Initialize(InputService input, IGoPool pool, SoundsService sounds)
         {
@@ -42,8 +59,12 @@ namespace Gameplay
             _wallDecals.Initialize(_camera, pool);
         }
         
-        public async UniTask<GameResult> StartGame(LevelData levelData)
+        public async UniTask<GameResult> StartGame(LevelData levelData, IGameCounterView counterView, bool damageNumbersEnabled = true)
         {
+            _counterView = counterView;
+            _damageNumbersEnabled = damageNumbersEnabled;
+            _pointsCounter = 0;
+            _counterView.SetPointsCount(_pointsCounter);
             _wallDecals.Clear();
             _game.Reinitialize(levelData);
             SetupField();
@@ -113,7 +134,8 @@ namespace Gameplay
                 switch (move.Current.Type)
                 {
                     case GameEventType.BlockMovedByUser:
-                        await MoveBlock(move.Current.Actions[0].From, move.Current.Actions[0].To, TimeSpan.Zero);
+                        int appendedCounterValue = UpdateCounter(move.Current.Type);
+                        await MoveBlock(move.Current.Actions[0].From, move.Current.Actions[0].To, TimeSpan.Zero, appendedCounterValue);
                         break;
                     case GameEventType.BlocksFell:
                         await HandleBlocksFell(move);
@@ -135,10 +157,23 @@ namespace Gameplay
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
+
             }
             
             _isMovementLocked = false;
             _replacer.IsReplacementLocked = false;
+        }
+
+        private int UpdateCounter(GameEventType eventType)
+        {
+            if (_actionPoints.TryGetValue(eventType, out int pointsForAction))
+            {
+                _pointsCounter += pointsForAction;
+                _counterView.SetPointsCount(_pointsCounter, true);
+                return pointsForAction;
+            }
+
+            return 0;
         }
 
         private UniTask HandleBlocksFell(IEnumerator<GameEvent> move)
@@ -161,6 +196,9 @@ namespace Gameplay
             _sounds.RaiseEvent(EventId.StackExplosion);
             await animatedFruit.PlayOnStackAnimation(_pool);
             PlayStackFinishSound(_game.StacksPerformed);
+            int appendedCounterValue = UpdateCounter(GameEventType.StackPerformed);
+            if (_damageNumbersEnabled)
+                _greenDamageNumber.Spawn(animatedFruit.Transform.position, appendedCounterValue);
             _wallDecals.SpawnDecal(animatedFruit.Transform.position, animatedFruit.DecalColor);
             RemoveBlock(animatedFruit);
             
@@ -212,12 +250,14 @@ namespace Gameplay
             return _slots[position.x, position.y].DropContent();
         }
 
-        private async UniTask MoveBlock(Vector2Int from, Vector2Int to, TimeSpan delay)
+        private async UniTask MoveBlock(Vector2Int from, Vector2Int to, TimeSpan delay, int? damageNumber = null)
         {
             BlockView view = _slots[from.x, from.y].RemoveCurrentBlock();
             await UniTask.Delay(delay);
             _sounds.RaiseEvent(EventId.FruitFell);
             await _slots[to.x, to.y].SetBlock(view, true);
+            if (damageNumber.HasValue && _damageNumbersEnabled)
+                _redDamageNumber.Spawn(view.Transform.position, damageNumber.Value);
         }
 
         private void HandleLoose(float progress) => 
@@ -241,7 +281,7 @@ namespace Gameplay
             }
 
             _slotsHighlighter.Slots = null;
-            _gameResult = new GameResult{Progress = progress, WasForceFinished = isForceFinish};
+            _gameResult = new GameResult{Progress = progress, WasForceFinished = isForceFinish, Score = _pointsCounter,};
         }
 
         private void OnDrawGizmos()
@@ -254,6 +294,7 @@ namespace Gameplay
         {
             public float Progress;
             public bool WasForceFinished;
+            public int Score;
             public bool IsWin => Progress >= 1;
         }
         

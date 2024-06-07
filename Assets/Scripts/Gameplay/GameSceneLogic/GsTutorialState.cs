@@ -6,12 +6,17 @@ using HDH.Popups;
 using I2.Loc;
 using UI;
 using UI.Popups.Confirmation;
+using UI.Screens;
 
 namespace Gameplay.GameSceneLogic
 {
     public class GsTutorialState : GsBaseState
     {
         private CancellationTokenSource _ctSource;
+        private IGameCounterView _counterDummy;
+
+        public override void OnFieldsReceived() => 
+            _counterDummy = new GameCounterDummy();
 
         public override void Enter()
         {
@@ -32,33 +37,35 @@ namespace Gameplay.GameSceneLogic
         private async UniTaskVoid StartTutorialLoop(CancellationToken ct)
         {
             await ShowInfoPopup(LocalizationManager.GetTranslation("TUTOR1_STEP1"), LocalizationManager.GetTranslation("OK"), ct);
-            await StartLevel(Fields.TutorInfo.Config.Level1);            
+            await StartLevel(Fields.TutorInfo.Config.Level1, false);            
             
             await ShowInfoPopup(LocalizationManager.GetTranslation("TUTOR1_STEP2"), LocalizationManager.GetTranslation("OK"), ct);
-            await StartLevel(Fields.TutorInfo.Config.Level2);
-            await StartLevel(Fields.TutorInfo.Config.Level3);
+            await StartLevel(Fields.TutorInfo.Config.Level2, false);
+            await StartLevel(Fields.TutorInfo.Config.Level3, false);
             
             await ShowInfoPopup(LocalizationManager.GetTranslation("TUTOR1_STEP3"), LocalizationManager.GetTranslation("OK"), ct);
-            await StartLevel(Fields.TutorInfo.Config.Level4);
-            await StartLevel(Fields.TutorInfo.Config.Level5);
+            await StartLevel(Fields.TutorInfo.Config.Level4, false);
+            await StartLevel(Fields.TutorInfo.Config.Level5, false);
             
             await ShowInfoPopup(LocalizationManager.GetTranslation("TUTOR1_STEP4"), LocalizationManager.GetTranslation("OK"), ct);
-            await StartLevel(Fields.TutorInfo.Config.Level6);
-            await StartLevel(Fields.TutorInfo.Config.Level7);
+            await StartLevel(Fields.TutorInfo.Config.Level6, false);
+            
+            await ShowInfoPopup(LocalizationManager.GetTranslation("TUTOR1_STEP4_1"), LocalizationManager.GetTranslation("OK"), ct);
+            await StartLevel(Fields.TutorInfo.Config.Level7, true);
             
             await ShowInfoPopup(LocalizationManager.GetTranslation("TUTOR1_STEP5"), LocalizationManager.GetTranslation("OK"), ct);
-            await StartLevel(Fields.TutorInfo.Config.Level8);
+            await StartLevel(Fields.TutorInfo.Config.Level8, true);
 
             Fields.TutorInfo.IsTutorCompleted = true;
             StateSwitcher.SwitchState<GsHomeScreenState>();
         }
 
-        private async UniTask StartLevel(LevelConfig config)
+        private async UniTask StartLevel(LevelConfig config, bool damageNumbersEnabled)
         {
             GameView.GameResult result = default;
             while (result.IsWin == false)
             {
-                result = await Fields.GameView.StartGame(config.GetLevelData());
+                result = await Fields.GameView.StartGame(config.GetLevelData(), _counterDummy, damageNumbersEnabled);
             }
         }
         

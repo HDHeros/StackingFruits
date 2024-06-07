@@ -4,18 +4,20 @@ using Cysharp.Threading.Tasks;
 using I2.Loc;
 using UI;
 using UI.Popups.Confirmation;
+using UI.Screens;
 
 namespace Gameplay.GameSceneLogic
 {
     public class GsGameInProgressState : GsBaseState
     {
         private CancellationTokenSource _ctSource;
+        private GameInProgressScreen _uiScreen;
 
         public override void Enter()
         {
             _ctSource = new CancellationTokenSource();
             Fields.TapToStartLabel.SetActive(false);
-            Fields.Hud.PushScreen(Hud.ScreenType.CommonScreen);
+            _uiScreen = Fields.Hud.PushScreen<GameInProgressScreen>(Hud.ScreenType.GameInProgressScreen);
             StartGameLoop(_ctSource.Token).Forget();
             Fields.Input.OnBackButtonPressed += OnBackButtonPressed;
         }
@@ -23,7 +25,7 @@ namespace Gameplay.GameSceneLogic
         public override void Exit(Action onExit)
         {
             _ctSource.Cancel();
-            Fields.Hud.PopScreen(Hud.ScreenType.CommonScreen);
+            Fields.Hud.PopScreen(Hud.ScreenType.GameInProgressScreen);
             Fields.Input.OnBackButtonPressed -= OnBackButtonPressed;
             base.Exit(onExit);
         }
@@ -59,7 +61,7 @@ namespace Gameplay.GameSceneLogic
         private async UniTaskVoid StartGameLoop(CancellationToken ct)
         {
             Fields.CameraController.ActivateInGameCamera();
-            GameView.GameResult result = await Fields.GameView.StartGame(Fields.PickedLevel.LevelData);
+            GameView.GameResult result = await Fields.GameView.StartGame(Fields.PickedLevel.LevelData, _uiScreen);
             HandleFinishGame(result, ct);
         }
 
@@ -118,6 +120,7 @@ namespace Gameplay.GameSceneLogic
 
         private async UniTaskVoid ReturnToSelectLevelAsync(CancellationToken ct, GameView.GameResult result)
         {
+            Fields.LevelsService.SetLevelMaxScore(Fields.PickedSection.Id, Fields.PickedLevel.Id, result.Score);
             Fields.CameraController.ActivateSelectLevelCamera();
             await UniTask.WaitWhile(() => Fields.CameraController.IsBlending, cancellationToken: ct);
             if (result.Progress > Fields.LevelsService.GetLevelProgress(Fields.PickedSection.Id, Fields.PickedLevel.Id))

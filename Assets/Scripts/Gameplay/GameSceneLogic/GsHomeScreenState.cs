@@ -17,6 +17,7 @@ namespace Gameplay.GameSceneLogic
         {
             Fields.CameraController.ActivateHomeScreenCamera();
             _homeScreen = Fields.Hud.PushScreen<HomeScreen>(Hud.ScreenType.HomeScreen);
+            _homeScreen.SetTotalScore(Fields.LevelsService.TotalScore);
             _homeScreen.TutorButtonClick += OnTutorButtonClick;
             _homeScreen.SettingsButtonClick += OnSettingsButtonClick;
             Fields.Input.OnTap += OnTap;
