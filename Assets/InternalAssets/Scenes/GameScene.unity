@@ -1616,6 +1616,10 @@ MonoBehaviour:
   _gameFieldBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 1, y: 2, z: 0}
+  _greenDamageNumber: {fileID: 8380122237180788588, guid: de5c3e5974fb98243a1ac75407f51572,
+    type: 3}
+  _redDamageNumber: {fileID: 7155155903422426304, guid: e5a6c9640df065e47ad0f5c1ff7cc254,
+    type: 3}
 --- !u!114 &1539559859
 MonoBehaviour:
   m_ObjectHideFlags: 0

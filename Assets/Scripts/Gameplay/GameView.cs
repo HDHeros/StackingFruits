@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Cysharp.Threading.Tasks;
+using DamageNumbersPro;
 using Gameplay.Blocks;
 using Gameplay.GameCore;
 using HDH.GoPool;
@@ -31,6 +32,8 @@ namespace Gameplay
         [SerializeField] private WallDecals _wallDecals;
         [SerializeField] private float _replacementDepth;
         [SerializeField] private Bounds _gameFieldBounds;
+        [SerializeField] private DamageNumber _greenDamageNumber;
+        [SerializeField] private DamageNumber _redDamageNumber;
         private StackingGame _game;
         private BlockSlot[,] _slots;
         private BlockReplacer _replacer;
@@ -126,17 +129,18 @@ namespace Gameplay
             while (move.MoveNext())
             {
                 await UniTask.WaitWhile(() => _isGamePaused);
+                int appendedCounterValue = UpdateCounter(move.Current.Type);
                 switch (move.Current.Type)
                 {
                     case GameEventType.BlockMovedByUser:
-                        await MoveBlock(move.Current.Actions[0].From, move.Current.Actions[0].To, TimeSpan.Zero);
+                        await MoveBlock(move.Current.Actions[0].From, move.Current.Actions[0].To, TimeSpan.Zero, appendedCounterValue);
                         break;
                     case GameEventType.BlocksFell:
                         await HandleBlocksFell(move);
                         await UniTask.Delay(TimeSpan.FromSeconds(0.25f));
                         break;
                     case GameEventType.StackPerformed:
-                        await AnimateStackPerform(move.Current.Actions);
+                        await AnimateStackPerform(move.Current.Actions, appendedCounterValue);
                         await UniTask.Delay(TimeSpan.FromSeconds(0.25f));
                         break;
                     case GameEventType.GameLost:
@@ -152,20 +156,22 @@ namespace Gameplay
                         throw new ArgumentOutOfRangeException();
                 }
 
-                UpdateCounter(move.Current.Type);
             }
             
             _isMovementLocked = false;
             _replacer.IsReplacementLocked = false;
         }
 
-        private void UpdateCounter(GameEventType eventType)
+        private int UpdateCounter(GameEventType eventType)
         {
             if (_actionPoints.TryGetValue(eventType, out int pointsForAction))
             {
                 _pointsCounter += pointsForAction;
                 _counterView.SetPointsCount(_pointsCounter, true);
+                return pointsForAction;
             }
+
+            return 0;
         }
 
         private UniTask HandleBlocksFell(IEnumerator<GameEvent> move)
@@ -180,7 +186,7 @@ namespace Gameplay
             return UniTask.WhenAll(uniTasks);
         }
 
-        private async UniTask AnimateStackPerform(IReadOnlyList<PerformedMovement> currentActions)
+        private async UniTask AnimateStackPerform(IReadOnlyList<PerformedMovement> currentActions, int damageNumberValue)
         {
             BlockView[] stackedFruits = currentActions.Select(a => _slots[a.From.x, a.From.y].ResetSlot()).ToArray();
             await MoveAllToStackPos();
@@ -188,6 +194,7 @@ namespace Gameplay
             _sounds.RaiseEvent(EventId.StackExplosion);
             await animatedFruit.PlayOnStackAnimation(_pool);
             PlayStackFinishSound(_game.StacksPerformed);
+            _greenDamageNumber.Spawn(animatedFruit.Transform.position, damageNumberValue);
             _wallDecals.SpawnDecal(animatedFruit.Transform.position, animatedFruit.DecalColor);
             RemoveBlock(animatedFruit);
             
@@ -239,12 +246,14 @@ namespace Gameplay
             return _slots[position.x, position.y].DropContent();
         }
 
-        private async UniTask MoveBlock(Vector2Int from, Vector2Int to, TimeSpan delay)
+        private async UniTask MoveBlock(Vector2Int from, Vector2Int to, TimeSpan delay, int? damageNumber = null)
         {
             BlockView view = _slots[from.x, from.y].RemoveCurrentBlock();
             await UniTask.Delay(delay);
             _sounds.RaiseEvent(EventId.FruitFell);
             await _slots[to.x, to.y].SetBlock(view, true);
+            if (damageNumber.HasValue)
+                _redDamageNumber.Spawn(view.Transform.position, damageNumber.Value);
         }
 
         private void HandleLoose(float progress) => 
