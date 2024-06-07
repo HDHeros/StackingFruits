@@ -59,10 +59,16 @@ namespace Gameplay.GameCore
         public IEnumerator<GameEvent> MoveBlock(Vector2Int from, Vector2Int to)
         {
             if (IsInRange(from.x, from.y) == false || IsInRange(to.x, to.y) == false)
-                throw new ArgumentOutOfRangeException();
+            {
+                yield return new GameEvent(GameEventType.WrongActionRequested, _performedMovements);
+                yield break;
+            }
 
             if (_field[to.x, to.y].Value.Equals(_levelData.EmptyBlockValue) == false)
-                throw new Exception();
+            {
+                yield return new GameEvent(GameEventType.WrongActionRequested, _performedMovements);
+                yield break;
+            }
 
             _performedMovements.Clear();
             _performedMovements.Add(ReplaceBlock(from, to));
@@ -122,6 +128,15 @@ namespace Gameplay.GameCore
                     }
                 }
             }
+        }
+
+        public bool IsInRange(int x, int y)
+        {
+            if (x < 0 || x >= _levelData.FieldSize.x)
+                return false;
+            if (y < 0 || y >= _levelData.FieldSize.y)
+                return false;
+            return true;
         }
 
         private bool HandleStacks()
@@ -235,15 +250,6 @@ namespace Gameplay.GameCore
         {
             _isFieldNormalized = false;
             _field[x, y].Value = value;
-        }
-
-        private bool IsInRange(int x, int y)
-        {
-            if (x < 0 || x >= _levelData.FieldSize.x)
-                return false;
-            if (y < 0 || y >= _levelData.FieldSize.y)
-                return false;
-            return true;
         }
     }
 }

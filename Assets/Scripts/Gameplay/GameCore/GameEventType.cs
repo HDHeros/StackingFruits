@@ -8,5 +8,6 @@
         StackPerformed = 3,
         GameWon = 4,
         GameLost = 5,
+        WrongActionRequested = 6,
     }
 }
