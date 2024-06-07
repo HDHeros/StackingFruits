@@ -1,5 +1,5 @@
 {
-    "idSave": 3,
+    "idSave": 4,
     "isFirstSession": false,
     "language": "ru",
     "promptDone": false,
@@ -17,31 +17,38 @@
                 "Levels": [
                     {
                         "Id": "S1_L1",
-                        "Progress": 0.0
+                        "Progress": 0.0,
+                        "Score": 0
                     },
                     {
                         "Id": "S1_L2",
-                        "Progress": 0.0
+                        "Progress": 0.0,
+                        "Score": 0
                     },
                     {
                         "Id": "S1_L3",
-                        "Progress": 0.0
+                        "Progress": 0.0,
+                        "Score": 0
                     },
                     {
                         "Id": "S1_L4",
-                        "Progress": 0.0
+                        "Progress": 0.0,
+                        "Score": 0
                     },
                     {
                         "Id": "S1_L5",
-                        "Progress": 1.0
+                        "Progress": 1.0,
+                        "Score": 13
                     },
                     {
                         "Id": "S1_L6",
-                        "Progress": 0.0
+                        "Progress": 0.0,
+                        "Score": 0
                     },
                     {
                         "Id": "S1_L7",
-                        "Progress": 0.3333333432674408
+                        "Progress": 0.3333333432674408,
+                        "Score": 0
                     }
                 ]
             },
@@ -50,27 +57,33 @@
                 "Levels": [
                     {
                         "Id": "S2_L1",
-                        "Progress": 0.0
+                        "Progress": 0.0,
+                        "Score": 0
                     },
                     {
                         "Id": "S2_L2",
-                        "Progress": 0.0
+                        "Progress": 0.0,
+                        "Score": 0
                     },
                     {
                         "Id": "S2_L3",
-                        "Progress": 0.0
+                        "Progress": 0.0,
+                        "Score": 0
                     },
                     {
                         "Id": "S2_L4",
-                        "Progress": 0.0
+                        "Progress": 0.0,
+                        "Score": 0
                     },
                     {
                         "Id": "S2_L5",
-                        "Progress": 0.0
+                        "Progress": 0.0,
+                        "Score": 0
                     },
                     {
                         "Id": "S2_L6",
-                        "Progress": 0.0
+                        "Progress": 0.0,
+                        "Score": 0
                     }
                 ]
             },
@@ -79,35 +92,43 @@
                 "Levels": [
                     {
                         "Id": "S3_L1",
-                        "Progress": 0.0
+                        "Progress": 0.0,
+                        "Score": 0
                     },
                     {
                         "Id": "S3_L2",
-                        "Progress": 0.0
+                        "Progress": 0.0,
+                        "Score": 0
                     },
                     {
                         "Id": "S3_L3",
-                        "Progress": 0.0
+                        "Progress": 0.0,
+                        "Score": 0
                     },
                     {
                         "Id": "S3_L4",
-                        "Progress": 0.0
+                        "Progress": 0.0,
+                        "Score": 0
                     },
                     {
                         "Id": "S3_L5",
-                        "Progress": 0.0
+                        "Progress": 0.0,
+                        "Score": 0
                     },
                     {
                         "Id": "S3_L6",
-                        "Progress": 0.0
+                        "Progress": 0.0,
+                        "Score": 0
                     },
                     {
                         "Id": "S3_L7",
-                        "Progress": 0.0
+                        "Progress": 0.0,
+                        "Score": 0
                     },
                     {
                         "Id": "S3_L8",
-                        "Progress": 0.0
+                        "Progress": 0.0,
+                        "Score": 0
                     }
                 ]
             },
@@ -116,51 +137,63 @@
                 "Levels": [
                     {
                         "Id": "S4_L1",
-                        "Progress": 0.0
+                        "Progress": 0.0,
+                        "Score": 0
                     },
                     {
                         "Id": "S4_L2",
-                        "Progress": 0.0
+                        "Progress": 0.0,
+                        "Score": 0
                     },
                     {
                         "Id": "S4_L3",
-                        "Progress": 0.0
+                        "Progress": 0.0,
+                        "Score": 0
                     },
                     {
                         "Id": "S4_L4",
-                        "Progress": 0.0
+                        "Progress": 0.0,
+                        "Score": 0
                     },
                     {
                         "Id": "S4_L5",
-                        "Progress": 0.0
+                        "Progress": 0.0,
+                        "Score": 0
                     },
                     {
                         "Id": "S4_L6",
-                        "Progress": 0.0
+                        "Progress": 0.0,
+                        "Score": 0
                     },
                     {
                         "Id": "S4_L7",
-                        "Progress": 0.0
+                        "Progress": 0.0,
+                        "Score": 0
                     },
                     {
                         "Id": "S4_L8",
-                        "Progress": 0.0
+                        "Progress": 0.0,
+                        "Score": 0
                     },
                     {
                         "Id": "S4_L9",
-                        "Progress": 0.0
+                        "Progress": 0.0,
+                        "Score": 0
                     },
                     {
                         "Id": "S4_L10",
-                        "Progress": 0.0
+                        "Progress": 0.0,
+                        "Score": 0
                     },
                     {
                         "Id": "S4_L11",
-                        "Progress": 0.0
+                        "Progress": 0.0,
+                        "Score": 0
                     },
                     {
                         "Id": "S4_L12",
-                        "Progress": 0.0
+                        "Progress": 0.0,
+                        "Score": 0
                     }
                 ]
             }

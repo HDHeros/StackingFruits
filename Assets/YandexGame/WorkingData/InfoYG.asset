@@ -41,7 +41,7 @@ MonoBehaviour:
   leaderboardEnable: 1
   saveScoreAnonymousPlayers: 1
   leaderboardSimulation:
-  - technoName: advanced
+  - technoName: TopScoreLb
     entries: 'Test LeaderBoard
 
       Name: advanced
