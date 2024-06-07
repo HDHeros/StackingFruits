@@ -3,24 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using GameStructConfigs;
 using HDH.UserData;
+using Infrastructure.LeaderboardLogic;
 
 namespace Gameplay.LevelsLogic
 {
     public class LevelsService
     {
-        public IEnumerable<SectionModel> Sections;
-        public int SectionsCount => _sections.Length;
         private readonly LevelsModel _dataModel;
         private readonly SectionModel[] _sections;
+        private readonly Leaderboard _leaderboard;
+        public int SectionsCount => _sections.Length;
+        public int TotalScore => _totalScore;
 
-        
-        
-        public LevelsService(GameConfig gameConfig, UserDataService userDataService)
+        public IEnumerable<SectionModel> Sections;
+        private int _totalScore;
+
+        public LevelsService(GameConfig gameConfig, UserDataService userDataService, Leaderboard leaderboard)
         {
             _dataModel = userDataService.GetModel<LevelsModel>();
             SectionConfig[] sectionsConfigs = gameConfig.Sections;
             _sections = new SectionModel[sectionsConfigs.Length];
             _dataModel.Sections ??= _sections;
+            _leaderboard = leaderboard;
 
             for (var i = 0; i < sectionsConfigs.Length; i++)
             {
@@ -50,6 +54,7 @@ namespace Gameplay.LevelsLogic
                 
                 _sections[i] = section;
             }
+            RecalculateTotalScore(false);
         }
 
         public void SetLevelProgress(SectionId sectionId, string levelId, float progressValue)
@@ -68,13 +73,27 @@ namespace Gameplay.LevelsLogic
             return _sections[sectionIndex].Levels[GetLevelIndexInSection(sectionIndex, levelId)].Progress;
         }
 
+        public int GetSectionScore(SectionId sectionId)
+        {
+            int sectionIndex = GetSectionIndex(sectionId);
+            return _sections[sectionIndex].Levels.Sum(l => l.Score);
+        }
+
         public void SetLevelMaxScore(SectionId sectionId, string levelId, int score)
         {
             int sectionIndex = GetSectionIndex(sectionId);
             int currentScore = _sections[sectionIndex].Levels[GetLevelIndexInSection(sectionIndex, levelId)].Score;
             if (currentScore >= score) return;
             _sections[sectionIndex].Levels[GetLevelIndexInSection(sectionIndex, levelId)].Score = score;
+            RecalculateTotalScore();
             ForceSaveModel();
+        }
+
+        private void RecalculateTotalScore(bool updateLeaderboard = true)
+        {
+            _totalScore = _sections.Sum(l => GetSectionScore(l.Id));
+            if (updateLeaderboard)
+                _leaderboard.SetValue(_totalScore);
         }
 
         public int GetLevelScore(SectionId sectionId, string levelId)

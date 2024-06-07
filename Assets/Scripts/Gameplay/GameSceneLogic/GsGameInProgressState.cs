@@ -25,7 +25,7 @@ namespace Gameplay.GameSceneLogic
         public override void Exit(Action onExit)
         {
             _ctSource.Cancel();
-            Fields.Hud.PopScreen(Hud.ScreenType.CommonScreen);
+            Fields.Hud.PopScreen(Hud.ScreenType.GameInProgressScreen);
             Fields.Input.OnBackButtonPressed -= OnBackButtonPressed;
             base.Exit(onExit);
         }

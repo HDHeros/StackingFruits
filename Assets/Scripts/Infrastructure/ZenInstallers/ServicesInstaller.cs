@@ -8,6 +8,7 @@ using HDH.Popups.Configs;
 using HDH.UserData;
 using HDH.UserData.Dto;
 using Infrastructure.AdLogic;
+using Infrastructure.LeaderboardLogic;
 using Infrastructure.Pause;
 using Infrastructure.RateAppLogic;
 using Infrastructure.SceneManagement;
@@ -37,6 +38,7 @@ namespace Infrastructure.ZenInstallers
             InstallHud();
             InstallGlobalVolumeService();
             InstallPauseService();
+            InstallLeaderboard();
             InstallAd();//not implemented
             InstallRateAppService();//not implemented
             InstallGameConfig();
@@ -48,6 +50,13 @@ namespace Infrastructure.ZenInstallers
             InstallLevelsService();
             InstallTutorInfoService();
         }
+
+        private void InstallLeaderboard() =>
+            Container
+                .Bind<Leaderboard>()
+                .To<LeaderboardDummy>()
+                .FromNew()
+                .AsSingle();
 
         private void InstallRateAppService() =>
             Container

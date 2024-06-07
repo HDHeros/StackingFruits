@@ -14,7 +14,7 @@ namespace UI.Screens
         private void Inject(InputService inputService) =>
             _inputService = inputService;
         
-        private void Start()
+        protected virtual void Start()
         {
             _backButton.onClick.AddListener(OnBackButtonClicked);
         }

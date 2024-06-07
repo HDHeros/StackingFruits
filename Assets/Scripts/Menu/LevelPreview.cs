@@ -5,6 +5,7 @@ using Gameplay.LevelsLogic;
 using GameStructConfigs;
 using HDH.UnityExt.Extensions;
 using Infrastructure.SoundsLogic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Random = UnityEngine.Random;
@@ -80,6 +81,7 @@ namespace Menu
         {
             _isSelectionEnabled = false; 
             _collider.enabled = false;
+            // SetSelected(false);
             ResetOnHoverAnimation();
         }
         
@@ -99,6 +101,12 @@ namespace Menu
             _model.DOLocalMove(Vector3.zero * _onMouseHoverOffset, 0.2f);
         }
 
+        public void SetSelected(bool isSelected)
+        {
+            _modelRenderer.material.SetFloat("_OutlineWidth", isSelected ? 10f : 3f);
+            _modelRenderer.material.SetColor("_OutlineColor", isSelected ? Color.white : Color.black);
+        }
+        
         private void ResetOnHoverAnimation()
         {
             _model.DOKill();

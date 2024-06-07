@@ -33,10 +33,21 @@ MonoBehaviour:
       TermType: 0
       Description: 
       Languages:
-      - "\u0410\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u044F"
-      - "\u0410\u045E\u0442\u0430\u0440\u044B\u0437\u0430\u0446\u044B\u044F"
-      - Authorization
-      - Yetki
+      - "\u0410\u0432\u0442\u043E\u0440\u0438\u0437\u043E\u0432\u0430\u0442\u044C\u0441\u044F?"
+      - "\u0410\u045E\u0442\u0430\u0440\u044B\u0437\u0430\u0432\u0430\u0446\u0446\u0430?"
+      - Log In?
+      - "Giri\u015F Yapmak?"
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: BEST_SCORE
+      TermType: 0
+      Description: 
+      Languages:
+      - "\u041B\u0443\u0447\u0448\u0438\u0439 \u0440\u0435\u0437\u0443\u043B\u044C\u0442\u0430\u0442:
+        {[VALUE]}   "
+      - "\u041B\u0435\u043F\u0448\u044B \u0431\u0430\u043B: {[VALUE]}   "
+      - 'The best score: {[VALUE]}  '
+      - 'En iyi skor: {[VALUE]}   '
       Flags: 00000000
       Languages_Touch: []
     - Term: CANCEL
@@ -103,6 +114,16 @@ MonoBehaviour:
       - "Seviye se\xE7imine d\xF6n\xFCp mevcut ilerlemeyi kaybedecek misiniz?"
       Flags: 00000000
       Languages_Touch: []
+    - Term: LOG_IN
+      TermType: 0
+      Description: 
+      Languages:
+      - "\u0410\u0432\u0442\u043E\u0440\u0438\u0437\u043E\u0432\u0430\u0442\u044C\u0441\u044F"
+      - "\u0423\u0432\u0430\u0439\u0441\u0446\u0456"
+      - Log in
+      - "Giri\u015F yapmak"
+      Flags: 00000000
+      Languages_Touch: []
     - Term: LOSE_GAME_POPUP_BTN_BACK
       TermType: 0
       Description: 
@@ -157,8 +178,8 @@ MonoBehaviour:
       TermType: 0
       Description: 
       Languages:
-      - "\u0425\u043E\u0440\u043E\u0448\u043E"
-      - "\u0414\u043E\u0431\u0440\u0430"
+      - "\u041E\u043A"
+      - "\u041E\u043A"
       - Ok
       - Tamam
       Flags: 00000000
@@ -208,6 +229,16 @@ MonoBehaviour:
       - "\u041F\u0430\u0447\u0430\u0446\u044C"
       - Start
       - "Ba\u015Flamak"
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: START_LEVEL
+      TermType: 0
+      Description: 
+      Languages:
+      - "\u0421\u0442\u0430\u0440\u0442"
+      - "\u0421\u0442\u0430\u0440\u0442"
+      - Start
+      - "Ba\u015Flang\u0131\xE7"
       Flags: 00000000
       Languages_Touch: []
     - Term: STNG_HEADER
@@ -352,6 +383,30 @@ MonoBehaviour:
       - "E\u011Fitimi tekrar g\xF6zden ge\xE7irmek ister misiniz?"
       Flags: 00000000
       Languages_Touch: []
+    - Term: TOTAL_SECTION_SCORE
+      TermType: 0
+      Description: 
+      Languages:
+      - "\u0420\u0435\u0437\u0443\u043B\u044C\u0442\u0430\u0442 \u0440\u0430\u0437\u0434\u0435\u043B\u0430:
+        {[VALUE]}"
+      - "\u0412\u044B\u043D\u0456\u043A \u0440\u0430\u0437\u0434\u0437\u0435\u043B\u0430:
+        {[VALUE]} "
+      - 'Section score: {[VALUE]} '
+      - "B\xF6l\xFCm sonucu: {[VALUE]} "
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: TOTAL_SCORE
+      TermType: 0
+      Description: 
+      Languages:
+      - "\u041E\u0447\u043A\u043E\u0432 \u043F\u043E\u043B\u0443\u0447\u0435\u043D\u043E:
+        {[VALUE]} "
+      - "\u0410\u0447\u043A\u043E\u045E \u0430\u0442\u0440\u044B\u043C\u0430\u043D\u0430:
+        {[VALUE]}  "
+      - 'Total score: {[VALUE]}'
+      - "Al\u0131nan puanlar: {[VALUE]}  "
+      Flags: 00000000
+      Languages_Touch: []
     CaseInsensitiveTerms: 0
     OnMissingTranslation: 1
     mTerm_AppName: 
@@ -373,7 +428,7 @@ MonoBehaviour:
     Google_WebServiceURL: https://script.google.com/macros/s/AKfycbxO7t2po_IVj5GuC_HLfFS3HdmrYqV-J4De9x2TrPiOe2FN3419IzCL6W5Q9iYXPeBv/exec
     Google_SpreadsheetKey: 1cYQaFoEZPDLU3BCbcjryGEbiiMtLp-mDzPAZnG2Q7To
     Google_SpreadsheetName: I2Loc Stack the Fruit Localization
-    Google_LastUpdatedVersion: 1714033300769
+    Google_LastUpdatedVersion: 1714594812378
     Google_Password: change_this
     GoogleUpdateFrequency: 3
     GoogleInEditorCheckFrequency: 2

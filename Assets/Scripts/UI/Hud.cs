@@ -9,7 +9,15 @@ namespace UI
 {
     public class Hud : MonoBehaviour
     {
-        public enum ScreenType{None = 0, HomeScreen = 1, EmptyScreen = 2, CommonScreen = 3, GameInProgressScreen = 4,}
+        public enum ScreenType
+        {
+            None = 0, 
+            HomeScreen = 1, 
+            EmptyScreen = 2, 
+            CommonScreen = 3, 
+            GameInProgressScreen = 4,
+            LevelSelectionScreen = 5,
+        }
         [Serializable]
         public struct Screen
         {

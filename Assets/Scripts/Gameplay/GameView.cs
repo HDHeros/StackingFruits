@@ -129,10 +129,10 @@ namespace Gameplay
             while (move.MoveNext())
             {
                 await UniTask.WaitWhile(() => _isGamePaused);
-                int appendedCounterValue = UpdateCounter(move.Current.Type);
                 switch (move.Current.Type)
                 {
                     case GameEventType.BlockMovedByUser:
+                        int appendedCounterValue = UpdateCounter(move.Current.Type);
                         await MoveBlock(move.Current.Actions[0].From, move.Current.Actions[0].To, TimeSpan.Zero, appendedCounterValue);
                         break;
                     case GameEventType.BlocksFell:
@@ -140,7 +140,7 @@ namespace Gameplay
                         await UniTask.Delay(TimeSpan.FromSeconds(0.25f));
                         break;
                     case GameEventType.StackPerformed:
-                        await AnimateStackPerform(move.Current.Actions, appendedCounterValue);
+                        await AnimateStackPerform(move.Current.Actions);
                         await UniTask.Delay(TimeSpan.FromSeconds(0.25f));
                         break;
                     case GameEventType.GameLost:
@@ -186,7 +186,7 @@ namespace Gameplay
             return UniTask.WhenAll(uniTasks);
         }
 
-        private async UniTask AnimateStackPerform(IReadOnlyList<PerformedMovement> currentActions, int damageNumberValue)
+        private async UniTask AnimateStackPerform(IReadOnlyList<PerformedMovement> currentActions)
         {
             BlockView[] stackedFruits = currentActions.Select(a => _slots[a.From.x, a.From.y].ResetSlot()).ToArray();
             await MoveAllToStackPos();
@@ -194,7 +194,8 @@ namespace Gameplay
             _sounds.RaiseEvent(EventId.StackExplosion);
             await animatedFruit.PlayOnStackAnimation(_pool);
             PlayStackFinishSound(_game.StacksPerformed);
-            _greenDamageNumber.Spawn(animatedFruit.Transform.position, damageNumberValue);
+            int appendedCounterValue = UpdateCounter(GameEventType.StackPerformed);
+            _greenDamageNumber.Spawn(animatedFruit.Transform.position, appendedCounterValue);
             _wallDecals.SpawnDecal(animatedFruit.Transform.position, animatedFruit.DecalColor);
             RemoveBlock(animatedFruit);
             
