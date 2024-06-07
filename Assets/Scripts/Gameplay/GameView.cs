@@ -46,6 +46,7 @@ namespace Gameplay
         private SlotsHighlighter _slotsHighlighter;
         private IGameCounterView _counterView;
         private int _pointsCounter;
+        private bool _damageNumbersEnabled;
 
         public void Initialize(InputService input, IGoPool pool, SoundsService sounds)
         {
@@ -58,9 +59,10 @@ namespace Gameplay
             _wallDecals.Initialize(_camera, pool);
         }
         
-        public async UniTask<GameResult> StartGame(LevelData levelData, IGameCounterView counterView)
+        public async UniTask<GameResult> StartGame(LevelData levelData, IGameCounterView counterView, bool damageNumbersEnabled = true)
         {
             _counterView = counterView;
+            _damageNumbersEnabled = damageNumbersEnabled;
             _pointsCounter = 0;
             _counterView.SetPointsCount(_pointsCounter);
             _wallDecals.Clear();
@@ -195,7 +197,8 @@ namespace Gameplay
             await animatedFruit.PlayOnStackAnimation(_pool);
             PlayStackFinishSound(_game.StacksPerformed);
             int appendedCounterValue = UpdateCounter(GameEventType.StackPerformed);
-            _greenDamageNumber.Spawn(animatedFruit.Transform.position, appendedCounterValue);
+            if (_damageNumbersEnabled)
+                _greenDamageNumber.Spawn(animatedFruit.Transform.position, appendedCounterValue);
             _wallDecals.SpawnDecal(animatedFruit.Transform.position, animatedFruit.DecalColor);
             RemoveBlock(animatedFruit);
             
@@ -253,7 +256,7 @@ namespace Gameplay
             await UniTask.Delay(delay);
             _sounds.RaiseEvent(EventId.FruitFell);
             await _slots[to.x, to.y].SetBlock(view, true);
-            if (damageNumber.HasValue)
+            if (damageNumber.HasValue && _damageNumbersEnabled)
                 _redDamageNumber.Spawn(view.Transform.position, damageNumber.Value);
         }
 
