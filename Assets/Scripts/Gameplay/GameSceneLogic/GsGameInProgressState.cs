@@ -120,6 +120,7 @@ namespace Gameplay.GameSceneLogic
 
         private async UniTaskVoid ReturnToSelectLevelAsync(CancellationToken ct, GameView.GameResult result)
         {
+            Fields.LevelsService.SetLevelMaxScore(Fields.PickedSection.Id, Fields.PickedLevel.Id, result.Score);
             Fields.CameraController.ActivateSelectLevelCamera();
             await UniTask.WaitWhile(() => Fields.CameraController.IsBlending, cancellationToken: ct);
             if (result.Progress > Fields.LevelsService.GetLevelProgress(Fields.PickedSection.Id, Fields.PickedLevel.Id))

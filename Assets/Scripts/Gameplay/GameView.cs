@@ -277,7 +277,7 @@ namespace Gameplay
             }
 
             _slotsHighlighter.Slots = null;
-            _gameResult = new GameResult{Progress = progress, WasForceFinished = isForceFinish};
+            _gameResult = new GameResult{Progress = progress, WasForceFinished = isForceFinish, Score = _pointsCounter,};
         }
 
         private void OnDrawGizmos()
@@ -290,6 +290,7 @@ namespace Gameplay
         {
             public float Progress;
             public bool WasForceFinished;
+            public int Score;
             public bool IsWin => Progress >= 1;
         }
         

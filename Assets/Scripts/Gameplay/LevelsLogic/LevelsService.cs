@@ -66,7 +66,21 @@ namespace Gameplay.LevelsLogic
         {
             int sectionIndex = GetSectionIndex(sectionId);
             return _sections[sectionIndex].Levels[GetLevelIndexInSection(sectionIndex, levelId)].Progress;
-            
+        }
+
+        public void SetLevelMaxScore(SectionId sectionId, string levelId, int score)
+        {
+            int sectionIndex = GetSectionIndex(sectionId);
+            int currentScore = _sections[sectionIndex].Levels[GetLevelIndexInSection(sectionIndex, levelId)].Score;
+            if (currentScore >= score) return;
+            _sections[sectionIndex].Levels[GetLevelIndexInSection(sectionIndex, levelId)].Score = score;
+            ForceSaveModel();
+        }
+
+        public int GetLevelScore(SectionId sectionId, string levelId)
+        {
+            int sectionIndex = GetSectionIndex(sectionId);
+            return _sections[sectionIndex].Levels[GetLevelIndexInSection(sectionIndex, levelId)].Score;
         }
 
         public SectionModel GetSectionByIndex(int index) => 
@@ -140,6 +154,7 @@ namespace Gameplay.LevelsLogic
             [NonSerialized] public LevelConfig Config;
             public string Id;
             public float Progress;
+            public int Score;
         }
     }
 }

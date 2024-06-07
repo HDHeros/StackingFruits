@@ -43,21 +43,6 @@ PrefabInstance:
       propertyPath: _defaultLocalBounds.m_Extent.z
       value: 0.34
       objectReference: {fileID: 0}
-    - target: {fileID: 5183899783146244303, guid: 4341530679db66643bfdba4dceb50dda,
-        type: 3}
-      propertyPath: m_Size.x
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 5183899783146244303, guid: 4341530679db66643bfdba4dceb50dda,
-        type: 3}
-      propertyPath: m_Size.y
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 5183899783146244303, guid: 4341530679db66643bfdba4dceb50dda,
-        type: 3}
-      propertyPath: m_Size.z
-      value: 0.25
-      objectReference: {fileID: 0}
     - target: {fileID: 7318648407229216689, guid: 4341530679db66643bfdba4dceb50dda,
         type: 3}
       propertyPath: m_LocalPosition.x
