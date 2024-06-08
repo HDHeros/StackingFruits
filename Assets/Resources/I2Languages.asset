@@ -445,7 +445,7 @@ MonoBehaviour:
     Google_WebServiceURL: https://script.google.com/macros/s/AKfycbxO7t2po_IVj5GuC_HLfFS3HdmrYqV-J4De9x2TrPiOe2FN3419IzCL6W5Q9iYXPeBv/exec
     Google_SpreadsheetKey: 1cYQaFoEZPDLU3BCbcjryGEbiiMtLp-mDzPAZnG2Q7To
     Google_SpreadsheetName: I2Loc Stack the Fruit Localization
-    Google_LastUpdatedVersion: 1717755391438
+    Google_LastUpdatedVersion: 1717756550239
     Google_Password: change_this
     GoogleUpdateFrequency: 3
     GoogleInEditorCheckFrequency: 2

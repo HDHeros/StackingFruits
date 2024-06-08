@@ -1,5 +1,5 @@
 {
-    "idSave": 4,
+    "idSave": 5,
     "isFirstSession": false,
     "language": "ru",
     "promptDone": false,
@@ -22,8 +22,8 @@
                     },
                     {
                         "Id": "S1_L2",
-                        "Progress": 0.0,
-                        "Score": 0
+                        "Progress": 1.0,
+                        "Score": 14
                     },
                     {
                         "Id": "S1_L3",
@@ -47,7 +47,7 @@
                     },
                     {
                         "Id": "S1_L7",
-                        "Progress": 0.3333333432674408,
+                        "Progress": 0.0,
                         "Score": 0
                     }
                 ]
